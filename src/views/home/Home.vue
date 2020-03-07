@@ -1,14 +1,14 @@
 <template>
-  <el-container ref="homePage">
-    <el-aside width="200px" style="background-color: #545c64; margin-bottom: 0">
+<!--  <el-container ref="homePage">-->
+<!--    <el-aside width="200px" style="background-color: #545c64; margin-bottom: 0">-->
       <side-menu/>
-    </el-aside>
-    <el-container>
-      <el-header>Header</el-header>
-      <el-main>Main</el-main>
-      <el-footer>Footer</el-footer>
-    </el-container>
-  </el-container>
+<!--    </el-aside>-->
+<!--    <el-container>-->
+<!--      <el-header>Header</el-header>-->
+<!--      <el-main>Main</el-main>-->
+<!--      <el-footer>Footer</el-footer>-->
+<!--    </el-container>-->
+<!--  </el-container>-->
 </template>
 
 <script>
@@ -32,16 +32,16 @@
       };
     },
     watch: {
-      // 如果 `clientHeight` 发生改变，这个函数就会运行
-      clientHeight: function () {
-        this.changeFixed(this.clientHeight)
-      }
+      // // 如果 `clientHeight` 发生改变，这个函数就会运行
+      // clientHeight: function () {
+      //   this.changeFixed(this.clientHeight)
+      // }
     },
 
     methods: {
-      changeFixed(clientHeight) { //动态修改样式
-        this.$refs.homePage.$el.style.height = clientHeight - 20 + 'px';
-      },
+      // changeFixed(clientHeight) { //动态修改样式
+      //   this.$refs.homePage.$el.style.height = clientHeight - 20 + 'px';
+      // },
     },
   }
 </script>
