@@ -96,7 +96,7 @@
         });
       },
       login() {
-
+        this.$router.push('/login');
       }
     }
   }

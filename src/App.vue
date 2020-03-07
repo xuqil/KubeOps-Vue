@@ -1,16 +1,13 @@
 <template>
   <div id="app">
-<!--    <login></login>-->
-    <register/>
-<!--    <test/>-->
+    <transition>
+      <router-view/>
+    </transition>
   </div>
 </template>
 
 
 <script>
-  import Login  from "components/common/login/Login"
-  import Register from "components/common/login/Register";
-  import Test from "components/Test";
 
   export default {
     data() {
@@ -19,9 +16,6 @@
       }
     },
     components: {
-      Test, //测试组件
-      Login,
-      Register,
     }
   }
 </script>
