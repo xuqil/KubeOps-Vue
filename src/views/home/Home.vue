@@ -1,48 +1,28 @@
 <template>
-<!--  <el-container ref="homePage">-->
-<!--    <el-aside width="200px" style="background-color: #545c64; margin-bottom: 0">-->
-      <side-menu/>
-<!--    </el-aside>-->
-<!--    <el-container>-->
-<!--      <el-header>Header</el-header>-->
-<!--      <el-main>Main</el-main>-->
-<!--      <el-footer>Footer</el-footer>-->
-<!--    </el-container>-->
-<!--  </el-container>-->
+  <el-container>
+    <el-header style="padding: 0"><head-bar/></el-header>
+    <el-container>
+      <el-aside width="250px" style="text-align: left;"><side-menu/></el-aside>
+      <el-main>Main</el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
-  import SideMenu from "components/common/Menu/SideMenu";
+  import SideMenu from "components/common/menu/SideMenu";
+  import HeadBar from "components/common/headBar/HeadBar";
 
   export default {
     name: "Home",
     data() {
       return {
-        clientHeight: '',
+
       }
     },
     components: {
-      SideMenu
-    },
-    mounted() {
-      // 获取浏览器可视区域高度
-      this.clientHeight = `${document.documentElement.clientHeight}`;
-      window.onresize = function temp() {
-        this.clientHeight = `${document.documentElement.clientHeight}`;
-      };
-    },
-    watch: {
-      // // 如果 `clientHeight` 发生改变，这个函数就会运行
-      // clientHeight: function () {
-      //   this.changeFixed(this.clientHeight)
-      // }
-    },
-
-    methods: {
-      // changeFixed(clientHeight) { //动态修改样式
-      //   this.$refs.homePage.$el.style.height = clientHeight - 20 + 'px';
-      // },
-    },
+      SideMenu,
+      HeadBar
+    }
   }
 </script>
 
