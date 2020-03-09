@@ -48,6 +48,12 @@ const router = new VueRouter({
 // 前置钩子(hook) or 前置守卫(guard):路由跳转前进行回调
 // 通过导航守卫实时更改页面标题
 router.beforeEach((to, from, next) => {
+  // 访问登录页，放行
+  if (to.path === '/login') return next();
+  // 获取token
+  const tokenStr = window.sessionStorage.getItem('token');
+  // 没有token, 强制跳转到登录页
+  if (!tokenStr) return next('/login');
   //在各组件路由中定义meta的title
   document.title = to.matched[0].meta.title;
   //必须调用的函数，否则链接不能调转到next
