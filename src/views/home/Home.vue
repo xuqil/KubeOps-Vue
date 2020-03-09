@@ -1,9 +1,9 @@
 <template>
-  <el-container>
-    <el-header style="padding: 0"><head-bar/></el-header>
+  <el-container  class="home_container">
+    <el-header><head-bar/></el-header>
     <el-container>
-      <el-aside  :width="asideWidth" style="text-align: left;flex:0 1 auto;"><side-menu/></el-aside>
-      <el-main style="flex:1 1 auto;">Mainfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</el-main>
+      <el-aside  :width="asideWidth"><side-menu/></el-aside>
+      <el-main>Mainfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</el-main>
     </el-container>
   </el-container>
 </template>
@@ -33,37 +33,13 @@
 </script>
 
 <style scoped>
-  /*.el-header, .el-footer {*/
-  /*  background-color: #B3C0D1;*/
-  /*  color: #333;*/
-  /*  text-align: center;*/
-  /*  line-height: 60px;*/
-  /*}*/
-
-  /*.el-aside {*/
-  /*  background-color: #D3DCE6;*/
-  /*  color: #333;*/
-  /*  text-align: center;*/
-  /*  line-height: 200px;*/
-  /*}*/
-
-  /*.el-main {*/
-  /*  background-color: #E9EEF3;*/
-  /*  color: #333;*/
-  /*  text-align: center;*/
-  /*  line-height: 160px;*/
-  /*}*/
-
-  /*body > .el-container {*/
-  /*  margin-bottom: 40px;*/
-  /*}*/
-
-  /*.el-container:nth-child(5) .el-aside,*/
-  /*.el-container:nth-child(6) .el-aside {*/
-  /*  line-height: 260px;*/
-  /*}*/
-
-  /*.el-container:nth-child(7) .el-aside {*/
-  /*  line-height: 320px;*/
-  /*}*/
+  .home_container{
+    height: 100%;
+  }
+  .el-header{
+    padding: 0;
+  }
+  .el-aside{
+    text-align: left;flex:0 1 auto;
+  }
 </style>
