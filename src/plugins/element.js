@@ -3,7 +3,7 @@ import { Button } from 'element-ui'
 import {
   Form, FormItem,
   Input,
-  Menu, MenuItem, MenuItemGroup, Submenu,
+  Menu, MenuItem, MenuItemGroup, Submenu,Tooltip,
   Container, Header, Aside, Main,
   Icon, Image
 } from 'element-ui'
@@ -17,6 +17,7 @@ Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
 Vue.use(Submenu);
+Vue.use(Tooltip);
 
 Vue.use(Container);
 Vue.use(Header);
