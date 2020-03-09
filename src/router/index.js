@@ -55,7 +55,7 @@ router.beforeEach((to, from, next) => {
   // 没有token, 强制跳转到登录页
   if (!tokenStr) return next('/login');
   //在各组件路由中定义meta的title
-  document.title = to.matched[0].meta.title;
+  if(to.matched.length !== 0) document.title = to.matched[0].meta.title;
   //必须调用的函数，否则链接不能调转到next
   next()
 });

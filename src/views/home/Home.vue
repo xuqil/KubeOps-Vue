@@ -26,7 +26,7 @@
     computed: {
       //随侧边栏开闭调正侧边栏宽度
       asideWidth(){
-        return this.$store.getters.isCollapse ? '64px' : '250px'
+        return this.$store.getters.isCollapse ? '64px' : '200px'
       }
     }
   }
