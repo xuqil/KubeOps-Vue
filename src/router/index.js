@@ -10,12 +10,16 @@ const Home = () => import('views/home/Home');
 
 const routes = [
   {
-    path: '',
+    path: '/home',
     component: Home,
     name: "home",
     meta: {
       title: '主页'
     }
+  },
+  {
+    path: '',
+    redirect: '/login'
   },
   {
     path: '/login',

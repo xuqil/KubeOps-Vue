@@ -5,8 +5,12 @@ import {
   Input,
   Menu, MenuItem, MenuItemGroup, Submenu,Tooltip,
   Container, Header, Aside, Main,
-  Icon, Image
+  Icon, Image,
+  Message
 } from 'element-ui'
+
+//弹框提示
+Vue.prototype.$message = Message;
 
 Vue.use(Button);
 Vue.use(Form);

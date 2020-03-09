@@ -1,31 +1,36 @@
 <template>
-  <div class="login">
-    <div class="login-wrap">
-      <el-row type="flex" justify="center">
-        <el-form :model="loginForm" :rules="rules" status-icon ref="loginForm" label-width="100px">
-          <h3>登录</h3>
-          <div class="user-form">
-            <el-form-item label="用户名" prop="username">
-              <el-input v-model="loginForm.username" placeholder="请输入用户名" clearable></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input placeholder="请输入密码" v-model="loginForm.password" show-password></el-input>
-            </el-form-item>
-            <router-link to="/">找回密码</router-link>
-            <router-link to="/register">注册账号</router-link>
-            <el-form-item>
-              <el-button class="user-sbn" type="primary" style="width: 100%" @click="doLogin('ruleForm')">登录
-              </el-button>
-            </el-form-item>
-          </div>
+  <div class="login_container">
+    <div class="login_box">
+      <!--  标题  -->
+      <div class="title_box">
+        KubeOps运维平台
+      </div>
+      <!-- 登录表单 -->
+      <div>
+        <el-form
+          label-width="60px"
+          class="login_form"
+          :model="loginForm"
+          :rules="loginFormRules"
+          ref="loginFormRef">
+          <el-form-item label="账号" prop="username">
+            <el-input v-model="loginForm.username"  placeholder="请输入用户名" prefix-icon="iconfont icon-user"></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="loginForm.password" type="password" placeholder="请输入密码" prefix-icon="iconfont icon-3702mima"></el-input>
+          </el-form-item>
+          <el-form-item class="btns">
+            <el-button type="primary" @click="login">登录</el-button>
+            <el-button type="info" @click="resetLoginForm">重置</el-button>
+          </el-form-item>
         </el-form>
-      </el-row>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {login} from 'network/loginRegister'
+  import {apiLogin} from "network/api";
 
   export default {
     name: "Login",
@@ -35,20 +40,42 @@ import {login} from 'network/loginRegister'
           username: '',
           password: ''
         },
-        rules: {
-          username: [{required: true, message: '请输入用户名或账号', trigger: 'blur'}],
-          password: [{required: true, message: '请输入密码', trigger: 'blur'}]
+        // 表单验证
+        loginFormRules: {
+          username: [
+            {required: true, message: '请输入用户名', trigger: 'blur'},
+            {min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+          ],
+          password: [
+            {required: true, message: '请输入用户密码', trigger: 'blur'},
+            {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+          ]
         }
       }
     },
     methods: {
-      doLogin() {
-        login(this.loginForm).then(res => {
-          console.log(res);
-          this.$message.success("登录成功")
-        }).catch( error => {
-          console.log(error);
-          this.$message.error("用户或者密码错误")
+      //重置表单
+      resetLoginForm() {
+        this.$refs.loginFormRef.resetFields();
+      },
+      //登录及表单校验
+      login() {
+        this.$refs.loginFormRef.validate(valid => {
+          // console.log(valid);
+          if (!valid) return false;
+          apiLogin(this.loginForm).then(res => {
+            // console.log(res);
+            if (res.meta.status !== 200) return this.$message.error("登录失败");
+            this.$message.success("登录成功");
+            //保持token
+            window.sessionStorage.setItem('token', res.data.token);
+            // 2、通过编程式导航跳转到后台主页, 路由地址为：/home
+            this.$router.push('/home')
+          }).catch(err => {
+            console.log(err);
+            return false;
+          })
+
         })
       }
     }
@@ -56,50 +83,43 @@ import {login} from 'network/loginRegister'
 </script>
 
 <style scoped>
-  .login {
+  .login_container {
+    background-color: #2b4b6b;
+    height: 100%;
+  }
+
+  .login_box {
+    width: 450px;
+    height: 350px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+  }
+
+  /*使用flex的justify-content对自身元素居中布局*/
+  .title_box {
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    padding-top: 15px;
+  }
+
+  .login_form {
+    position: absolute;
+    bottom: 40px;
     width: 100%;
-    height: 740px;
-    /*background: url("~assets/img/login/4.jpg") no-repeat;*/
-    background: #aaaaaa;
-    background-size: cover;
-    overflow: hidden;
+    padding: 0 20px;
+    box-sizing: border-box;
   }
 
-  .login-wrap {
-    /*background: url("~assets/img/login/3.jpg") no-repeat;*/
-    background-size: cover;
-    background: #dadada;
-    border: 1px solid #dadada;
-    width: 400px;
-    height: 300px;
-    margin: 215px auto;
-    overflow: hidden;
-    line-height: 40px;
-    text-align: center;
-    box-shadow: 0 0 5px 10px #dadada;
-  }
-
-  .user-form {
-    margin-right: 60px;
-  }
-
-  h3 {
-    color: #0babeab8;
-    font-size: 24px;
-  }
-
-  a {
-    text-decoration: none;
-    color: #aaa;
-    font-size: 15px;
-    margin-left: 90px;
-  }
-
-  a:hover {
-    color: coral;
-  }
-
-  .user-sbn {
-    float: left
+  .btns {
+    padding-top: 20px;
+    padding-right: 15px;
+    display: flex;
+    justify-content: center;
   }
 </style>

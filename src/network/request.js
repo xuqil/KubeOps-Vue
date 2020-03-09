@@ -5,13 +5,15 @@ import Qs from 'qs'
 function baseConfig(config) {
   // 1.创建axios的实例
   const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api',
+    baseURL: 'http://127.0.0.1:8888/api/private/v1/',
     timeout: 5000
   });
 
   // 2.axios的拦截器
   // 2.1.请求拦截的作用
   instance.interceptors.request.use(config => {
+    //在请求头中添加token认证
+    config.headers.Authorization = window.sessionStorage.getItem('token');
     return config
   }, error => {
     return Promise.reject(error)
@@ -19,7 +21,11 @@ function baseConfig(config) {
 
   // 2.2.响应拦截
   instance.interceptors.response.use(res => {
-    return Promise.resolve(res.data)
+    if (res.status === 200) {
+      return Promise.resolve(res.data);
+    } else {
+      return Promise.reject(res);
+    }
   }, error => {
     return Promise.reject(error)
   });
@@ -40,7 +46,7 @@ export default {
       }
     })
   },
-  get(url, params=null) {
+  get(url, params = null) {
     return baseConfig({
       method: 'get',
       url,
