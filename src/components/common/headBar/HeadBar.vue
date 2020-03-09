@@ -9,7 +9,6 @@
     </div>
     <div class="header-menu">
       <el-menu
-        :default-active="activeIndex"
         mode="horizontal"
         @select="handleSelect"
         background-color="#242f42"
@@ -18,13 +17,13 @@
         id="header-menu">
         <template v-for="item in items">
           <!--具有二级菜单的选项-->
-          <el-submenu v-if="item.subs" :index="item.index" :style="{order: item.order}">
-            <template slot="title"><i :class="item.icon"></i>{{item.title}}</template>
+          <el-submenu v-if="item.subs" :index="item.index" :key="item.index" :style="{order: item.order}">
+            <template slot="title"><i v-if="item.icon" :class="item.icon"></i>{{item.title}}</template>
             <!-- 二级菜单的选项-->
             <el-menu-item v-for="sub in item.subs" :key="sub.title" :index="sub.index">{{sub.title}}</el-menu-item>
           </el-submenu>
           <!--一级菜单选项-->
-          <el-menu-item v-else :index="item.index" :style="{order: item.order}"><i :class="item.icon"></i>{{item.title}}
+          <el-menu-item v-else :index="item.index" :key="item.index" :style="{order: item.order}"><i :class="item.icon"></i>{{item.title}}
           </el-menu-item>
         </template>
       </el-menu>
@@ -40,11 +39,11 @@
     data() {
       return {
         activeIndex: '1',
-        //菜单选项，index请求路径，order为倒序数字，icon有没有都可以
+        //菜单选项，index请求路径，order为顺序，icon有没有都可以
         items: [
           {
             // icon: 'el-icon-caret-bottom',
-            order: 1,
+            order: 3,
             index: 'admin',
             title: "Admin",
             //二级菜单没有order
@@ -67,7 +66,7 @@
           },
           {
             icon: 'el-icon-full-screen',
-            order: 3,
+            order: 1,
             index: 'screen',
             title: '全屏'
           }
@@ -94,9 +93,10 @@
 </script>
 
 <style scoped>
+  /*使用flex对菜单选项布局*/
   #header-menu {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     height: 70px;
   }
 
@@ -110,6 +110,7 @@
     color: #fff;
   }
 
+  /*使用浮动对顶栏组件布局*/
   .collapse-btn {
     float: left;
     padding: 0 21px;
@@ -127,7 +128,9 @@
     float: right;
   }
 
-  .header-bar > ul > li {
+  .header-bar ul  li {
     height: 100%;
+    display: flex;
+    align-items: center;
   }
 </style>
