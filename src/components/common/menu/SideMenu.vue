@@ -11,45 +11,27 @@
       unique-opened
       :collapse="isCollapse"
     >
-      <template v-for="item in items">
-        <template v-if="item.subs">
-          <!--一级菜单-->
-          <el-submenu :index="item.index" :key="item.index">
+      <template v-for="item in menuItems">
+        <!--一级菜单-->
+        <el-submenu v-if="item.subs" :index="item.index + ''">
+          <template slot="title">
+            <i v-if="item.icon" :class="item.icon"></i>
+            <span>{{item.title}}</span>
+          </template>
+          <!-- 二级菜单 -->
+          <el-menu-item :index="subItem.index + ''" v-for="subItem in item.subs" :key="subItem.index">
             <template slot="title">
-              <i :class="item.icon"></i>
-              <span>{{item.title}}</span>
+              <i v-if="subItem.icon" :class="subItem.icon"></i>
+              <i v-else class="el-icon-menu"></i>
+              <span>{{subItem.title}}</span>
             </template>
-            <template v-for="subItem in item.subs">
-              <!--二级菜单-->
-              <el-submenu
-                v-if="subItem.subs"
-                :index="subItem.index"
-                :key="subItem.index">
-                <template slot="title">{{subItem.title}}</template>
-                <!--二级菜单选项-->
-                <el-menu-item
-                  v-for="(threeItem,i) in subItem.subs"
-                  :key="i"
-                  :index="threeItem.index"
-                >{{ threeItem.title }}
-                </el-menu-item>
-              </el-submenu>
-              <!--没有三级菜单的一级菜单选项-->
-              <el-menu-item
-                v-else
-                :index="subItem.index"
-                :key="subItem.index">{{ subItem.title }}
-              </el-menu-item>
-            </template>
-          </el-submenu>
-        </template>
-        <!--没有二级菜单的一级菜单-->
-        <template v-else>
-          <el-menu-item :index="item.index" :key="item.index">
-            <i :class="item.icon"></i>
-            <span slot="title">{{ item.title }}</span>
           </el-menu-item>
-        </template>
+        </el-submenu>
+        <!--没有二级菜单的一级菜单-->
+        <el-menu-item v-else :index="item.index + ''">
+          <i v-if="item.icon" :class="item.icon"></i>
+          <span slot="title">{{item.title}}</span>
+        </el-menu-item>
       </template>
     </el-menu>
   </div>
@@ -62,7 +44,7 @@
     name: "SideMenu",
     data() {
       return {
-        items: [
+        menuItems: [
           {
             icon: 'el-icon-s-home',
             index: 'home',
