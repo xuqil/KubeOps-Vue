@@ -7,26 +7,20 @@
     <div class="logo">
       <div>KubeOps运维平台</div>
     </div>
-    <div class="header-menu">
-      <el-menu
-        mode="horizontal"
-        @select="handleSelect"
-        background-color="#242f42"
-        text-color="#fff"
-        active-text-color="#ffd04b"
-        id="header-menu">
-        <template v-for="item in items">
-          <!--具有二级菜单的选项-->
-          <el-submenu v-if="item.subs" :index="item.index" :key="item.index" :style="{order: item.order}">
-            <template slot="title"><i v-if="item.icon" :class="item.icon"></i>{{item.title}}</template>
-            <!-- 二级菜单的选项-->
-            <el-menu-item v-for="sub in item.subs" :key="sub.title" :index="sub.index">{{sub.title}}</el-menu-item>
-          </el-submenu>
-          <!--一级菜单选项-->
-          <el-menu-item v-else :index="item.index" :key="item.index" :style="{order: item.order}"><i :class="item.icon"></i>{{item.title}}
-          </el-menu-item>
-        </template>
-      </el-menu>
+    <div class="header-container">
+      <div class="header-items">
+        <el-button type="text" icon="el-icon-full-screen" @click="changeFullScreen">全屏</el-button>
+        <el-button type="text" icon="el-icon-bell">通知</el-button>
+        <el-dropdown class="dropdown">
+          <span class="el-dropdown-link">
+            Admin<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>设置</el-dropdown-item>
+            <el-dropdown-item>注销</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -38,51 +32,25 @@
     name: "HeadBar",
     data() {
       return {
-        activeIndex: '1',
-        //菜单选项，index请求路径，order为顺序，icon有没有都可以
-        items: [
-          {
-            // icon: 'el-icon-caret-bottom',
-            order: 3,
-            index: 'admin',
-            title: "Admin",
-            //二级菜单没有order
-            subs: [
-              {
-                index: 'user-setting',
-                title: '设置'
-              },
-              {
-                index: 'logout',
-                title: '注销'
-              }
-            ]
-          },
-          {
-            icon: 'el-icon-bell',
-            order: 2,
-            index: 'messages',
-            title: '消息中心'
-          },
-          {
-            icon: 'el-icon-full-screen',
-            order: 1,
-            index: 'screen',
-            title: '全屏'
-          }
-        ]
       };
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
       ...mapMutations([
         //修改侧栏开闭
         'isCollapse'
       ]),
-      changeCollapse(){
+      changeCollapse() {
         this.isCollapse()
+      },
+      //全屏函数
+      changeFullScreen(){
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+        }
       }
     },
     computed: mapState({
@@ -93,13 +61,6 @@
 </script>
 
 <style scoped>
-  /*使用flex对菜单选项布局*/
-  #header-menu {
-    display: flex;
-    flex-direction: row;
-    height: 70px;
-  }
-
   .header-bar {
     position: relative;
     box-sizing: border-box;
@@ -124,13 +85,43 @@
     text-align: left;
   }
 
-  .header-menu {
+  .header-container {
     float: right;
+    height: 100%;
   }
 
-  .header-bar ul  li {
-    height: 100%;
+  .header-items {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    height: 100%;
+    font-size: 17px;
+    align-items: center
+  }
+
+  .el-button{
+    padding-right: 15px;
+    font-size: 18px;
+    color: #fff;
+  }
+
+  .el-button:focus{
+    color: rgb(32, 160, 255);
+  }
+
+  .dropdown{
+    padding-left: 10px;
+    padding-right: 15px;
+  }
+
+  .el-dropdown-link {
+    cursor: pointer;
+    color: #fff;
+    font-size: 18px;
+  }
+
+  .el-icon-arrow-down {
+    display: inline-block;
+    height: 100%;
+    font-size: 17px;
   }
 </style>

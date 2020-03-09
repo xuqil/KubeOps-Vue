@@ -6,7 +6,8 @@ import {
   Menu, MenuItem, MenuItemGroup, Submenu,Tooltip,
   Container, Header, Aside, Main,
   Icon, Image,
-  Message
+  Message,
+  DropdownMenu, DropdownItem, Dropdown
 } from 'element-ui'
 
 //弹框提示
@@ -30,3 +31,7 @@ Vue.use(Main);
 
 Vue.use(Icon);
 Vue.use(Image);
+
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(Dropdown);
