@@ -1,13 +1,13 @@
 <template>
   <div class="header-bar">
     <div class="collapse-btn" @click="changeCollapse">
-      <i v-if="isCollapse" class="el-icon-s-fold"></i>
+      <i v-if="Collapse" class="el-icon-s-fold"></i>
       <i v-else class="el-icon-s-unfold"></i>
     </div>
     <div class="logo">
       <div>KubeOps运维平台</div>
     </div>
-    <div class="headerMenu">
+    <div class="header-menu">
       <el-menu
         :default-active="activeIndex"
         mode="horizontal"
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import {mapMutations, mapState} from 'vuex'
 
   export default {
     name: "HeadBar",
@@ -85,7 +85,11 @@
       changeCollapse(){
         this.isCollapse()
       }
-    }
+    },
+    computed: mapState({
+      // 侧栏开闭合设置
+      Collapse: state => state.isCollapse
+    })
   }
 </script>
 
@@ -119,7 +123,7 @@
     text-align: left;
   }
 
-  .headerMenu {
+  .header-menu {
     float: right;
   }
 
