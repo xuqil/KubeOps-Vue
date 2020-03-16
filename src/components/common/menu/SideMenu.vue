@@ -1,16 +1,16 @@
 <template>
   <div class="sidebar">
     <el-menu
-      default-active="1"
       class="sidebar-el-menu"
       @open="handleOpen"
       @close="handleClose"
-      background-color="#324157"
+      background-color="#00233C"
       text-color="#bfcbd9"
       active-text-color="#20a0ff"
       unique-opened
       :collapse="isCollapse"
       router
+      :default-active="$route.path"
     >
       <template v-for="item in menuItems">
         <!--一级菜单-->
@@ -81,6 +81,11 @@
             index: 'profile',
             title: '用户管理',
             subs: [
+              {
+                index: 'users',
+                path: 'users',
+                title: '用户列表'
+              },
               {
                 index: 'permissions',
                 path: 'permissions',

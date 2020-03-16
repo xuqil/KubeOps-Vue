@@ -1,12 +1,20 @@
 import request from './request'
 
 
-//登录请求
-export function apiLogin(data) {
-  return request.post('/login/', data)
-}
+export default {
+  //登录请求
+   login(data) {
+    return request.post('/login/', data)
+  },
 
 //注册请求
-export function apiRegister(data) {
-  return request.post('/register/', data)
+   register(data) {
+    return request.post('/register/', data)
+  },
+
+//  用户列表
+  users(params) {
+    return request.get('/users/', params)
+  }
+
 }

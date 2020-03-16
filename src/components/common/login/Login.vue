@@ -30,15 +30,13 @@
 </template>
 
 <script>
-  import {apiLogin} from "network/api";
-
   export default {
     name: "Login",
     data() {
       return {
         loginForm: {
-          username: '',
-          password: ''
+          username: 'admin',
+          password: '19218xql'
         },
         // 表单验证
         loginFormRules: {
@@ -63,12 +61,13 @@
         this.$refs.loginFormRef.validate(valid => {
           // console.log(valid);
           if (!valid) return false;
-          apiLogin(this.loginForm).then(res => {
-            // console.log(res);
-            if (res.meta.status !== 200) return this.$message.error("登录失败");
+          this.$api.login(this.loginForm).then(res => {
+            console.log(res);
+            if (res.data.status !== 200) return this.$message.error("登录失败");
             this.$message.success("登录成功");
             //保持token
-            window.sessionStorage.setItem('token', res.data.token);
+            let token = 'jwt ' + res.token;
+            window.sessionStorage.setItem('token', token);
             // 2、通过编程式导航跳转到后台主页, 路由地址为：/home
             this.$router.push('/home')
           }).catch(err => {

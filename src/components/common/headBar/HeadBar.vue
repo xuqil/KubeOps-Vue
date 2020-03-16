@@ -16,8 +16,8 @@
             Admin<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>设置</el-dropdown-item>
-            <el-dropdown-item>注销</el-dropdown-item>
+            <el-dropdown-item>修改密码</el-dropdown-item>
+            <el-dropdown-item>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -66,7 +66,7 @@
     box-sizing: border-box;
     width: 100%;
     height: 70px;
-    background-color: #242f42;
+    background-color: #00172c;
     font-size: 22px;
     color: #fff;
   }

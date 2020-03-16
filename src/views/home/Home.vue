@@ -3,7 +3,7 @@
     <el-header><head-bar/></el-header>
     <el-container>
       <el-aside  :width="asideWidth"><side-menu/></el-aside>
-      <el-main>Mainfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</el-main>
+      <el-main><router-view/></el-main>
     </el-container>
   </el-container>
 </template>

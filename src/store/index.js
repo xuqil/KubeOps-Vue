@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    isCollapse: true //侧栏默认闭合
+    isCollapse: false //侧栏默认闭合
   },
   mutations: {
     isCollapse: state => {

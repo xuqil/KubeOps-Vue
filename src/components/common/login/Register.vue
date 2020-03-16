@@ -28,8 +28,6 @@
 
 <script>
 
-  import {apiRegister} from "network/api";
-
   export default {
     name: "Register",
     data() {
@@ -82,7 +80,7 @@
         this.$refs[formName].validate((valid) => {
           console.log(valid);
           if (valid) {
-            apiRegister(this.registerForm).then(res => {
+            this.$api.register(this.registerForm).then(res => {
               console.log(res);
               this.$message.success("注册成功")
             }).catch(error => {

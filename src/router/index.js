@@ -7,6 +7,7 @@ const Login = () => import('components/common/login/Login');
 const Register = () => import('components/common/login/Register');
 
 const Home = () => import('views/home/Home');
+const Users = () => import('views/user/Users');
 
 const routes = [
   {
@@ -15,7 +16,17 @@ const routes = [
     name: "home",
     meta: {
       title: '主页'
-    }
+    },
+    children: [
+      // { path: '/home', component: Welcome },
+      { path: '/users', component: Users },
+      // { path: '/rights', component: Rights },
+      // { path: '/roles', component: Roles },
+      // { path: '/categories', component: Cate },
+      // { path: '/params', component: Params },
+      // { path: '/goods', component: GoodsList },
+      // { path: '/goods/add', component: Add },
+    ]
   },
   {
     path: '',
