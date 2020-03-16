@@ -21,11 +21,7 @@ function baseConfig(config) {
 
   // 2.2.响应拦截
   instance.interceptors.response.use(res => {
-    if (res.status === 200) {
       return Promise.resolve(res);
-    } else {
-      return Promise.reject(res);
-    }
   }, error => {
     return Promise.reject(error)
   });
@@ -52,5 +48,22 @@ export default {
       url,
       params
     })
-  }
+  },
+  put(url, data) {
+    return baseConfig({
+      method: 'put',
+      url,
+      data: Qs.stringify(data)
+    })
+  },
+  delete(url, data) {
+    return baseConfig({
+      method: 'delete',
+      url,
+      params: Qs.stringify(data),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    })
+  },
 }
