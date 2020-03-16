@@ -24,4 +24,8 @@ export default {
   userAdd(data) {
     return request.post('/user/', data)
   },
+//  删除用户
+  userDelete(suffix, data) {
+    return request.delete('/users/' + suffix + '/', data)
+  }
 }

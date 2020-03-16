@@ -13,7 +13,7 @@ function baseConfig(config) {
   // 2.1.请求拦截的作用
   instance.interceptors.request.use(config => {
     //在请求头中添加token认证
-    config.headers.Authorization = window.sessionStorage.getItem('token');
+    config.headers.Authorization = 'jwt ' + window.sessionStorage.getItem('token');
     return config
   }, error => {
     return Promise.reject(error)

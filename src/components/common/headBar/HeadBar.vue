@@ -11,13 +11,13 @@
       <div class="header-items">
         <el-button type="text" icon="el-icon-full-screen" @click="changeFullScreen">全屏</el-button>
         <el-button type="text" icon="el-icon-bell">通知</el-button>
-        <el-dropdown class="dropdown">
+        <el-dropdown class="dropdown"  @command="handleCommand">
           <span class="el-dropdown-link">
             Admin<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>修改密码</el-dropdown-item>
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item command="password">修改密码</el-dropdown-item>
+            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -50,6 +50,13 @@
           if (document.exitFullscreen) {
             document.exitFullscreen();
           }
+        }
+      },
+      //退出登录
+      handleCommand(command) {
+        if(command === 'logout') {
+          window.sessionStorage.clear();
+          this.$router.push('/login')
         }
       }
     },

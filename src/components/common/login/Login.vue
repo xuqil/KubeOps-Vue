@@ -14,10 +14,11 @@
           :rules="loginFormRules"
           ref="loginFormRef">
           <el-form-item label="账号" prop="username">
-            <el-input v-model="loginForm.username"  placeholder="请输入用户名" prefix-icon="iconfont icon-user"></el-input>
+            <el-input v-model="loginForm.username" placeholder="请输入用户名" prefix-icon="iconfont icon-user"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input v-model="loginForm.password" type="password" placeholder="请输入密码" prefix-icon="iconfont icon-3702mima"></el-input>
+            <el-input v-model="loginForm.password" type="password" placeholder="请输入密码"
+                      prefix-icon="iconfont icon-3702mima"></el-input>
           </el-form-item>
           <el-form-item class="btns">
             <el-button type="primary" @click="login">登录</el-button>
@@ -66,7 +67,7 @@
             if (res.data.status !== 200) return this.$message.error("登录失败");
             this.$message.success("登录成功");
             //保持token
-            let token = 'jwt ' + res.token;
+            let token = res.data.token;
             window.sessionStorage.setItem('token', token);
             // 2、通过编程式导航跳转到后台主页, 路由地址为：/home
             this.$router.push('/home')
