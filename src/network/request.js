@@ -21,7 +21,7 @@ function baseConfig(config) {
 
   // 2.2.响应拦截
   instance.interceptors.response.use(res => {
-      return Promise.resolve(res);
+    return Promise.resolve(res);
   }, error => {
     return Promise.reject(error)
   });
@@ -56,7 +56,7 @@ export default {
       data: data
     })
   },
-  delete(url, data) {
+  delete(url, data = null) {
     return baseConfig({
       method: 'delete',
       url,

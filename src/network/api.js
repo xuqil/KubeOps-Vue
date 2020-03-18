@@ -27,8 +27,8 @@ export default {
     return request.post('/user/', data)
   },
   //删除用户
-  userDelete(suffix, data) {
-    return request.delete('/users/' + suffix + '/', data)
+  userDelete(suffix) {
+    return request.delete('/users/' + suffix + '/')
   },
 
   /*****************菜单相关******************/
@@ -50,7 +50,10 @@ export default {
   rolesPot(data) {
     return request.post('/roles/', data)
   },
-
+  //删除角色
+  rolesDelete(suffix) {
+    return request.delete('/roles/' + suffix + '/')
+  },
   /*****************权限相关******************/
   rightsGet(params=null) {
     return request.get('/permissions/', params)
