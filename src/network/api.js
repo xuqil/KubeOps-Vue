@@ -46,6 +46,10 @@ export default {
   rolesPut(suffix, data) {
     return request.put('/roles/' + suffix + '/', data)
   },
+  //添加角色
+  rolesPot(data) {
+    return request.post('/roles/', data)
+  },
 
   /*****************权限相关******************/
   rightsGet(params=null) {

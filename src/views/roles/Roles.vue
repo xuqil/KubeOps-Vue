@@ -11,7 +11,7 @@
       <!-- 添加角色按钮 -->
       <el-row>
         <el-col>
-          <el-button type="primary">添加角色</el-button>
+          <el-button type="primary"  @click="addDialogVisible = true">添加角色</el-button>
         </el-col>
       </el-row>
       <!--角色列表-->
@@ -95,6 +95,28 @@
                 <el-button type="primary" @click="saveRoleRights">确 定</el-button>
             </span>
     </el-dialog>
+    <!--添加角色区域-->
+    <el-dialog
+      title="添加用户"
+      :visible.sync="addDialogVisible"
+      width="50%"
+      @close="addDialogClosed">
+      <el-form
+        :model="addRolesForm"
+        ref="addUserFormRef"
+        label-width="70px">
+        <el-form-item label="角色" >
+          <el-input v-model="addRolesForm.title"></el-input>
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="addRolesForm.desc" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addRole">确 定</el-button>
+            </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -126,6 +148,13 @@
         rightsProps: {
           children: 'children',
           label: 'title'
+        },
+        //添加角色对话框
+        addDialogVisible: false,
+        // 用户添加
+        addRolesForm: {
+          title: '',
+          desc: ''
         },
       }
     },
@@ -200,7 +229,6 @@
           console.log(onerror);
           return this.$message.error("获取权限列表失败")
         });
-        console.log("ok")
         //获取默认的权限
         this.defaultRights = [];
         roles.permissions.forEach(value => this.defaultRights.push(value.id));
@@ -224,7 +252,29 @@
           return this.$message.error('分配权限失败！')
         });
         this.rightsDialogVisible = false;
-      }
+      },
+      //添加角色
+      addRole(){
+        // 提交请求前，表单预验证
+        this.$refs.addUserFormRef.validate(valid => {
+          // 表单预校验失败
+          if (!valid) return;
+          this.$api.rolesPot(this.addRolesForm).then(res => {
+            this.$message.success('添加角色成功！');
+            this.getRolesList()
+          }).catch(onerror => {
+            console.log(onerror);
+            this.$message.error('添加角色失败！')
+          });
+          // 隐藏添加角色对话框
+          this.addDialogVisible = false;
+        })
+      },
+      //关闭添加角色对话框
+      addDialogClosed(){
+        this.addRolesForm.title = '';
+        this.addRolesForm.desc = '';
+      },
     }
   }
 </script>
