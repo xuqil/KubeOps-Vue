@@ -66,6 +66,16 @@
           </template>
         </el-table-column>
       </el-table>
+      <!--分页区域-->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryInfo.page"
+        :page-sizes="[1, 2, 5, 10]"
+        :page-size="queryInfo.page_size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
     </el-card>
     <!--分配权限-->
     <el-dialog
@@ -93,6 +103,14 @@
     name: "Roles",
     data() {
       return {
+        queryInfo: {
+          // 当前页数
+          page: 1,
+          // 每页显示多少数据
+          page_size: 5
+        },
+        //总条目
+        total: 0,
         //角色列表
         rolesList: [],
         //更新的权限
@@ -117,12 +135,22 @@
     methods: {
       //获取角色列表
       getRolesList() {
-        this.$api.rolesGet().then(res => {
+        this.$api.rolesGet(this.queryInfo).then(res => {
           this.rolesList = res.data.results;
+          this.total = res.data.count;
         }).catch(onerror => {
           console.log(onerror);
           return this.$message.error('获取角色列表失败！')
         })
+      },
+      //分页
+      handleSizeChange(newSize) {
+        this.queryInfo.page_size = newSize;
+        this.getRolesList()
+      },
+      handleCurrentChange(newPage) {
+        this.queryInfo.page = newPage;
+        this.getRolesList()
       },
       //获取数组内元素索引
       indexArray(val, array) {

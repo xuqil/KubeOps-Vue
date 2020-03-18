@@ -39,8 +39,8 @@ export default {
 
   /*****************角色相关******************/
   //获取角色列表
-  rolesGet() {
-    return request.get('/roles/')
+  rolesGet(params=null) {
+    return request.get('/roles/', params)
   },
   //更新角色信息
   rolesPut(suffix, data) {
@@ -48,7 +48,7 @@ export default {
   },
 
   /*****************权限相关******************/
-  rightsGet() {
-    return request.get('/permissions/')
+  rightsGet(params=null) {
+    return request.get('/permissions/', params)
   }
 }
