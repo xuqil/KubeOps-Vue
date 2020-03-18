@@ -113,7 +113,7 @@
         <el-button type="primary" @click="editUser">确 定</el-button>
       </span>
     </el-dialog>
-    <!--分配权限-->
+    <!--分配角色-->
     <el-dialog
       title="分配角色"
       :visible.sync="roleDialogVisible"

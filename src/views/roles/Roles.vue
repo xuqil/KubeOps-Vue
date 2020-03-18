@@ -59,13 +59,32 @@
             <el-button
               type="warning"
               icon="el-icon-setting"
-              size="mini">
+              size="mini"
+              @click="showSetRights(scope.row)">
               分配权限
             </el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
+    <!--分配权限-->
+    <el-dialog
+      title="分配权限"
+      :visible.sync="rightsDialogVisible"
+      width="50%">
+      <el-tree
+        :data="rightsTree"
+        :props="rightsProps"
+        ref="rightsRef"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :default-checked-keys="defaultRights"></el-tree>
+      <span slot="footer" class="dialog-footer">
+                <el-button @click="rightsDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveRoleRights">确 定</el-button>
+            </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -74,8 +93,22 @@
     name: "Roles",
     data() {
       return {
+        //角色列表
         rolesList: [],
-        updateRights: []
+        //更新的权限
+        updateRights: [],
+        //分配权限会话框
+        rightsDialogVisible: false,
+        //选中的权限ID
+        selectRightsId: [],
+        defaultRights: [],
+        //权限分配树形列表
+        rightsTree: [],
+        //显示规则
+        rightsProps: {
+          children: 'children',
+          label: 'title'
+        },
       }
     },
     created() {
@@ -114,13 +147,11 @@
           return this.$message.info("已取消删除")
         }
         role.permissions.forEach(value => this.updateRights.push(value.id));
-        console.log(this.updateRights);
         this.removeArray(rightId, this.updateRights);
-        console.log(this.updateRights);
         this.$api.rolesPut(role.id, {
           permissions: this.updateRights,
         }).then(res => {
-          console.log(res);
+          // console.log(res);
           this.$message.success("删除成功");
           this.getRolesList()
         }).catch(onerror => {
@@ -128,6 +159,39 @@
           return this.$message.error('删除权限失败！')
         });
         this.updateRights = [];
+      },
+      showSetRights(roles) {
+        this.currentRoleId = roles.id;
+        this.$api.rightsGet().then(res => {
+          this.rightsTree = res.data.results;
+          this.rightFlag = true;
+        }).catch(onerror => {
+          console.log(onerror);
+          return this.$message.error("获取权限列表失败")
+        });
+        console.log("ok")
+        //获取默认的权限
+        this.defaultRights = [];
+        roles.permissions.forEach(value => this.defaultRights.push(value.id));
+        console.log(this.defaultRights);
+        this.rightsDialogVisible = true;
+      },
+      saveRoleRights() {
+        const permissionsKeys = [
+          ...this.$refs.rightsRef.getCheckedKeys(),
+          ...this.$refs.rightsRef.getHalfCheckedKeys()
+        ];
+        this.$api.rolesPut(this.currentRoleId, {
+          permissions: permissionsKeys,
+        }).then(res => {
+          // console.log(res);
+          this.$message.success("分配成功");
+          this.getRolesList()
+        }).catch(onerror => {
+          console.log(onerror);
+          return this.$message.error('分配权限失败！')
+        });
+        this.rightsDialogVisible = false;
       }
     }
   }
