@@ -25,7 +25,7 @@
         <el-table-column label="姓名" prop="username"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
         <el-table-column label="电话" prop="mobile"></el-table-column>
-        <el-table-column label="角色" prop="roles"></el-table-column>
+        <el-table-column label="角色" prop="roles[0].title"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.active" @change="userStateChange(scope.row)">
@@ -209,7 +209,7 @@
           this.total = res.data.count;
         }).catch(onerror => {
           console.log(onerror);
-          return this.$message.error('获取用户列表失败');
+          return this.$message.error('没有权限');
         })
       },
       //分页

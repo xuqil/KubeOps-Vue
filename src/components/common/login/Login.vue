@@ -37,7 +37,7 @@
       return {
         loginForm: {
           username: 'admin',
-          password: '19218xql'
+          password: 'admin'
         },
         // 表单验证
         loginFormRules: {
@@ -47,7 +47,7 @@
           ],
           password: [
             {required: true, message: '请输入用户密码', trigger: 'blur'},
-            {min: 6, max: 18, message: '长度在 6 到 18 个字符', trigger: 'blur'}
+            {min: 3, max: 18, message: '长度在 3 到 18 个字符', trigger: 'blur'}
           ]
         }
       }

@@ -27,5 +27,9 @@ export default {
 //  删除用户
   userDelete(suffix, data) {
     return request.delete('/users/' + suffix + '/', data)
+  },
+  //获取树形菜单
+  menuTree() {
+    return request.get('/menu/tree/')
   }
 }

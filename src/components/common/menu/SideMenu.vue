@@ -14,13 +14,13 @@
     >
       <template v-for="item in menuItems">
         <!--一级菜单-->
-        <el-submenu v-if="item.subs" :index="item.index + ''">
+        <el-submenu v-if="item.children" :index="item.id + ''">
           <template slot="title">
             <i v-if="item.icon" :class="item.icon"></i>
             <span>{{item.title}}</span>
           </template>
           <!-- 二级菜单 -->
-          <el-menu-item :index="'/' + subItem.path" v-for="subItem in item.subs" :key="subItem.index">
+          <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id">
             <template slot="title">
               <i v-if="subItem.icon" :class="subItem.icon"></i>
               <i v-else class="el-icon-menu"></i>
@@ -29,7 +29,7 @@
           </el-menu-item>
         </el-submenu>
         <!--没有二级菜单的一级菜单-->
-        <el-menu-item v-else :index="'/' + item.path">
+        <el-menu-item v-else :index="item.path">
           <i v-if="item.icon" :class="item.icon"></i>
           <span slot="title">{{item.title}}</span>
         </el-menu-item>
@@ -45,92 +45,22 @@
     name: "SideMenu",
     data() {
       return {
-        menuItems: [
-          {
-            icon: 'el-icon-s-home',
-            index: 'home',
-            path: 'home',
-            title: '系统首页'
-          },
-          {
-            icon: 'el-icon-setting',
-            index: 'platform',
-            path: 'platform',
-            title: '平台管理'
-          },
-          {
-            icon: 'el-icon-goods',
-            index: 'assets',
-            path: 'assets',
-            title: '资产管理'
-          },
-          {
-            icon: 'el-icon-bangzhu',
-            index: 'deployment',
-            path: 'deployment',
-            title: '应用部署'
-          },
-          {
-            icon: 'el-icon-time',
-            index: 'task',
-            path: 'task',
-            title: '任务管理'
-          },
-          {
-            icon: 'el-icon-user',
-            index: 'profile',
-            title: '用户管理',
-            subs: [
-              {
-                index: 'users',
-                path: 'users',
-                title: '用户列表'
-              },
-              {
-                index: 'permissions',
-                path: 'permissions',
-                title: '权限管理'
-              },
-              {
-                index: 'user',
-                path: 'user',
-                title: '账户设置'
-              }
-            ]
-          },
-          {
-            icon: 'el-icon-folder',
-            index: 'file',
-            title: '文件管理',
-            subs: [
-              {
-                index: 'upload',
-                path: 'upload',
-                title: '文件上传'
-              },
-              {
-                index: 'download',
-                path: 'download',
-                title: '文件下载'
-              }
-            ]
-          },
-          {
-            icon: 'el-icon-chat-line-square',
-            index: 'wiki',
-            path: 'wiki',
-            title: 'WIKI'
-          },
-          {
-            icon: 'el-icon-monitor',
-            index: 'monitor',
-            path: 'monitor',
-            title: '监控管理'
-          }
-        ]
+        menuItems: []
       }
     },
+    created() {
+      this.getMenuTree();
+    },
     methods: {
+      getMenuTree() {
+        this.$api.menuTree().then(res => {
+          this.menuItems = res.data;
+          console.log(res.data)
+        }).catch(onerror => {
+          console.log(onerror);
+          return this.$message.error("获取菜单列表失败")
+        })
+      },
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
       },
