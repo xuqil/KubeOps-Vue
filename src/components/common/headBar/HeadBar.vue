@@ -13,7 +13,7 @@
         <el-button type="text" icon="el-icon-bell">通知</el-button>
         <el-dropdown class="dropdown"  @command="handleCommand">
           <span class="el-dropdown-link">
-            Admin<i class="el-icon-arrow-down el-icon--right"></i>
+            {{$store.getters.getUsername}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="password">修改密码</el-dropdown-item>
