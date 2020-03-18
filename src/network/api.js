@@ -42,6 +42,10 @@ export default {
   rolesGet() {
     return request.get('/roles/')
   },
+  //更新角色信息
+  rolesPut(suffix, data) {
+    return request.put('/roles/' + suffix + '/', data)
+  },
 
   /*****************权限相关******************/
   rightsGet() {

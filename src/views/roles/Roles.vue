@@ -21,11 +21,24 @@
             <el-row>
               <el-col >
                 <template v-for="item in scope.row.permissions">
-                  <el-tag v-if="item.action==='add'" closable>{{ item.title }}</el-tag>
-                  <el-tag v-else-if="item.action==='delete'" type="danger" closable>{{ item.title }}</el-tag>
-                  <el-tag v-else-if="item.action==='edit'" type="warning" closable>{{ item.title }}</el-tag>
-                  <el-tag v-else-if="item.action==='list'" type="success" closable>{{ item.title }}</el-tag>
-                  <el-tag v-else type="info" closable>{{ item.title }}</el-tag>
+                  <el-tag v-if="item.action==='add'"
+                          @close="removeRightById(scope.row, item.id)"
+                          closable>{{ item.title }}</el-tag>
+                  <el-tag v-else-if="item.action==='delete'"
+                          type="danger"
+                          @close="removeRightById(scope.row, item.id)"
+                          closable>{{ item.title }}</el-tag>
+                  <el-tag v-else-if="item.action==='edit'"
+                          type="warning"
+                          @close="removeRightById(scope.row, item.id)"
+                          closable>{{ item.title }}</el-tag>
+                  <el-tag v-else-if="item.action==='list'"
+                          type="success"
+                          @close="removeRightById(scope.row, item.id)"
+                          closable>{{ item.title }}</el-tag>
+                  <el-tag v-else type="info"
+                          @close="removeRightById(scope.row, item.id)"
+                          closable>{{ item.title }}</el-tag>
                 </template>
               </el-col>
             </el-row>
@@ -56,7 +69,8 @@
     name: "Roles",
     data() {
       return {
-        rolesList: []
+        rolesList: [],
+        updateRights: []
       }
     },
     created() {
@@ -71,6 +85,40 @@
           return this.$message.error('获取角色列表失败！')
         })
       },
+      //获取数组内元素索引
+      indexArray(val, array) {
+        for (let i = 0; i < array.length; i++) {
+          if (array[i] === val) return i;
+        }
+        return -1;
+      },
+      //删除数组中指定元素
+      removeArray(val, array) {
+        let index = this.indexArray(val, array);
+        if (index > -1) {
+          array.splice(index, 1);
+        }
+      },
+      async removeRightById(role, rightId){
+        const rightConfirm = await this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).catch(err => err);
+        if (rightConfirm !== 'confirm') {
+          return this.$message.info("已取消删除")
+        }
+        role.permissions.forEach(value => this.updateRights.push(value.id));
+        this.removeArray(rightId, this.updateRights);
+        this.$api.rolesPut(role.id, {permissions: this.updateRights}).then(res => {
+          this.$message.success("删除成功");
+          this.updateRights = [];
+          this.getRolesList()
+        }).catch(onerror => {
+          console.log(onerror);
+          return this.$message.error('删除权限失败！')
+        });
+      }
     }
   }
 </script>
