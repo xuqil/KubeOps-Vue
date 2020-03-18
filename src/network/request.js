@@ -53,6 +53,16 @@ export default {
     return baseConfig({
       method: 'put',
       url,
+      data: Qs.stringify(data),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    })
+  },
+  noQsPut(url, data) {
+    return baseConfig({
+      method: 'put',
+      url,
       data: data
     })
   },

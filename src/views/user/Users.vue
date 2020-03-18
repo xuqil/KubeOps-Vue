@@ -68,16 +68,19 @@
         :rules="addUserFormRules"
         ref="addUserFormRef"
         label-width="70px">
-        <el-form-item label="用户名" prop="username">
+        <el-form-item label="用户名" prop="username" label-width="90px">
           <el-input v-model="addUserForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="addUserForm.password" type="password"></el-input>
+        <el-form-item label="密码" prop="password" label-width="90px">
+          <el-input type="password" v-model="addUserForm.password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item label="确认密码" prop="checkPassword" label-width="90px">
+          <el-input type="password" v-model="addUserForm.checkPassword" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email" label-width="90px">
           <el-input v-model="addUserForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="手机" prop="mobile">
+        <el-form-item label="手机" prop="mobile" label-width="90px">
           <el-input v-model="addUserForm.mobile"></el-input>
         </el-form-item>
       </el-form>
@@ -164,6 +167,26 @@
         // 返回一个错误提示
         callback(new Error('请输入合法的手机号码'))
       };
+      let validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.addUserForm.checkPassword !== '') {
+            this.$refs.addUserFormRef.validateField('checkPassword');
+          }
+          callback();
+        }
+      };
+      let validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.addUserForm.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
+
       return {
         queryInfo: {
           // 当前页数
@@ -179,6 +202,7 @@
         addUserForm: {
           username: '',
           password: '',
+          checkPassword: '',
           email: '',
           mobile: ''
         },
@@ -195,12 +219,11 @@
           ],
           password: [
             {required: true, message: '请输入用户密码', trigger: 'blur'},
-            {
-              min: 6,
-              max: 18,
-              message: '用户密码的长度在6～18个字',
-              trigger: 'blur'
-            }
+            {validator: validatePass, trigger: 'blur'}
+          ],
+          checkPassword: [
+            {required: true, message: '请再次输入用户密码', trigger: 'blur'},
+            {validator: validatePass2, trigger: 'blur'}
           ],
           email: [
             {required: true, message: '请输入邮箱', trigger: 'blur'},
@@ -283,13 +306,13 @@
           if (!valid) return;
           this.$api.userAdd(this.addUserForm).then(res => {
             this.$message.success('添加用户成功！');
+            this.getUserList()
           }).catch(onerror => {
             console.log(onerror);
             this.$message.error('添加用户失败！')
           });
           // 隐藏添加用户对话框
           this.addDialogVisible = false;
-          this.getUserList()
         })
       },
       // 编辑用户信息

@@ -44,7 +44,7 @@ export default {
   },
   //更新角色信息
   rolesPut(suffix, data) {
-    return request.put('/roles/' + suffix + '/', data)
+    return request.noQsPut('/roles/' + suffix + '/', data)
   },
   //添加角色
   rolesPot(data) {
