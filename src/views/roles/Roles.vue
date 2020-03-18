@@ -115,6 +115,7 @@
       this.getRolesList()
     },
     methods: {
+      //获取角色列表
       getRolesList() {
         this.$api.rolesGet().then(res => {
           this.rolesList = res.data.results;
@@ -137,6 +138,7 @@
           array.splice(index, 1);
         }
       },
+      //删除权限
       async removeRightById(role, rightId) {
         const rightConfirm = await this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -160,6 +162,7 @@
         });
         this.updateRights = [];
       },
+      //显示分配权限对话框
       showSetRights(roles) {
         this.currentRoleId = roles.id;
         this.$api.rightsGet().then(res => {
@@ -176,6 +179,7 @@
         console.log(this.defaultRights);
         this.rightsDialogVisible = true;
       },
+      //保持修改的权限
       saveRoleRights() {
         const permissionsKeys = [
           ...this.$refs.rightsRef.getCheckedKeys(),

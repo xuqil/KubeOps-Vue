@@ -39,6 +39,7 @@
       this.getRightsList()
     },
     methods: {
+      //获取权限列表
       getRightsList() {
         this.$api.rightsGet().then(res => {
           console.log(res.data.results);
