@@ -41,7 +41,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="queryInfo.page"
-        :page-sizes="[1, 2, 5, 7]"
+        :page-sizes="[1, 2, 5, 10]"
         :page-size="queryInfo.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
@@ -247,11 +247,11 @@
         })
       },
       //编辑权限对话框关闭
-      editDialogClosed(){
+      editDialogClosed() {
         this.$refs.editRightsFormRef.resetFields()
       },
       //删除权限
-      async removeRightsById(id){
+      async removeRightsById(id) {
         const confirmResult = await this.$confirm(
           '此操作将永久删除该权限, 是否继续?',
           '提示',
