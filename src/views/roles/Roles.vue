@@ -17,20 +17,33 @@
       <!--角色列表-->
       <el-table :data="rolesList" border stripe>
         <el-table-column type="expand">
-
+          <template slot-scope="scope">
+            <el-row>
+              <el-col >
+                <template v-for="item in scope.row.permissions">
+                  <el-tag v-if="item.action==='add'" closable>{{ item.title }}</el-tag>
+                  <el-tag v-else-if="item.action==='delete'" type="danger" closable>{{ item.title }}</el-tag>
+                  <el-tag v-else-if="item.action==='edit'" type="warning" closable>{{ item.title }}</el-tag>
+                  <el-tag v-else-if="item.action==='list'" type="success" closable>{{ item.title }}</el-tag>
+                  <el-tag v-else type="info" closable>{{ item.title }}</el-tag>
+                </template>
+              </el-col>
+            </el-row>
+          </template>
         </el-table-column>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="角色名称" prop="title"></el-table-column>
         <el-table-column label="角色描述" prop="desc"></el-table-column>
         <el-table-column label="操作" width="300px">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini" >编辑</el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
             <el-button
               type="warning"
               icon="el-icon-setting"
               size="mini">
-              分配权限</el-button>
+              分配权限
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -50,7 +63,7 @@
       this.getRolesList()
     },
     methods: {
-      getRolesList () {
+      getRolesList() {
         this.$api.rolesGet().then(res => {
           this.rolesList = res.data.results;
         }).catch(onerror => {
@@ -65,18 +78,5 @@
 <style scoped>
   .el-tag {
     margin: 7px;
-  }
-
-  .bdtop {
-    border-top: 1px solid #eee;
-  }
-
-  .bdbottom {
-    border-bottom: 1px solid #eee;
-  }
-
-  .vcenter {
-    display: flex;
-    align-items: center;
   }
 </style>
