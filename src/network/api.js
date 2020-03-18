@@ -31,5 +31,9 @@ export default {
   //获取树形菜单
   menuTree() {
     return request.get('/menu/tree/')
+  },
+//  获取角色列表
+  rolesGet() {
+    return request.get('/roles/')
   }
 }

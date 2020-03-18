@@ -55,17 +55,17 @@
       getMenuTree() {
         this.$api.menuTree().then(res => {
           this.menuItems = res.data;
-          console.log(res.data)
+          // console.log(res.data)
         }).catch(onerror => {
           console.log(onerror);
           return this.$message.error("获取菜单列表失败")
         })
       },
       handleOpen(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       }
     },
     computed: mapState({
