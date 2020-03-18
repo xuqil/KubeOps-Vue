@@ -19,26 +19,31 @@
         <el-table-column type="expand">
           <template slot-scope="scope">
             <el-row>
-              <el-col >
+              <el-col>
                 <template v-for="item in scope.row.permissions">
                   <el-tag v-if="item.action==='add'"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}</el-tag>
+                          closable>{{ item.title }}
+                  </el-tag>
                   <el-tag v-else-if="item.action==='delete'"
                           type="danger"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}</el-tag>
+                          closable>{{ item.title }}
+                  </el-tag>
                   <el-tag v-else-if="item.action==='edit'"
                           type="warning"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}</el-tag>
+                          closable>{{ item.title }}
+                  </el-tag>
                   <el-tag v-else-if="item.action==='list'"
                           type="success"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}</el-tag>
+                          closable>{{ item.title }}
+                  </el-tag>
                   <el-tag v-else type="info"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}</el-tag>
+                          closable>{{ item.title }}
+                  </el-tag>
                 </template>
               </el-col>
             </el-row>
@@ -99,7 +104,7 @@
           array.splice(index, 1);
         }
       },
-      async removeRightById(role, rightId){
+      async removeRightById(role, rightId) {
         const rightConfirm = await this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -109,15 +114,20 @@
           return this.$message.info("已取消删除")
         }
         role.permissions.forEach(value => this.updateRights.push(value.id));
+        console.log(this.updateRights);
         this.removeArray(rightId, this.updateRights);
-        this.$api.rolesPut(role.id, {permissions: this.updateRights}).then(res => {
+        console.log(this.updateRights);
+        this.$api.rolesPut(role.id, {
+          permissions: this.updateRights,
+        }).then(res => {
+          console.log(res);
           this.$message.success("删除成功");
-          this.updateRights = [];
           this.getRolesList()
         }).catch(onerror => {
           console.log(onerror);
           return this.$message.error('删除权限失败！')
         });
+        this.updateRights = [];
       }
     }
   }

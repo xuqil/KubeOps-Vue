@@ -53,7 +53,7 @@ export default {
     return baseConfig({
       method: 'put',
       url,
-      data: Qs.stringify(data)
+      data: data
     })
   },
   delete(url, data) {
