@@ -7,7 +7,9 @@ const Login = () => import('components/common/login/Login');
 const Register = () => import('components/common/login/Register');
 
 const Home = () => import('views/home/Home');
+const Welcome = () => import('views/home/Welcome');
 const Users = () => import('views/user/Users');
+const Rights = () => import('views/rights/Rights');
 
 const routes = [
   {
@@ -18,9 +20,9 @@ const routes = [
       title: '主页'
     },
     children: [
-      // { path: '/home', component: Welcome },
+      { path: '/home', component: Welcome },
       { path: '/users', component: Users },
-      // { path: '/rights', component: Rights },
+      { path: '/rights', component: Rights },
       // { path: '/roles', component: Roles },
       // { path: '/categories', component: Cate },
       // { path: '/params', component: Params },
