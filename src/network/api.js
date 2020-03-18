@@ -55,7 +55,20 @@ export default {
     return request.delete('/roles/' + suffix + '/')
   },
   /*****************权限相关******************/
+  //获取权限列表
   rightsGet(params=null) {
     return request.get('/permissions/', params)
-  }
+  },
+  //添加权限
+  rightsPot(data) {
+    return request.post('/permissions/', data)
+  },
+  //修改权限信息
+  rightsPut(suffix, data) {
+    return request.put('/permissions/' + suffix + '/', data)
+  },
+  //删除权限
+  rightsDelete(suffix) {
+    return request.delete('/permissions/' + suffix + '/')
+  },
 }

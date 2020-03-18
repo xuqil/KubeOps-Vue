@@ -8,6 +8,13 @@
     </el-breadcrumb>
     <!--卡片视图区-->
     <el-card class="box-card">
+      <!-- 添加权限按钮 -->
+      <el-row>
+        <el-col>
+          <el-button type="primary" @click="addDialogVisible = true">添加权限</el-button>
+        </el-col>
+      </el-row>
+      <!--权限表格-->
       <el-table :data="rightsList" border stripe>
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="权限名称" prop="title"></el-table-column>
@@ -19,6 +26,13 @@
             <el-tag type="warning" v-else-if="scope.row.action === 'edit'">编辑</el-tag>
             <el-tag type="success" v-else-if="scope.row.action === 'list'">查看</el-tag>
             <el-tag type="info" v-else>Admin</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="180px">
+          <template slot-scope="scope">
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini"
+                       @click="removeRightsById(scope.row.id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -33,6 +47,69 @@
         :total="total">
       </el-pagination>
     </el-card>
+    <!--添加权限区域-->
+    <el-dialog
+      title="添加用户"
+      :visible.sync="addDialogVisible"
+      width="50%"
+      @close="addDialogClosed">
+      <el-form
+        :model="addRightsForm"
+        ref="addRightsFormRef"
+        label-width="70px"
+        :rules="addRightsRules">
+        <el-form-item label="权限名称" prop="title" label-width="90px">
+          <el-input v-model="addRightsForm.title"></el-input>
+        </el-form-item>
+        <el-form-item label="URL路径" prop="path" label-width="90px">
+          <el-input v-model="addRightsForm.path"></el-input>
+        </el-form-item>
+        <el-form-item label="动作" prop="action" label-width="90px">
+          <el-select v-model="addRightsForm.action" placeholder="请选择动作" clearable>
+            <el-option label="增" value="add"></el-option>
+            <el-option label="删" value="delete"></el-option>
+            <el-option label="改" value="update"></el-option>
+            <el-option label="查" value="list"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addRight">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 修改权限的对话框 -->
+    <el-dialog
+      title="修改权限信息"
+      :visible.sync="editDialogVisible"
+      width="50%"
+      @close="editDialogClosed">
+      <!-- 内容主体 -->
+      <el-form
+        :model="editRightsForm"
+        ref="editRightsFormRef"
+        :rules="editRightsFormRules"
+        label-width="70px">
+        <el-form-item label="权限">
+          <el-input v-model="editRightsForm.title"></el-input>
+        </el-form-item>
+        <el-form-item label="路径" prop="path">
+          <el-input v-model="editRightsForm.path"></el-input>
+        </el-form-item>
+        <el-form-item label="动作" prop="action" label-width="90px">
+          <el-select v-model="editRightsForm.action" placeholder="请选择动作" clearable>
+            <el-option label="增" value="add"></el-option>
+            <el-option label="删" value="delete"></el-option>
+            <el-option label="改" value="update"></el-option>
+            <el-option label="查" value="list"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editRights">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -40,6 +117,14 @@
   export default {
     name: "Rights",
     data() {
+      // 自定义URL路径规则
+      const checkPath = (rule, value, callback) => {
+        const regPath = /^\/.*?\/$/;
+        if (regPath.test(value)) {
+          return callback()
+        }
+        callback(new Error('请输入合法路径!如：/users/'))
+      };
       return {
         // 权限列表
         rightsList: [],
@@ -51,6 +136,42 @@
         },
         //总条目
         total: 0,
+        //添加权限对话框闭合
+        addDialogVisible: false,
+        //权限表单
+        addRightsForm: {
+          title: '',
+          path: '',
+          action: ''
+        },
+        addRightsRules: {
+          title: [
+            {required: true, message: '请输入权限名称', trigger: 'blur'}
+          ],
+          path: [
+            {required: true, message: '请输入路径', trigger: 'blur'},
+            {validator: checkPath, trigger: 'blur'}
+          ],
+          action: [
+            {required: true, message: '请输入动作', trigger: 'blur'}
+          ],
+        },
+        //编辑权限
+        editDialogVisible: false,
+        //编辑的权限表单
+        editRightsForm: {},
+        editRightsFormRules: {
+          title: [
+            {required: true, message: '请输入权限名称', trigger: 'blur'}
+          ],
+          path: [
+            {required: true, message: '请输入路径', trigger: 'blur'},
+            {validator: checkPath, trigger: 'blur'}
+          ],
+          action: [
+            {required: true, message: '请输入动作', trigger: 'blur'}
+          ],
+        }
       }
     },
     created() {
@@ -76,6 +197,80 @@
       handleCurrentChange(newPage) {
         this.queryInfo.page = newPage;
         this.getRightsList()
+      },
+      //添加权限对话框关闭
+      addDialogClosed() {
+        this.$refs.addRightsFormRef.resetFields()
+      },
+      //添加权限
+      addRight() {
+        // 提交请求前，表单预验证
+        this.$refs.addRightsFormRef.validate(valid => {
+          // 表单预校验失败
+          if (!valid) return;
+          this.$api.rightsPot(this.addRightsForm).then(res => {
+            this.$message.success('添加权限成功！');
+            this.getRightsList()
+          }).catch(onerror => {
+            console.log(onerror);
+            this.$message.error('添加权限失败！')
+          });
+          this.addDialogVisible = false;
+        })
+      },
+      //显示编辑权限对话框
+      showEditDialog(id) {
+        this.editRightsForm = this.rightsList.find(function (obj) {
+          return obj.id === id
+        });
+        this.editDialogVisible = true
+      },
+      //编辑权限
+      editRights() {
+        // 提交请求前，表单预验证
+        this.$refs.editRightsFormRef.validate(valid => {
+          // console.log(valid)
+          // 表单预校验失败
+          if (!valid) return;
+          this.$api.rightsPut(this.editRightsForm.id, {
+            title: this.editRightsForm.title,
+            path: this.editRightsForm.path,
+            action: this.editRightsForm.action
+          }).then(res => {
+            this.$message.success('更新权限信息成功！');
+            this.getRightsList()
+          }).catch(onerror => {
+            console.log(onerror);
+            this.$message.error('更新权限信息失败！')
+          });
+          this.editDialogVisible = false;
+        })
+      },
+      //编辑权限对话框关闭
+      editDialogClosed(){
+        this.$refs.editRightsFormRef.resetFields()
+      },
+      //删除权限
+      async removeRightsById(id){
+        const confirmResult = await this.$confirm(
+          '此操作将永久删除该权限, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).catch(err => err);
+        if (confirmResult !== 'confirm') {
+          return this.$message.info('已取消删除')
+        }
+        this.$api.rightsDelete(id).then(res => {
+          this.$message.success('删除权限成功！');
+          this.getRightsList()
+        }).catch(onerror => {
+          console.log(onerror);
+          return this.$message.error('删除权限失败！')
+        });
       },
     }
   }
