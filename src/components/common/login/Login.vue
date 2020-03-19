@@ -66,7 +66,9 @@
             console.log(res.data);
             this.$store.commit('saveUsername', res.data.username);
             this.$store.commit('saveUserId', res.data.id)
-            if (res.data.status !== 200) return this.$message.error("登录失败");
+            if (res.data.status !== 200) {
+              return this.$message.error(res.data.msg)
+            }
             this.$message.success("登录成功");
             //保持token
             let token = res.data.token;

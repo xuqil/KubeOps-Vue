@@ -22,6 +22,10 @@ export default {
   userUpdate(suffix, data) {
     return request.put('/user/' + suffix + '/', data)
   },
+  //修改登录用户密码
+  passwordUpdate(data) {
+    return request.put('/password/', data)
+  },
 
   //用户列表
   usersGet(params) {

@@ -11,12 +11,12 @@
       <div class="header-items">
         <el-button type="text" icon="el-icon-full-screen" @click="changeFullScreen">全屏</el-button>
         <el-button type="text" icon="el-icon-bell">通知</el-button>
-        <el-dropdown class="dropdown"  @command="handleCommand">
+        <el-dropdown class="dropdown" @command="handleCommand">
           <span class="el-dropdown-link">
-            {{$store.getters.getUsername}}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{getUsername}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="password">修改密码</el-dropdown-item>
+            <el-dropdown-item command="password">账户设置</el-dropdown-item>
             <el-dropdown-item command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -26,13 +26,12 @@
 </template>
 
 <script>
-  import {mapMutations, mapState} from 'vuex'
+  import {mapGetters, mapMutations, mapState} from 'vuex'
 
   export default {
     name: "HeadBar",
     data() {
-      return {
-      };
+      return {};
     },
     methods: {
       ...mapMutations([
@@ -43,7 +42,7 @@
         this.isCollapse()
       },
       //全屏函数
-      changeFullScreen(){
+      changeFullScreen() {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen();
         } else {
@@ -54,16 +53,25 @@
       },
       //退出登录
       handleCommand(command) {
-        if(command === 'logout') {
+        if (command === 'logout') {
           window.sessionStorage.clear();
           this.$router.push('/login')
+        } else {
+          this.$router.push('/user')
         }
       }
     },
-    computed: mapState({
-      // 侧栏开闭合设置
-      Collapse: state => state.isCollapse
-    })
+    computed:
+      {
+        ...mapState({
+          // 侧栏开闭合设置
+          Collapse: state => state.isCollapse
+        }),
+        ...mapGetters([
+          //登录的用户名
+          'getUsername'
+        ]),
+      }
   }
 </script>
 
@@ -105,17 +113,17 @@
     align-items: center
   }
 
-  .el-button{
+  .el-button {
     padding-right: 15px;
     font-size: 18px;
     color: #fff;
   }
 
-  .el-button:focus{
+  .el-button:focus {
     color: rgb(32, 160, 255);
   }
 
-  .dropdown{
+  .dropdown {
     padding-left: 10px;
     padding-right: 15px;
   }
