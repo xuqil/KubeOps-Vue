@@ -14,6 +14,15 @@ export default {
     return request.post('/register/', data)
   },
 
+  //登录用户信息
+  userDetail(suffix) {
+    return request.get('/user/' + suffix + '/')
+  },
+  //修改登录用户信息
+  userUpdate(suffix, data) {
+    return request.put('/user/' + suffix + '/', data)
+  },
+
   //用户列表
   usersGet(params) {
     return request.get('/users/', params)
@@ -39,7 +48,7 @@ export default {
 
   /*****************角色相关******************/
   //获取角色列表
-  rolesGet(params=null) {
+  rolesGet(params = null) {
     return request.get('/roles/', params)
   },
   //更新角色信息
@@ -56,7 +65,7 @@ export default {
   },
   /*****************权限相关******************/
   //获取权限列表
-  rightsGet(params=null) {
+  rightsGet(params = null) {
     return request.get('/permissions/', params)
   },
   //添加权限

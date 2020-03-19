@@ -9,6 +9,7 @@ const Register = () => import('components/common/login/Register');
 const Home = () => import('views/home/Home');
 const Welcome = () => import('views/home/Welcome');
 const Users = () => import('views/user/Users');
+const User = () => import('views/user/User');
 const Rights = () => import('views/rights/Rights');
 const Roles = () => import('views/roles/Roles');
 
@@ -23,12 +24,9 @@ const routes = [
     children: [
       { path: '/home', component: Welcome },
       { path: '/users', component: Users },
+      { path: '/user', component: User },
       { path: '/rights', component: Rights },
       { path: '/roles', component: Roles },
-      // { path: '/categories', component: Cate },
-      // { path: '/params', component: Params },
-      // { path: '/goods', component: GoodsList },
-      // { path: '/goods/add', component: Add },
     ]
   },
   {

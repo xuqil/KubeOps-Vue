@@ -334,6 +334,7 @@
           // 表单预校验失败
           if (!valid) return;
           this.$api.usersPut(this.editUserForm.id, {
+            username: this.editUserForm.username,
             email: this.editUserForm.email,
             mobile: this.editUserForm.mobile
           }).then(res => {
