@@ -102,4 +102,24 @@ export default {
   tagsDelete(suffix) {
     return request.delete('/tags/' + suffix + '/')
   },
+
+  /*****************资产IDC机房相关******************/
+  //获取机房列表
+  IDCGet(params = null) {
+    return request.get('/idc/', params)
+  },
+  //添加机房
+  IDCPot(data) {
+    return request.post('/idc/', data)
+  },
+  //修改机房信息
+  IDCPut(suffix, data) {
+    return request.put('/idc/' + suffix + '/', data)
+  },
+  //删除机房
+  IDCDelete(suffix) {
+    return request.delete('/idc/' + suffix + '/')
+  },
+
+
 }

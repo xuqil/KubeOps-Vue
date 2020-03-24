@@ -8,7 +8,7 @@
     </el-breadcrumb>
     <!-- 卡片视图 -->
     <el-card>
-      <!-- 添加角色按钮 -->
+      <!-- 添加标签按钮 -->
       <el-row>
         <el-col>
           <el-button type="primary" @click="addDialogVisible = true">添加标签</el-button>
