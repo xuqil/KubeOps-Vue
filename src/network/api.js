@@ -132,7 +132,7 @@ export default {
   },
   //修改机房信息
   serversPut(suffix, data) {
-    return request.put('/servers/' + suffix + '/', data)
+    return request.noQsPut('/servers/' + suffix + '/', data)
   },
   //删除机房
   serversDelete(suffix) {

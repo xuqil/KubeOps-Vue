@@ -135,6 +135,26 @@
         <el-form-item label="服务器IP" prop="ip">
           <el-input v-model="editServerForm.ip" clearable></el-input>
         </el-form-item>
+        <el-form-item label="机房">
+          <el-select v-model="editServerForm.idc" placeholder="请选择机房">
+            <el-option
+              v-for="item in IDCList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="标签">
+          <el-select v-model="selectedTags" multiple placeholder="请选择">
+            <el-option
+              v-for="item in tagsList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="操作系统类型">
           <el-input v-model="editServerForm.os_type" clearable></el-input>
         </el-form-item>
@@ -248,7 +268,9 @@
         },
         editDialogVisible: false,
         editServerForm: [],
-
+        IDCList: '',
+        tagsList: [],
+        selectedTags: [],
       }
     },
     created() {
@@ -311,16 +333,39 @@
       addDialogClosed() {
         Object.keys(this.addServerForm).forEach(key => this.addServerForm[key] = '');
       },
+      //显示编辑主机对话框
       showEditDialog(id) {
         this.editServerForm = this.serversList.find(function (obj) {
           return obj.id === id
         });
-        console.log(this.editServerForm)
+        //判断是否分配机房
+        if (this.editServerForm.idc !== null) {
+          if (this.editServerForm.idc.id !== undefined) {
+            //获取已分配的机房ID
+            this.editServerForm.idc = this.editServerForm.idc.id;
+          }
+        }
+        //获取已分配的标签ID
+        this.selectedTags = [];
+        this.editServerForm.tags.forEach(value => this.selectedTags.push(value.id));
+
+        this.getIDCList();
+        this.getTagsList();
         this.editDialogVisible = true
       },
+      //提交编辑
       editServer() {
         this.$refs.editServerFormRef.validate(valid => {
           if (!valid) return;
+          console.log(this.selectedTags)
+          if (this.selectedTags === []) {
+            let tmp = this.editServerForm.tags;
+            this.editServerForm.tags = [];
+            tmp.forEach(value => this.editServerForm.tags.push(value.id));
+          } else {
+            this.editServerForm.tags = this.selectedTags;
+          }
+          console.log(this.editServerForm)
           this.$api.serversPut(this.editServerForm.id, this.editServerForm).then(res => {
             this.$message.success('更新主机信息成功！');
             this.getServersList()
@@ -329,6 +374,24 @@
             this.$message.error('更新主机信息失败！')
           });
           this.editDialogVisible = false;
+        })
+      },
+      //获取IDC列表
+      getIDCList() {
+        this.$api.IDCGet(this.queryInfo).then(res => {
+          this.IDCList = res.data.results;
+        }).catch(onerror => {
+          console.log(onerror);
+          return this.$message.error("获取IDC机房列表失败！")
+        })
+      },
+      //获取标签列表
+      getTagsList() {
+        this.$api.tagsGet(this.queryInfo).then(res => {
+          this.tagsList = res.data.results;
+        }).catch(onerror => {
+          console.log(onerror);
+          return this.$message.error("获取标签列表失败！")
         })
       },
       editDialogClosed() {
