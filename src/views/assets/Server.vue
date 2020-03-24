@@ -74,7 +74,7 @@
           <el-input v-model="addServerForm.username" clearable></el-input>
         </el-form-item>
         <el-form-item label="服务器密码">
-          <el-input v-model="addServerForm.password" clearable></el-input>
+          <el-input type="password" v-model="addServerForm.password" clearable></el-input>
         </el-form-item>
         <el-form-item label="服务器端口号">
           <el-input v-model="addServerForm.port" clearable></el-input>
@@ -116,6 +116,80 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="addServer">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!--编辑主机区域-->
+    <el-dialog
+      title="添加标签"
+      :visible.sync="editDialogVisible"
+      width="70%"
+      @close="editDialogClosed">
+      <el-form
+        :model="editServerForm"
+        ref="editServerFormRef"
+        :rules="addServerFormRules"
+        label-width="100px">
+        <el-form-item label="主机名称" prop="hostname">
+          <el-input v-model="editServerForm.hostname" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器IP" prop="ip">
+          <el-input v-model="editServerForm.ip" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="操作系统类型">
+          <el-input v-model="editServerForm.os_type" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="操作系统版本">
+          <el-input v-model="editServerForm.os_version" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="登录类型">
+          <el-input v-model="editServerForm.auth_type" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器用户名">
+          <el-input v-model="editServerForm.username" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器密码">
+          <el-input type="password" v-model="editServerForm.password" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器端口号">
+          <el-input v-model="editServerForm.port" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="应用环境">
+          <el-input v-model="editServerForm.app_env" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="序列号">
+          <el-input v-model="editServerForm.sn" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="型号">
+          <el-input v-model="editServerForm.model" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="品牌">
+          <el-input v-model="editServerForm.brand" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="设备类型">
+          <el-input v-model="editServerForm.device_type" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-input v-model="editServerForm.status" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="所在机柜">
+          <el-input v-model="editServerForm.cabinet" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器类型">
+          <el-input v-model="editServerForm.type" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="上架日期">
+          <el-input v-model="editServerForm.shelves_date" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="保修日期">
+          <el-input v-model="editServerForm.maintenance_date" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input type="textarea" v-model="editServerForm.marks" clearable></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editServer">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -172,6 +246,9 @@
             {validator: checkIPV4, trigger: 'blur'}
           ]
         },
+        editDialogVisible: false,
+        editServerForm: [],
+
       }
     },
     created() {
@@ -195,9 +272,6 @@
       handleCurrentChange(newPage) {
         this.queryInfo.page = newPage;
         this.getTagsList()
-      },
-      showEditDialog(id) {
-
       },
       //删除主机
       async removeServerById(id) {
@@ -237,9 +311,36 @@
       addDialogClosed() {
         Object.keys(this.addServerForm).forEach(key => this.addServerForm[key] = '');
       },
+      showEditDialog(id) {
+        this.editServerForm = this.serversList.find(function (obj) {
+          return obj.id === id
+        });
+        console.log(this.editServerForm)
+        this.editDialogVisible = true
+      },
+      editServer() {
+        this.$refs.editServerFormRef.validate(valid => {
+          if (!valid) return;
+          this.$api.serversPut(this.editServerForm.id, this.editServerForm).then(res => {
+            this.$message.success('更新主机信息成功！');
+            this.getServersList()
+          }).catch(onerror => {
+            console.log(onerror);
+            this.$message.error('更新主机信息失败！')
+          });
+          this.editDialogVisible = false;
+        })
+      },
+      editDialogClosed() {
+        this.$refs.editServerFormRef.resetFields()
+      },
       showServerDetail(id) {
+        this.editServerForm = this.serversList.find(function (obj) {
+          return obj.id === id
+        });
+        this.editDialogVisible = true
+      },
 
-      }
     }
   }
 </script>
