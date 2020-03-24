@@ -44,6 +44,80 @@
         :total="total">
       </el-pagination>
     </el-card>
+    <!--添加主机区域-->
+    <el-dialog
+      title="添加标签"
+      :visible.sync="addDialogVisible"
+      width="70%"
+      @close="addDialogClosed">
+      <el-form
+        :model="addServerForm"
+        ref="addServerFormRef"
+        :rules="addServerFormRules"
+        label-width="100px">
+        <el-form-item label="主机名称" prop="hostname">
+          <el-input v-model="addServerForm.hostname" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器IP" prop="ip">
+          <el-input v-model="addServerForm.ip" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="操作系统类型">
+          <el-input v-model="addServerForm.os_type" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="操作系统版本">
+          <el-input v-model="addServerForm.os_version" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="登录类型">
+          <el-input v-model="addServerForm.auth_type" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器用户名">
+          <el-input v-model="addServerForm.username" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器密码">
+          <el-input v-model="addServerForm.password" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器端口号">
+          <el-input v-model="addServerForm.port" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="应用环境">
+          <el-input v-model="addServerForm.app_env" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="序列号">
+          <el-input v-model="addServerForm.sn" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="型号">
+          <el-input v-model="addServerForm.model" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="品牌">
+          <el-input v-model="addServerForm.brand" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="设备类型">
+          <el-input v-model="addServerForm.device_type" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-input v-model="addServerForm.status" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="所在机柜">
+          <el-input v-model="addServerForm.cabinet" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="服务器类型">
+          <el-input v-model="addServerForm.type" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="上架日期">
+          <el-input v-model="addServerForm.shelves_date" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="保修日期">
+          <el-input v-model="addServerForm.maintenance_date" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input type="textarea" v-model="addServerForm.marks" clearable></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addServer">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -51,6 +125,15 @@
   export default {
     name: "Server",
     data() {
+      // 自定义IPV4规则
+      const checkIPV4 = (rule, value, callback) => {
+        const ipv4Regexp = /^(?!\.)((^|\.)([1-9]?\d|1\d\d|2(5[0-5]|[0-4]\d))){4}$/gm;
+        if (ipv4Regexp.test(value)) {
+          return callback()
+        }
+        // 返回一个错误提示
+        callback(new Error('请输入合法的IPV4'))
+      };
       return {
         queryInfo: {
           // 当前页数
@@ -59,14 +142,43 @@
           page_size: 5
         },
         total: 0,
-        serversList: []
+        serversList: [],
+        addDialogVisible: false,
+        addServerForm: {
+          hostname: '',
+          ip: '',
+          os_type: '',
+          os_version: '',
+          auth_type: "",
+          username: "",
+          password: "",
+          port: "",
+          app_env: "",
+          sn: "",
+          model: "",
+          brand: "",
+          device_type: "",
+          status: "",
+          cabinet: "",
+          type: "",
+          shelves_date: "",
+          maintenance_date: "",
+          marks: ""
+        },
+        addServerFormRules: {
+          hostname: [{required: true, message: '请输入主机名', trigger: 'blur'},],
+          ip: [
+            {required: true, message: '请输入IP', trigger: 'blur'},
+            {validator: checkIPV4, trigger: 'blur'}
+          ]
+        },
       }
     },
     created() {
       this.getServersList()
     },
     methods: {
-      getServersList(){
+      getServersList() {
         this.$api.serversGet(this.queryInfo).then(res => {
           this.serversList = res.data.results;
           this.total = res.data.count;
@@ -87,10 +199,45 @@
       showEditDialog(id) {
 
       },
-      removeServerById(id) {
-
+      //删除主机
+      async removeServerById(id) {
+        const confirmResult = await this.$confirm(
+          '此操作将永久删除该主机, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).catch(err => err);
+        if (confirmResult !== 'confirm') {
+          return this.$message.info('已取消删除')
+        }
+        this.$api.serversDelete(id).then(res => {
+          this.$message.success('删除主机成功！');
+          this.getServersList()
+        }).catch(onerror => {
+          console.log(onerror);
+          return this.$message.error('删除主机失败！')
+        });
       },
-      showServerDetail(id){
+      addServer() {
+        this.$refs.addServerFormRef.validate(valid => {
+          if (!valid) return;
+          this.$api.serversPot(this.addServerForm).then(res => {
+            this.$message.success('添加主机成功！');
+            this.getServersList()
+          }).catch(onerror => {
+            console.log(onerror);
+            this.$message.error('添加主机失败！')
+          });
+          this.addDialogVisible = false;
+        })
+      },
+      addDialogClosed() {
+        Object.keys(this.addServerForm).forEach(key => this.addServerForm[key] = '');
+      },
+      showServerDetail(id) {
 
       }
     }
