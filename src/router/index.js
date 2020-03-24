@@ -10,8 +10,8 @@ const Home = () => import('views/home/Home');
 const Welcome = () => import('views/home/Welcome');
 const Users = () => import('views/user/Users');
 const User = () => import('views/user/User');
-const Rights = () => import('views/rights/Rights');
-const Roles = () => import('views/roles/Roles');
+const Rights = () => import('views/power/Rights');
+const Roles = () => import('views/power/Roles');
 
 const routes = [
   {

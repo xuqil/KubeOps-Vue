@@ -38,6 +38,7 @@
   }
   .el-header{
     padding: 0;
+    height: 70px !important;
   }
   .el-aside{
     text-align: left;flex:0 1 auto;
