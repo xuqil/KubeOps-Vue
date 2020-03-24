@@ -12,6 +12,9 @@ const Users = () => import('views/user/Users');
 const User = () => import('views/user/User');
 const Rights = () => import('views/power/Rights');
 const Roles = () => import('views/power/Roles');
+const Server = () => import('views/assets/Server');
+const IDC = () => import('views/assets/IDC');
+const Tags = () => import('views/assets/Tags');
 
 const routes = [
   {
@@ -27,6 +30,9 @@ const routes = [
       { path: '/user', component: User },
       { path: '/rights', component: Rights },
       { path: '/roles', component: Roles },
+      { path: '/server', component: Server },
+      { path: '/idc', component: IDC },
+      { path: '/tags', component: Tags },
     ]
   },
   {

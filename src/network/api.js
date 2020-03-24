@@ -84,4 +84,22 @@ export default {
   rightsDelete(suffix) {
     return request.delete('/permissions/' + suffix + '/')
   },
+
+  /*****************资产标签相关******************/
+  //获取标签列表
+  tagsGet(params = null) {
+    return request.get('/tags/', params)
+  },
+  //添加标签
+  tagsPot(data) {
+    return request.post('/tags/', data)
+  },
+  //修改标签信息
+  tagsPut(suffix, data) {
+    return request.put('/tags/' + suffix + '/', data)
+  },
+  //删除标签
+  tagsDelete(suffix) {
+    return request.delete('/tags/' + suffix + '/')
+  },
 }
