@@ -15,6 +15,7 @@ const Roles = () => import('views/power/Roles');
 const Server = () => import('views/assets/Server');
 const IDC = () => import('views/assets/IDC');
 const Tags = () => import('views/assets/Tags');
+const WebSSH = () => import('views/assets/WebSSH');
 
 const routes = [
   {
@@ -33,6 +34,7 @@ const routes = [
       { path: '/server', component: Server },
       { path: '/idc', component: IDC },
       { path: '/tags', component: Tags },
+      { path: '/webssh', component: WebSSH },
     ]
   },
   {

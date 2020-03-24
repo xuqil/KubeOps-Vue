@@ -121,5 +121,21 @@ export default {
     return request.delete('/idc/' + suffix + '/')
   },
 
-
+  /*****************资产主机相关******************/
+  //获取机房列表
+  serversGet(params = null) {
+    return request.get('/servers/', params)
+  },
+  //添加机房
+  serversPot(data) {
+    return request.post('/servers/', data)
+  },
+  //修改机房信息
+  serversPut(suffix, data) {
+    return request.put('/servers/' + suffix + '/', data)
+  },
+  //删除机房
+  serversDelete(suffix) {
+    return request.delete('/servers/' + suffix + '/')
+  },
 }
