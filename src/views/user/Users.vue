@@ -67,20 +67,20 @@
         :model="addUserForm"
         :rules="addUserFormRules"
         ref="addUserFormRef"
-        label-width="70px">
-        <el-form-item label="用户名" prop="username" label-width="90px">
+        label-width="90px">
+        <el-form-item label="用户名" prop="username">
           <el-input v-model="addUserForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password" label-width="90px">
+        <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="addUserForm.password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="checkPassword" label-width="90px">
+        <el-form-item label="确认密码" prop="checkPassword">
           <el-input type="password" v-model="addUserForm.checkPassword" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email" label-width="90px">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="addUserForm.email"></el-input>
         </el-form-item>
-        <el-form-item label="手机" prop="mobile" label-width="90px">
+        <el-form-item label="手机" prop="mobile">
           <el-input v-model="addUserForm.mobile"></el-input>
         </el-form-item>
       </el-form>

@@ -56,12 +56,12 @@
       <el-form
         :model="addRightsForm"
         ref="addRightsFormRef"
-        label-width="70px"
+        label-width="90px"
         :rules="addRightsRules">
-        <el-form-item label="权限名称" prop="title" label-width="90px">
+        <el-form-item label="权限名称" prop="title">
           <el-input v-model="addRightsForm.title"></el-input>
         </el-form-item>
-        <el-form-item label="URL路径" prop="path" label-width="90px">
+        <el-form-item label="URL路径" prop="path">
           <el-input v-model="addRightsForm.path"></el-input>
         </el-form-item>
         <el-form-item label="动作" prop="action" label-width="90px">

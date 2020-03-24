@@ -28,8 +28,6 @@
             </el-button>
             <el-button type="danger" icon="el-icon-delete" @click="removeServerById(scope.row.id)" size="mini">删除
             </el-button>
-            <el-button type="info" icon="el-icon-info" @click="showServerDetail(scope.row.id)" size="mini">详细信息
-            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -46,7 +44,7 @@
     </el-card>
     <!--添加主机区域-->
     <el-dialog
-      title="添加标签"
+      title="添加服务器"
       :visible.sync="addDialogVisible"
       width="70%"
       @close="addDialogClosed">
@@ -120,7 +118,7 @@
     </el-dialog>
     <!--编辑主机区域-->
     <el-dialog
-      title="添加标签"
+      title="编辑服务器"
       :visible.sync="editDialogVisible"
       width="70%"
       @close="editDialogClosed">
@@ -236,8 +234,10 @@
           page_size: 5
         },
         total: 0,
+        //服务器列表
         serversList: [],
         addDialogVisible: false,
+        //添加的服务器
         addServerForm: {
           hostname: '',
           ip: '',
@@ -267,9 +267,11 @@
           ]
         },
         editDialogVisible: false,
+        //编辑的服务器
         editServerForm: [],
         IDCList: '',
         tagsList: [],
+        //已选中的标签
         selectedTags: [],
       }
     },
@@ -397,13 +399,6 @@
       editDialogClosed() {
         this.$refs.editServerFormRef.resetFields()
       },
-      showServerDetail(id) {
-        this.editServerForm = this.serversList.find(function (obj) {
-          return obj.id === id
-        });
-        this.editDialogVisible = true
-      },
-
     }
   }
 </script>
