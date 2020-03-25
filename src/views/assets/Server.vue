@@ -21,6 +21,7 @@
         <el-table-column label="IP" prop="ip"></el-table-column>
         <el-table-column label="设备类型" prop="device_type"></el-table-column>
         <el-table-column label="操作系统版本" prop="os_version"></el-table-column>
+        <el-table-column label="应用环境" prop="app_env"></el-table-column>
         <el-table-column label="服务器状态" prop="status"></el-table-column>
         <el-table-column label="操作" width="300px">
           <template slot-scope="scope">
