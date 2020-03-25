@@ -26,7 +26,7 @@
           <el-table-column label="登录用户" prop="username"></el-table-column>
           <el-table-column label="操作" width="300px">
             <template slot-scope="scope">
-              <el-button type="primary" @click="connectServer(scope.row.id)" size="mini">远程登录
+              <el-button type="primary" @click="showTableConnectServer(scope.row.id)" size="mini">远程登录
               </el-button>
               <el-button type="danger" @click="stopConnect(scope.row.id)" size="mini">终止远程
               </el-button>
@@ -52,22 +52,21 @@
         @close="otherConnectDialogClosed">
         <el-form ref="otherServerFormRef" :model="otherServerForm" label-width="80px">
           <el-form-item label="主机地址">
-            <el-input v-model="otherServerForm.host"></el-input>
+            <el-input v-model="otherServerForm.ip"></el-input>
           </el-form-item>
           <el-form-item label="端口">
             <el-input v-model="otherServerForm.port"></el-input>
           </el-form-item>
           <el-form-item label="用户名">
-            <el-input v-model="otherServerForm.user"></el-input>
+            <el-input v-model="otherServerForm.username"></el-input>
           </el-form-item>
-
           <el-form-item label="认证类型">
-            <el-radio-group v-model="otherServerForm.type">
+            <el-radio-group v-model="otherServerForm.auth_type">
               <el-radio label="pwd" checked>密码认证</el-radio>
               <el-radio label="key">秘钥认证</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="密码" v-if="otherServerForm.type === 'pwd'">
+          <el-form-item label="密码" v-if="otherServerForm.auth_type === 'pwd'">
             <el-input type="password" show-password v-model="otherServerForm.password"></el-input>
           </el-form-item>
 
@@ -85,6 +84,49 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="otherConnectServer">登录</el-button>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+      <!--主机列表的远程登录-->
+      <el-dialog
+        title="登录服务器"
+        :visible.sync="tableConnectDialogVisible"
+        width="50%"
+        @close="tableConnectDialogClosed">
+        <el-form ref="tableServerFormRef" :model="tableServerForm" label-width="80px">
+          <el-form-item label="主机地址">
+            <el-input v-model="tableServerForm.ip" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="端口">
+            <el-input v-model="tableServerForm.port"></el-input>
+          </el-form-item>
+          <el-form-item label="用户名">
+            <el-input v-model="tableServerForm.username"></el-input>
+          </el-form-item>
+          <el-form-item label="认证类型">
+            <el-radio-group v-model="tableServerForm.auth_type">
+              <el-radio label="pwd" checked>密码认证</el-radio>
+              <el-radio label="key">秘钥认证</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="密码" v-if="tableServerForm.auth_type === 'pwd'">
+            <el-input type="password" show-password v-model="tableServerForm.password"></el-input>
+          </el-form-item>
+          <el-form-item label="秘钥文件" v-else>
+            <el-upload
+              action="#"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              :on-exceed="handleExceed"
+              :file-list="fileList">
+              <el-button size="mini" type="info">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">文件大小不超过500kb</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="tableConnectServer">登录</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </el-form>
@@ -116,19 +158,19 @@
         otherConnectDialogVisible: false,
         //是否显示
         isShow: true,
+        //其他主机登录信息
         otherServerForm: {
-          host: '192.168.1.11',
+          ip: '192.168.1.11',
           port: 22,
-          user: 'xql',
-          type: 'pwd',
-          password: '19218xql'
+          username: 'kubeops',
+          auth_type: 'pwd',
+          password: 'kubeops'
         },
-        fileList: []
-      }
-    },
-    computed: {
-      btoaPassword() {
-        return window.btoa(this.otherServerForm.password)
+        fileList: [],
+        //主机列表的主机登录信息
+        tableServerForm: [],
+        tableConnectDialogVisible: false,
+
       }
     },
     created() {
@@ -153,39 +195,40 @@
         this.queryInfo.page = newPage;
         this.getTagsList()
       },
-      //获取other远程登录表单信息
-      getConnectInfo() {
-        let ssh_key = null;
-        if (this.type === 'key') {
-          console.log('key')
-        }
-
-        const connect_info1 = 'host=' + this.otherServerForm.host + '&port=' + this.otherServerForm.port
-          + '&user=' + this.otherServerForm.user + '&auth=' + this.otherServerForm.type;
-        const connect_info2 = '&password=' + this.btoaPassword + '&ssh_key=' + ssh_key;
-        return connect_info1 + connect_info2
-      },
       //获取窗口大小
       getTermSize() {
-        const init_width = 9;
-        const init_height = 17;
-
-        let windows_width = document.body.clientWidth;
-        let windows_height = document.body.clientHeight;
-
+        const initWidth = 9;
+        const initHeight = 17;
+        const windowsWidth = document.body.clientWidth;
+        const windowsHeight = document.body.clientHeight;
         return {
-          cols: Math.floor(windows_width / init_width),
-          rows: Math.floor(windows_height / init_height),
+          cols: Math.floor(windowsWidth / initWidth),
+          rows: Math.floor(windowsHeight / initHeight),
         }
       },
+      //获取远程登录表单信息
+      getConnectInfo(serverForm, type) {
+        /*
+        * serverForm: 主机表单信息
+        * type: 1:其他主机远程登录   2:主机列表的主机远程登录
+        * */
+        let ssh_key = null;
+        if (serverForm.auth_type === 'key') {
+          console.log('key')
+        }
+        const connect_info1 = 'host=' + serverForm.ip + '&port=' + serverForm.port
+          + '&user=' + serverForm.username + '&auth=' + serverForm.auth_type;
+        const connect_info2 = '&password=' + window.btoa(serverForm.password) + '&ssh_key=' + ssh_key + '&type=' + type;
+        return connect_info1 + connect_info2
+      },
       //启动远程SSH
-      startSSH() {
+      startSSH(serverForm, type) {
         let cols = this.getTermSize().cols;
         let rows = this.getTermSize().rows;
-        let connect_info = this.getConnectInfo();
+        let connectInfo = this.getConnectInfo(serverForm, type);
         console.log(cols);
         console.log(rows);
-        console.log(connect_info)
+        console.log(connectInfo)
         const term = new Terminal({
             cols: cols,
             rows: rows,
@@ -193,7 +236,7 @@
             cursorBlink: true
           }),
           protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
-          socketURL = protocol + '127.0.0.1:8000' + '/webssh/?' + connect_info + '&width=' + cols + '&height=' + rows;
+          socketURL = protocol + '127.0.0.1:8000' + '/webssh/?' + connectInfo + '&width=' + cols + '&height=' + rows;
 
         let sock = new WebSocket(socketURL);
         console.log(sock)
@@ -245,10 +288,10 @@
       },
       //启动SSH
       otherConnectServer() {
-        this.startSSH()
+        this.startSSH(this.otherServerForm, 1)
       },
       otherConnectDialogClosed() {
-          this.$refs.otherServerFormRef.resetFields()
+        this.$refs.otherServerFormRef.resetFields()
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -262,8 +305,20 @@
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`);
       },
-      connectServer() {
-
+      showTableConnectServer(id) {
+        this.tableServerForm = this.serversList.find(function (obj) {
+          return obj.id === id
+        });
+        //默认密码登录
+        this.tableServerForm['auth_type'] = 'pwd';
+        this.tableConnectDialogVisible = true
+      },
+      //启动SSH
+      tableConnectServer() {
+        this.startSSH(this.tableServerForm, 2)
+      },
+      tableConnectDialogClosed() {
+        this.$refs.tableServerFormRef.resetFields()
       },
       stopConnect() {
 
