@@ -20,7 +20,9 @@ import {
   Cascader,
   Alert,
   Tabs, TabPane,
-  Steps, Step
+  Steps, Step,
+  Radio, RadioGroup, RadioButton,
+  Upload,
 } from 'element-ui'
 
 
@@ -70,3 +72,10 @@ Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Steps)
 Vue.use(Step)
+
+Vue.use(Radio)
+Vue.use(RadioGroup)
+Vue.use(RadioButton)
+
+
+Vue.use(Upload)

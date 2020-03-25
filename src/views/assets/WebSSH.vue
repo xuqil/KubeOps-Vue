@@ -43,6 +43,51 @@
         :total="total">
       </el-pagination>
     </el-card>
+    <!--其他远程登录区域-->
+    <el-dialog
+      title="登录服务器"
+      :visible.sync="otherConnectDialogVisible"
+      width="50%"
+      @close="otherConnectDialogClosed">
+      <el-form ref="form" :model="otherServerForm" label-width="80px" v-show="isHide">
+        <el-form-item label="主机地址">
+          <el-input v-model="otherServerForm.host"></el-input>
+        </el-form-item>
+        <el-form-item label="端口">
+          <el-input v-model="otherServerForm.port"></el-input>
+        </el-form-item>
+        <el-form-item label="用户名">
+          <el-input v-model="otherServerForm.user"></el-input>
+        </el-form-item>
+
+        <el-form-item label="认证类型">
+          <el-radio-group v-model="otherServerForm.type">
+            <el-radio label="pwd" checked>密码认证</el-radio>
+            <el-radio label="key">秘钥认证</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="密码" v-if="otherServerForm.type === 'pwd'">
+          <el-input type="password" show-password v-model="otherServerForm.password"></el-input>
+        </el-form-item>
+
+        <el-form-item label="秘钥文件" v-else>
+          <el-upload
+            action="#"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
+            :on-exceed="handleExceed"
+            :file-list="fileList">
+            <el-button size="mini" type="info">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">文件大小不超过500kb</div>
+          </el-upload>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="otherConnectServer">登录</el-button>
+          <el-button>取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -61,7 +106,15 @@
         //服务器列表
         serversList: [],
         otherConnectDialogVisible: false,
-
+        isHide: true,
+        otherServerForm: {
+          host: '192.168.1.11',
+          port: 22,
+          user: 'xql',
+          type: 'pwd',
+          password: '19218xql'
+        },
+        fileList: []
       }
     },
     created() {
@@ -85,6 +138,24 @@
       handleCurrentChange(newPage) {
         this.queryInfo.page = newPage;
         this.getTagsList()
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${file.name}？`);
+      },
+      otherConnectDialogClosed() {
+
+      },
+      otherConnectServer() {
+
       },
       connectServer() {
 
