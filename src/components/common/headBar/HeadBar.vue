@@ -1,9 +1,5 @@
 <template>
   <div class="header-bar">
-    <div class="collapse-btn" @click="changeCollapse">
-      <i v-if="Collapse" class="el-icon-s-fold"></i>
-      <i v-else class="el-icon-s-unfold"></i>
-    </div>
     <div class="logo">
       <div>KubeOps运维平台</div>
     </div>
@@ -26,7 +22,7 @@
 </template>
 
 <script>
-  import {mapGetters, mapMutations, mapState} from 'vuex'
+  import {mapGetters} from 'vuex'
 
   export default {
     name: "HeadBar",
@@ -34,13 +30,6 @@
       return {};
     },
     methods: {
-      ...mapMutations([
-        //修改侧栏开闭
-        'isCollapse'
-      ]),
-      changeCollapse() {
-        this.isCollapse()
-      },
       //全屏函数
       changeFullScreen() {
         if (!document.fullscreenElement) {
@@ -63,10 +52,6 @@
     },
     computed:
       {
-        ...mapState({
-          // 侧栏开闭合设置
-          Collapse: state => state.isCollapse
-        }),
         ...mapGetters([
           //登录的用户名
           'getUsername'
@@ -81,20 +66,13 @@
     box-sizing: border-box;
     width: 100%;
     height: 70px;
-    background-color: #00172c;
+    background-color: #f5f5f5;
     font-size: 22px;
-    color: #fff;
-  }
-
-  /*使用浮动对顶栏组件布局*/
-  .collapse-btn {
-    float: left;
-    padding: 0 21px;
-    cursor: pointer;
-    line-height: 70px;
+    color: #00172c;
   }
 
   .logo {
+    margin-left: 10px;
     float: left;
     line-height: 70px;
     text-align: left;
@@ -116,7 +94,7 @@
   .el-button {
     padding-right: 15px;
     font-size: 18px;
-    color: #fff;
+    color: #00172c;
   }
 
   .el-button:focus {
@@ -130,7 +108,7 @@
 
   .el-dropdown-link {
     cursor: pointer;
-    color: #fff;
+    color: #00172c;
     font-size: 18px;
   }
 

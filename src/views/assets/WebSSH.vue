@@ -84,7 +84,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="otherConnectServer">登录</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="otherConnectDialogVisible = false">取消</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -127,7 +127,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="tableConnectServer">登录</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="tableConnectDialogVisible = false">取消</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -170,7 +170,6 @@
         //主机列表的主机登录信息
         tableServerForm: [],
         tableConnectDialogVisible: false,
-
       }
     },
     created() {
@@ -189,11 +188,11 @@
       //分页
       handleSizeChange(newSize) {
         this.queryInfo.page_size = newSize;
-        this.getTagsList()
+        this.getServersList()
       },
       handleCurrentChange(newPage) {
         this.queryInfo.page = newPage;
-        this.getTagsList()
+        this.getServersList()
       },
       //获取窗口大小
       getTermSize() {
@@ -293,6 +292,7 @@
       otherConnectDialogClosed() {
         this.$refs.otherServerFormRef.resetFields()
       },
+      //上传秘钥文件处理
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
@@ -305,6 +305,7 @@
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`);
       },
+      //显示主机列表登录界面
       showTableConnectServer(id) {
         this.tableServerForm = this.serversList.find(function (obj) {
           return obj.id === id

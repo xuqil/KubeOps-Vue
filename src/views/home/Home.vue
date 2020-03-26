@@ -1,8 +1,8 @@
 <template>
   <el-container  class="home_container">
-    <el-header><head-bar/></el-header>
+    <el-aside  :width="asideWidth"><side-menu/></el-aside>
     <el-container>
-      <el-aside  :width="asideWidth"><side-menu/></el-aside>
+      <el-header><head-bar/></el-header>
       <el-main><router-view/></el-main>
     </el-container>
   </el-container>

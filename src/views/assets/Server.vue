@@ -292,11 +292,11 @@
       //分页
       handleSizeChange(newSize) {
         this.queryInfo.page_size = newSize;
-        this.getTagsList()
+        this.getServersList()
       },
       handleCurrentChange(newPage) {
         this.queryInfo.page = newPage;
-        this.getTagsList()
+        this.getServersList()
       },
       //删除主机
       async removeServerById(id) {

@@ -2,16 +2,21 @@
   <div class="sidebar">
     <el-menu
       class="sidebar-el-menu"
-      @open="handleOpen"
-      @close="handleClose"
       background-color="#00233C"
       text-color="#bfcbd9"
       active-text-color="#20a0ff"
       unique-opened
-      :collapse="isCollapse"
+      :collapse="Collapse"
+      :collapse-transition="false"
       router
       :default-active="$route.path"
     >
+      <el-menu-item index="">
+        <div class="collapse-btn" @click="changeCollapse">
+          <i v-if="Collapse" class="el-icon-s-fold"></i>
+          <i v-else class="el-icon-s-unfold"></i>
+        </div>
+      </el-menu-item>
       <template v-for="item in menuItems">
         <!--一级菜单-->
         <el-submenu v-if="item.children" :index="item.id + ''">
@@ -39,7 +44,7 @@
 </template>
 
 <script>
-  import {mapState} from "vuex";
+  import {mapMutations, mapState} from "vuex";
 
   export default {
     name: "SideMenu",
@@ -52,25 +57,26 @@
       this.getMenuTree();
     },
     methods: {
+      ...mapMutations([
+        //修改侧栏开闭
+        'isCollapse'
+      ]),
+      changeCollapse() {
+        this.isCollapse()
+      },
       getMenuTree() {
         this.$api.menuTree().then(res => {
           this.menuItems = res.data;
           // console.log(res.data)
         }).catch(onerror => {
           console.log(onerror);
-          return this.$message.error("获取菜单列表失败")
+          return this.$message.error("获取菜单列`表失败")
         })
-      },
-      handleOpen(key, keyPath) {
-        // console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        // console.log(key, keyPath);
       }
     },
     computed: mapState({
       // 侧栏开闭合设置
-      isCollapse: state => state.isCollapse
+      Collapse: state => state.isCollapse,
     })
   }
 </script>
@@ -80,7 +86,7 @@
     display: block;
     position: absolute;
     left: 0;
-    top: 70px;
+    top: 0;
     bottom: 0;
     overflow-y: scroll;
   }
@@ -95,5 +101,9 @@
 
   .sidebar > ul {
     height: 100%;
+  }
+
+  .collapse-btn {
+    cursor: pointer;
   }
 </style>
