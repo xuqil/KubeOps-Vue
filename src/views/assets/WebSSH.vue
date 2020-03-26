@@ -176,6 +176,15 @@
       this.getServersList()
     },
     methods: {
+      //适配终端大小
+      initXtermDiv(){
+        const xtermDiv = document.getElementById('xterm');
+        const clientHeight = document.body.clientHeight;
+        const clientWidth = document.body.clientWidth;
+        xtermDiv.style.height = (clientHeight - 70).toString() + 'px';
+        xtermDiv.style.width = (clientWidth - 240).toString() + 'px';
+      },
+      //获取服务器列表
       getServersList() {
         this.$api.serversGet(this.queryInfo).then(res => {
           this.serversList = res.data.results;
@@ -246,6 +255,7 @@
           term.open(document.getElementById('xterm'));
         });
         this.isShow = false;
+        this.initXtermDiv();
         // 读取服务器端发送的数据并写入 web 终端
         sock.addEventListener('message', function (recv) {
           let data = JSON.parse(recv.data);
