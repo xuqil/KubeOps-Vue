@@ -138,4 +138,8 @@ export default {
   serversDelete(suffix) {
     return request.delete('/servers/' + suffix + '/')
   },
+  //上传key
+  uploadKeyUrl() {
+    return 'http://127.0.0.1:8000/api/v1/upload_key'
+  }
 }

@@ -72,12 +72,12 @@
 
           <el-form-item label="秘钥文件" v-else>
             <el-upload
-              action="#"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
+              :action="this.$api.uploadKeyUrl()"
               :before-remove="beforeRemove"
-              :on-exceed="handleExceed"
-              :file-list="fileList">
+              :before-upload="beforeKeyUpload"
+              :on-success="uploadSuccess"
+              :file-list="fileList"
+              name="pkey">
               <el-button size="mini" type="info">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">文件大小不超过500kb</div>
             </el-upload>
@@ -115,12 +115,12 @@
           </el-form-item>
           <el-form-item label="秘钥文件" v-else>
             <el-upload
-              action="#"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
+              :action="this.$api.uploadKeyUrl()"
               :before-remove="beforeRemove"
-              :on-exceed="handleExceed"
-              :file-list="fileList">
+              :before-upload="beforeKeyUpload"
+              :on-success="uploadSuccess"
+              :file-list="fileList"
+              name="pkey">
               <el-button size="mini" type="info">点击上传</el-button>
               <div slot="tip" class="el-upload__tip">文件大小不超过500kb</div>
             </el-upload>
@@ -166,6 +166,7 @@
           auth_type: 'pwd',
           password: 'kubeops'
         },
+        ssh_key: null,
         fileList: [],
         //主机列表的主机登录信息
         tableServerForm: [],
@@ -177,7 +178,7 @@
     },
     methods: {
       //适配终端大小
-      initXtermDiv(){
+      initXtermDiv() {
         const xtermDiv = document.getElementById('xterm');
         const clientHeight = document.body.clientHeight;
         const clientWidth = document.body.clientWidth;
@@ -220,13 +221,9 @@
         * serverForm: 主机表单信息
         * type: 1:其他主机远程登录   2:主机列表的主机远程登录
         * */
-        let ssh_key = null;
-        if (serverForm.auth_type === 'key') {
-          console.log('key')
-        }
         const connect_info1 = 'host=' + serverForm.ip + '&port=' + serverForm.port
           + '&user=' + serverForm.username + '&auth=' + serverForm.auth_type;
-        const connect_info2 = '&password=' + window.btoa(serverForm.password) + '&ssh_key=' + ssh_key + '&type=' + type;
+        const connect_info2 = '&password=' + window.btoa(serverForm.password) + '&ssh_key=' + this.ssh_key + '&type=' + type;
         return connect_info1 + connect_info2
       },
       //启动远程SSH
@@ -261,8 +258,6 @@
           let data = JSON.parse(recv.data);
           let message = data.message;
           let status = data.status;
-          console.log("status:")
-          console.log(status)
           if (status === 0) {
             term.write(message)
           } else {
@@ -303,17 +298,18 @@
         this.$refs.otherServerFormRef.resetFields()
       },
       //上传秘钥文件处理
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePreview(file) {
-        console.log(file);
-      },
-      handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      beforeKeyUpload(file) {
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error('上传文件大小不能超过 2MB!');
+        }
+        return isLt2M;
       },
       beforeRemove(file, fileList) {
         return this.$confirm(`确定移除 ${file.name}？`);
+      },
+      uploadSuccess(response) {
+        this.ssh_key = response
       },
       //显示主机列表登录界面
       showTableConnectServer(id) {
