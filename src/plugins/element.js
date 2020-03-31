@@ -23,6 +23,7 @@ import {
   Steps, Step,
   Radio, RadioGroup, RadioButton,
   Upload,
+  Progress,
 } from 'element-ui'
 
 
@@ -79,3 +80,4 @@ Vue.use(RadioButton)
 
 
 Vue.use(Upload)
+Vue.use(Progress)

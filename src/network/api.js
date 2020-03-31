@@ -141,5 +141,19 @@ export default {
   //上传key
   uploadKeyUrl() {
     return 'http://127.0.0.1:8000/api/v1/upload_key'
-  }
+  },
+
+  /*****************监控相关******************/
+  //获取CPU信息
+  cpuInfo() {
+    return request.get('/cpu/')
+  },
+  //获取网卡信息
+  netWorkInfo() {
+    return request.get('/network/')
+  },
+  //获取本机IP
+  hostIp() {
+    return request.get('/hostip/')
+  },
 }

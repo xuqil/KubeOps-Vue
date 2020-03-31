@@ -32,9 +32,10 @@
 </template>
 
 <script>
+import echarts from 'echarts'
 
   export default {
-    name: "Welcome",
+    name: "Monitor",
     data() {
       return {
         cpuInfo: [],
