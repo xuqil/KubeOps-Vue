@@ -7,6 +7,10 @@
     </el-breadcrumb>
     <!-- 卡片视图 -->
     <el-card>
+      <!--系统负载折线图-->
+      <div id="cpu-load" style="width: 1200px;height:400px;"></div>
+      <!--内存信息-->
+      <div id="memory" style="width: 600px;height:400px;"></div>
       <!--CPU信息-->
       <div id="cpu_info">
         <el-card header="CPU信息" shadow="always">
@@ -18,11 +22,12 @@
       <!--网卡信息-->
       <div id="network_info">
         <el-card header="网卡信息" shadow="always">
-          <template v-for="items in netWorkInfo">
+          <template v-for="(items, i) in netWorkInfo">
             <template v-for="(item, index) in items">
-              <p v-if="index === 0">IP{{index}}: {{item}}</p>
-              <p v-if="index === 1">网卡名称: {{item}}</p>
+              <p style="display: inline-block; margin-right: 19px" v-if="index === 0">{{i}}: {{item}}</p>
+              <p style="display: inline-block" v-if="index === 1">网卡名称: {{item}}</p>
             </template>
+            <br/>
           </template>
           <p>平台IP:{{hostIp['ip']}}</p>
         </el-card>
@@ -32,6 +37,7 @@
 </template>
 
 <script>
+  import echarts from 'echarts'
 
   export default {
     name: "Welcome",
@@ -40,6 +46,21 @@
         cpuInfo: [],
         netWorkInfo: [],
         hostIp: '',
+        seriesData: [],
+        watchLoad: '',
+        isLoad: true,
+        memory: [],
+      }
+    },
+    mounted() {
+      this.initSystemLoadEcharts();
+      this.initMemoryEcharts();
+      this.getSystemLoad();
+      this.getMemoryInfo();
+    },
+    watch: {
+      watchLoad() {
+        this.timer()
       }
     },
     created() {
@@ -66,6 +87,7 @@
           return this.$message.error("获取网卡信息失败")
         })
       },
+      //获取平台IP
       getHostIp() {
         this.$api.hostIp().then(res => {
           this.hostIp = res.data;
@@ -74,6 +96,176 @@
           return this.$message.error("获取后端IP失败")
         })
       },
+      //获取系统负载
+      getSystemLoad() {
+        let cpuLoad = echarts.init(document.getElementById('cpu-load'));
+        if (this.isLoad) {
+          cpuLoad.showLoading();
+          this.isLoad = false;
+        }
+        this.$api.systemLoad().then(res => {
+          // console.log(res.data);
+          this.watchLoad = res.data;
+          cpuLoad.hideLoading();
+          // 填入数据
+          cpuLoad.setOption({
+            xAxis: {
+              data: res.data['time']
+            },
+            series: [{
+              // 根据名字对应到相应的系列
+              name: '1分钟平均负载',
+              data: res.data['load_v1']
+            }, {
+              // 根据名字对应到相应的系列
+              name: '5分钟平均负载',
+              data: res.data['load_v5']
+            }, {
+              // 根据名字对应到相应的系列
+              name: '15分钟平均负载',
+              data: res.data['load_v15']
+            }]
+          });
+
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error("获取系统负载信息失败")
+        })
+      },
+      //获取内存信息
+      getMemoryInfo() {
+        let memory = echarts.init(document.getElementById('memory'));
+        this.$api.memoryInfo().then(res => {
+          // memory.hideLoading();
+          this.memory = res.data;
+          // console.log(this.memory);
+          memory.setOption({
+            title: {
+              text: '平台内存信息' + '(内存总量:' + res.data['MemTotal'] + 'kB)'
+            },
+            series: [{
+              name: '平台内存',
+              data: [
+                {value: res.data['MemFree'], name: '空闲内存数'},
+                {value: res.data['MemAvailable'], name: '可用内存数'},
+                {value: res.data['Buffers'], name: '缓冲区内存数'},
+                {value: res.data['Cached'], name: '缓存区内存数'}
+              ]
+            }]
+          })
+
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error("获取内存信息失败")
+        })
+      },
+      //定时器
+      timer() {
+        return setTimeout(() => {
+          this.getSystemLoad();
+          this.getMemoryInfo();
+        }, 9000)
+      },
+      //系统负载折线图
+      initSystemLoadEcharts() {
+        // 基于准备好的dom，初始化echarts实例
+        let cpuLoad = echarts.init(document.getElementById('cpu-load'));
+
+        // 指定图表的配置项和数据
+        let cpuLoadOption = {
+          title: {
+            text: 'CPU负载'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          legend: {
+            data: ['1分钟平均负载', '5分钟平均负载', '15分钟平均负载']
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: []
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              name: '1分钟平均负载',
+              type: 'line',
+              stack: '总量',
+              data: []
+            },
+            {
+              name: '5分钟平均负载',
+              type: 'line',
+              stack: '总量',
+              data: []
+            },
+            {
+              name: '15分钟平均负载',
+              type: 'line',
+              stack: '总量',
+              data: []
+            },
+          ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        cpuLoad.setOption(cpuLoadOption);
+      },
+      //内存信息饼状图
+      initMemoryEcharts() {
+        let memory = echarts.init(document.getElementById('memory'));
+        let memoryOption = {
+          title: {
+            text: '平台内存信息',
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}kB)'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['空闲内存数', '可用内存数', '缓冲区内存数', '缓存区内存数']
+          },
+          series: [
+            {
+              name: '平台内存',
+              type: 'pie',
+              radius: '55%',
+              center: ['50%', '60%'],
+              data: [
+                {value: 310, name: '空闲内存数'},
+                {value: 234, name: '可用内存数'},
+                {value: 135, name: '缓冲区内存数'},
+                {value: 1548, name: '缓存区内存数'}
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        };
+        memory.setOption(memoryOption);
+      }
     }
   }
 </script>
@@ -92,4 +284,5 @@
   #network_info .el-card {
     background-color: #63a35c;
   }
+
 </style>

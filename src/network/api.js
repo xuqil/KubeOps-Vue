@@ -156,4 +156,12 @@ export default {
   hostIp() {
     return request.get('/hostip/')
   },
+  //获取系统负载
+  systemLoad() {
+    return request.get('/systemload/')
+  },
+  //获取内存信息
+  memoryInfo() {
+    return request.get('/memory/')
+  }
 }
