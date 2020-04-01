@@ -82,11 +82,11 @@
               <div slot="tip" class="el-upload__tip">文件大小不超过500kb</div>
             </el-upload>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="otherConnectServer">登录</el-button>
-            <el-button @click="otherConnectDialogVisible = false">取消</el-button>
-          </el-form-item>
         </el-form>
+        <span slot="footer" class="dialog-footer">
+           <el-button type="primary" @click="otherConnectServer">登录</el-button>
+            <el-button @click="otherConnectDialogVisible = false">取消</el-button>
+        </span>
       </el-dialog>
       <!--主机列表的远程登录-->
       <el-dialog
@@ -125,11 +125,11 @@
               <div slot="tip" class="el-upload__tip">文件大小不超过500kb</div>
             </el-upload>
           </el-form-item>
-          <el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="tableConnectServer">登录</el-button>
             <el-button @click="tableConnectDialogVisible = false">取消</el-button>
-          </el-form-item>
-        </el-form>
+        </span>
       </el-dialog>
     </div>
     <div id="xterm" v-show="!isShow" class="xterm"/>

@@ -164,7 +164,7 @@
         return setTimeout(() => {
           this.getSystemLoad();
           this.getMemoryInfo();
-        }, 9000)
+        }, 1000)
       },
       //系统负载折线图
       initSystemLoadEcharts() {

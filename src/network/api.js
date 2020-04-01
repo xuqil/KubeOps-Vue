@@ -163,5 +163,11 @@ export default {
   //获取内存信息
   memoryInfo() {
     return request.get('/memory/')
+  },
+
+  /*****************文件相关******************/
+  //文件上传
+  uploadFilesURL(url) {
+    return 'http://127.0.0.1:8000/api/v1/files/'
   }
 }
