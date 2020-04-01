@@ -4,7 +4,6 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>文件管理</el-breadcrumb-item>
-      <el-breadcrumb-item>文件上传</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图 -->
     <el-card>
@@ -153,8 +152,13 @@
             let pos = this.serverForm.path.lastIndexOf('/');//'/所在的最后位置'
             let fileName = this.serverForm.path.substr(pos + 1);//截取文件名称字符串
             this.download(res.data, fileName);
-            this.$message.success('下载成功!');
+            //删除临时文件
+            this.$api.deleteTmpFiles(this.serverForm).then(res => {
+            }).catch(err => {
+              console.log(err);
+            });
             this.fileDialogVisible = false;
+            this.$message.success('下载成功!');
           }).catch(err => {
             console.log(err);
             return this.$message.error('下载失败!请检查文件的绝对路径是否正确')

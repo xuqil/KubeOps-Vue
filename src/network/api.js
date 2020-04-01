@@ -173,5 +173,9 @@ export default {
   //文件下载
   downloadFiles(data = null) {
     return request.post('/down_files', data)
+  },
+  //文件下载
+  deleteTmpFiles(data = null) {
+    return request.put('/down_files', data)
   }
 }
