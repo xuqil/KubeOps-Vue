@@ -167,7 +167,7 @@ export default {
 
   /*****************文件相关******************/
   //文件上传
-  uploadFilesURL(url) {
+  uploadFilesURL() {
     return 'http://127.0.0.1:8000/api/v1/files/'
   }
 }

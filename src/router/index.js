@@ -17,8 +17,7 @@ const IDC = () => import('views/assets/IDC');
 const Tags = () => import('views/assets/Tags');
 const WebSSH = () => import('views/assets/WebSSH');
 const Monitor = () => import('views/monitor/Monitor');
-const Upload = () => import('views/files/Upload');
-const Download = () => import('views/files/Download');
+const Files = () => import('views/files/Files');
 
 const routes = [
   {
@@ -39,8 +38,7 @@ const routes = [
       { path: '/tags', component: Tags },
       { path: '/webssh', component: WebSSH },
       { path: '/monitor', component: Monitor },
-      { path: '/upload', component: Upload },
-      { path: '/download', component: Download },
+      { path: '/files', component: Files },
     ]
   },
   {
