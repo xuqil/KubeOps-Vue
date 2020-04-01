@@ -61,7 +61,7 @@
           <el-input v-model="serverForm.path"></el-input>
         </el-form-item>
         <el-form-item v-else label="文件" prop="path">
-          <el-input v-model="serverForm.path"></el-input>
+          <el-input type="textarea" v-model="serverForm.path"></el-input>
         </el-form-item>
         <el-form-item v-if="serverForm.opt === 'upload'">
           <el-upload
@@ -90,6 +90,8 @@
 </template>
 
 <script>
+  import axios from 'axios'
+
   export default {
     name: "Files",
     data() {
@@ -143,8 +145,34 @@
           this.$refs.upload.submit();
         })
       },
+      //文件下载
       downloadFile() {
-
+        this.$refs.serverFormRef.validate(valid => {
+          if (!valid) return;
+          this.$api.downloadFiles(this.serverForm).then(res => {
+            let pos = this.serverForm.path.lastIndexOf('/');//'/所在的最后位置'
+            let fileName = this.serverForm.path.substr(pos + 1);//截取文件名称字符串
+            this.download(res.data, fileName);
+            this.$message.success('下载成功!');
+            this.fileDialogVisible = false;
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error('下载失败!请检查文件的绝对路径是否正确')
+          })
+        })
+      },
+      // 下载文件
+      download(data, fileName) {
+        if (!data) {
+          return
+        }
+        let url = window.URL.createObjectURL(new Blob([data]));
+        let link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click()
       },
       handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -197,7 +225,9 @@
       },
       //文件对话框关闭
       FileDialogClosed() {
-        this.$refs.upload.clearFiles();
+        if (this.$refs.upload) {
+          this.$refs.upload.clearFiles();
+        }
         this.$refs.serverFormRef.resetFields()
       },
     }
