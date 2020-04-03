@@ -188,6 +188,10 @@ export default {
   postsGet(params = null) {
     return request.get('/wiki/posts/', params)
   },
+  //获取某文章
+  postDetailGet(suffix) {
+    return request.get('/wiki/posts/' + suffix + '/')
+  },
   //修改文章
   postPut(suffix, data) {
     return request.put('/wiki/posts/' + suffix + '/', data)

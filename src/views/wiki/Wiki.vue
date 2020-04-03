@@ -7,19 +7,19 @@
     </el-breadcrumb>
     <el-row :gutter="20">
       <!--文章-->
-      <el-col :span="16" v-if="!showPostDetailVisible">
+      <el-col :span="16">
         <!--文章列表-->
-        <div id="posts_list">
+        <div id="posts_list" v-if="!showPostDetailVisible">
           <template v-for="(items, index) in postsList">
             <el-card>
               <!--标题--->
               <div class="post_title">{{items.title}}</div>
               <div class="post_title_bottom">
-                <span class="post_author"><i class="el-icon-user"></i>: {{items.author.username}}</span>
-                <span class="post_category">分类: {{items.category.name}}</span>
+                <span class="post_author"><i class="el-icon-user"></i>: {{items.author}}</span>
+                <span class="post_category">分类: {{items.category}}</span>
                 <span>
                     <i class="el-icon-collection-tag"></i>:
-                    <el-tag :type="tagsColors[i]" size="mini" v-for="(item, i) in items.tags" :key="item.id">{{item.name}}
+                    <el-tag :type="tagsColors[i]" size="mini" v-for="(item, i) in items.tags" :key="i">{{item}}
                     </el-tag>
                   </span>
               </div>
@@ -34,18 +34,17 @@
             </el-card>
           </template>
         </div>
-      </el-col>
-      <el-col :span="16" v-else>
         <!--文章详情-->
-        <div id="post_detail">
+        <div id="post_detail" v-else>
+          <el-button type="text" icon="el-icon-back" @click="backWiki">返回</el-button>
           <el-card>
             <!--标题--->
             <div class="post_title">{{detailPostForm.title}}</div>
             <div class="post_title_bottom">
-              <span class="post_author"><i class="el-icon-user"></i>: {{detailPostForm.author.username}}</span>
+              <span class="post_author"><i class="el-icon-user"></i>: {{detailPostForm.author}}</span>
               <span>
                   <i class="el-icon-collection-tag"></i>:
-                  <el-tag :type="tagsColors[i]" size="mini" v-for="(tag, i) in detailPostForm.tags" :key="tag.id">{{tag.name}}
+                  <el-tag :type="tagsColors[i]" size="mini" v-for="(tag, i) in detailPostForm.tags" :key="i">{{tag}}
                   </el-tag>
                 </span>
             </div>
@@ -55,9 +54,9 @@
             </div>
             <div class="post_operation">
               <el-button type="text" icon="el-icon-edit" @click="deletePost(detailPostForm.id)">删除</el-button>
-              <el-button type="text" icon="el-icon-delete" @click="showPostDetail(detailPostForm.id)">编辑</el-button>
+              <el-button type="text" icon="el-icon-delete" @click="showEditPost(detailPostForm.id)">编辑</el-button>
             </div>
-            <div class="post_time">{{detailPostForm.c_time | dataFormat}}</div>
+            <div class="post_time">创建时间:{{detailPostForm.c_time | dataFormat}}</div>
           </el-card>
         </div>
       </el-col>
@@ -99,9 +98,6 @@
           page_size: 5
         },
         total: 0,
-        // isDisplay: {
-        //   display: 'display'
-        // },
         postsList: [],
         tagsColors: ['success', 'info', 'warning', 'danger', 'success', 'info', 'warning', 'danger'],
         showPostDetailVisible: false,
@@ -157,6 +153,14 @@
           console.log(onerror);
           return this.$message.error('删除失败！')
         });
+      },
+      //返回wiki文章列表
+      backWiki() {
+        this.showPostDetailVisible = false;
+      },
+      //编辑文章
+      showEditPost(id) {
+        this.$router.push('/wiki/' + id);
       }
     },
   }
