@@ -7,7 +7,7 @@
       <el-header>
         <head-bar/>
       </el-header>
-      <el-main>
+      <el-main :style="{'background-color': getMainBackgroundColor}">
         <router-view/>
       </el-main>
     </el-container>
@@ -17,13 +17,12 @@
 <script>
   import SideMenu from "components/common/menu/SideMenu";
   import HeadBar from "components/common/headBar/HeadBar";
+  import {mapGetters} from "vuex";
 
   export default {
     name: "Home",
     data() {
-      return {
-
-      }
+      return {}
     },
     components: {
       SideMenu,
@@ -56,7 +55,10 @@
       //随侧边栏开闭调正侧边栏宽度
       asideWidth() {
         return this.$store.getters.isCollapse ? '64px' : '200px'
-      }
+      },
+      ...mapGetters([
+        'getMainBackgroundColor'
+      ]),
     }
   }
 </script>

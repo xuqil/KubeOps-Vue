@@ -11,9 +11,9 @@
       <el-row>
         <el-col :span="24">
           <div class="text_style">顶部导航栏背景颜色:</div>
-          <div class="color_div" :style="{ 'background-color': headColor}">&nabla;</div>
+          <div class="color_div" :style="{ 'background-color': headColor}"><i class="el-icon-magic-stick"></i></div>
           <div class="color_style">
-            <el-color-picker size="mini" v-model="headColor" show-alpha @change="changeHead"></el-color-picker>
+            <el-color-picker size="mini" v-model="headColor" show-alpha @active-change="changeHead"></el-color-picker>
           </div>
           <span class="color_button"><el-button type="info" size="mini" @click="restHead">重置</el-button></span>
           <el-button type="primary" size="mini" @click="saveHead">保存</el-button>
@@ -22,9 +22,9 @@
       <el-row>
         <el-col :span="24">
           <div class="text_style">侧边菜单栏背景颜色:</div>
-          <div class="color_div" :style="{ 'background-color': menuColor}">&nabla;</div>
+          <div class="color_div" :style="{ 'background-color': menuColor}"><i class="el-icon-magic-stick"></i></div>
           <div class="color_style">
-            <el-color-picker size="mini" v-model="menuColor" show-alpha @change="changeMenu"></el-color-picker>
+            <el-color-picker size="mini" v-model="menuColor" show-alpha @active-change="changeMenu"></el-color-picker>
           </div>
           <span class="color_button"><el-button type="info" size="mini" @click="restMenu">重置</el-button></span>
           <el-button type="primary" size="mini" @click="saveMenu">保存</el-button>
@@ -33,9 +33,9 @@
       <el-row>
         <el-col :span="24">
           <div class="text_style">页面主体背景颜色:</div>
-          <div class="color_div" :style="{ 'background-color': mainColor}">&nabla;</div>
+          <div class="color_div" :style="{ 'background-color': mainColor}"><i class="el-icon-magic-stick"></i></div>
           <div class="color_style">
-            <el-color-picker size="mini" v-model="mainColor" show-alpha @change="changeMain"></el-color-picker>
+            <el-color-picker size="mini" v-model="mainColor" show-alpha @active-change="changeMain"></el-color-picker>
           </div>
           <span class="color_button"><el-button type="info" size="mini" @click="restMain">重置</el-button></span>
           <el-button type="primary" size="mini" @click="saveMain">保存</el-button>
@@ -78,15 +78,15 @@
     }),
     methods: {
       changeHead(value) {
-        console.log(value)
+        // console.log(value)
         this.$store.commit('saveHeadBackgroundColor', value)
       },
       changeMenu(value) {
-        console.log(value)
+        // console.log(value)
         this.$store.commit('saveMenuBackgroundColor', value)
       },
       changeMain(value) {
-        console.log(value)
+        // console.log(value)
         this.$store.commit('saveMainBackgroundColor', value)
       },
       saveHead() {
