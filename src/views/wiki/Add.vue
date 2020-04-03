@@ -102,7 +102,7 @@
           this.tagsList = res.data.results;
         }).catch(err => {
           console.log(err);
-          return this.$message.error('获取标签失败！')
+          return this.$message.error(err.response.data.detail)
         })
       },
       getCategoriesList() {
@@ -110,7 +110,7 @@
           this.categoriesList = res.data.results;
         }).catch(err => {
           console.log(err);
-          return this.$message.error('获取分类失败！')
+          return this.$message.error(err.response.data.detail)
         })
       },
       // 显示富文本编辑器
@@ -206,9 +206,9 @@
           this.$api.postPost(this.postForm).then(res => {
             this.$message.success('添加成功！');
             this.$router.push('/wiki/');
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('添加失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
         })
       },

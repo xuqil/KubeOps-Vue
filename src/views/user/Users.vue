@@ -268,8 +268,8 @@
           console.log(this.userList);
           this.total = res.data.count;
         }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('没有权限');
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //分页
@@ -289,9 +289,9 @@
           {'active': userInfo.active}
         ).then(res => {
           this.$message.success("更新用户状态成功")
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error("更新用户状态失败")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
       },
       //监听 添加用户添加提示框关闭事件，关闭则清空表单
@@ -307,9 +307,9 @@
           this.$api.userAdd(this.addUserForm).then(res => {
             this.$message.success('添加用户成功！');
             this.getUserList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('添加用户失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           // 隐藏添加用户对话框
           this.addDialogVisible = false;
@@ -340,9 +340,9 @@
           }).then(res => {
             this.$message.success('更新用户信息成功！');
             this.getUserList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('更新用户信息失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           // 隐藏添加用户对话框
           this.editDialogVisible = false;
@@ -367,9 +367,9 @@
         this.$api.userDelete(id).then(res => {
           this.$message.success('删除用户成功！');
           this.getUserList()
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('删除用户失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
       },
 
@@ -380,9 +380,9 @@
         this.$api.rolesGet().then(res => {
           console.log(res.data.results);
           this.rolesList = res.data.results;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取角色列表失败！');
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
         this.roleDialogVisible = true
       },
@@ -395,9 +395,9 @@
           console.log(res);
           this.$message.success('更新角色成功！');
           this.getUserList();
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('更新用户角色失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
         this.roleDialogVisible = false
       },

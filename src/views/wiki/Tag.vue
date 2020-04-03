@@ -27,9 +27,9 @@
         this.$api.wikiTagsGet().then(res => {
           this.tagsList = res.data.results;
           console.log(this.tagsList)
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取wiki标签失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
     }

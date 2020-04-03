@@ -284,9 +284,9 @@
         this.$api.serversGet(this.queryInfo).then(res => {
           this.serversList = res.data.results;
           this.total = res.data.count;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取主机列表失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //分页
@@ -315,9 +315,9 @@
         this.$api.serversDelete(id).then(res => {
           this.$message.success('删除主机成功！');
           this.getServersList()
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('删除主机失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
       },
       addServer() {
@@ -326,9 +326,9 @@
           this.$api.serversPot(this.addServerForm).then(res => {
             this.$message.success('添加主机成功！');
             this.getServersList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('添加主机失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.addDialogVisible = false;
         })
@@ -372,9 +372,9 @@
           this.$api.serversPut(this.editServerForm.id, this.editServerForm).then(res => {
             this.$message.success('更新主机信息成功！');
             this.getServersList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('更新主机信息失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.editDialogVisible = false;
         })
@@ -383,18 +383,18 @@
       getIDCList() {
         this.$api.IDCGet(this.queryInfo).then(res => {
           this.IDCList = res.data.results;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error("获取IDC机房列表失败！")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //获取标签列表
       getTagsList() {
         this.$api.tagsGet(this.queryInfo).then(res => {
           this.tagsList = res.data.results;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error("获取标签列表失败！")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       editDialogClosed() {

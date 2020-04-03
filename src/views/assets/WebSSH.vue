@@ -190,9 +190,9 @@
         this.$api.serversGet(this.queryInfo).then(res => {
           this.serversList = res.data.results;
           this.total = res.data.count;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取主机列表失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //分页

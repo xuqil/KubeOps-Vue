@@ -83,9 +83,9 @@
             this.$api.register(this.registerForm).then(res => {
               console.log(res);
               this.$message.success("注册成功")
-            }).catch(error => {
-              console.log(error);
-              this.$message.error("注册失败")
+            }).catch(err => {
+              console.log(err);
+              return this.$message.error(err.response.data.detail)
             });
           } else {
             console.log('注册失败!!');

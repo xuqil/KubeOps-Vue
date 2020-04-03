@@ -75,7 +75,7 @@
           this.cpuInfo = res.data;
         }).catch(err => {
           console.log(err);
-          return this.$message.error("获取CPU信息失败")
+          return this.$message.error(err.response.data.detail)
         })
       },
       //获取网卡信息
@@ -84,7 +84,7 @@
           this.netWorkInfo = res.data;
         }).catch(err => {
           console.log(err);
-          return this.$message.error("获取网卡信息失败")
+          return this.$message.error(err.response.data.detail)
         })
       },
       //获取平台IP
@@ -93,7 +93,7 @@
           this.hostIp = res.data;
         }).catch(err => {
           console.log(err);
-          return this.$message.error("获取后端IP失败")
+          return this.$message.error(err.response.data.detail)
         })
       },
       //获取系统负载
@@ -129,7 +129,7 @@
 
         }).catch(err => {
           console.log(err);
-          return this.$message.error("获取系统负载信息失败")
+          return this.$message.error(err.response.data.detail)
         })
       },
       //获取内存信息
@@ -156,7 +156,7 @@
 
         }).catch(err => {
           console.log(err);
-          return this.$message.error("获取内存信息失败")
+          return this.$message.error(err.response.data.detail)
         })
       },
       //定时器

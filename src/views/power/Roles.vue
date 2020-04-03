@@ -195,9 +195,9 @@
         this.$api.rolesGet(this.queryInfo).then(res => {
           this.rolesList = res.data.results;
           this.total = res.data.count;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取角色列表失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //分页
@@ -241,9 +241,9 @@
           // console.log(res);
           this.$message.success("删除成功");
           this.getRolesList()
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('删除权限失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
         this.updateRights = [];
       },
@@ -253,9 +253,9 @@
         this.$api.rightsGet().then(res => {
           this.rightsTree = res.data.results;
           this.rightFlag = true;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error("获取权限列表失败")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
         //获取默认的权限
         this.defaultRights = [];
@@ -275,9 +275,9 @@
           // console.log(res);
           this.$message.success("分配成功");
           this.getRolesList()
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('分配权限失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
         this.rightsDialogVisible = false;
       },
@@ -290,9 +290,9 @@
           this.$api.rolesPot(this.addRoleForm).then(res => {
             this.$message.success('添加角色成功！');
             this.getRolesList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('添加角色失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           // 隐藏添加角色对话框
           this.addDialogVisible = false;
@@ -327,9 +327,9 @@
           }).then(res => {
             this.$message.success('更新角色信息成功！');
             this.getRolesList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('更新角色信息失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.editDialogVisible = false;
         })
@@ -351,9 +351,9 @@
         this.$api.rolesDelete(id).then(res => {
           this.$message.success('删除角色成功！');
           this.getRolesList()
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('删除角色失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
       },
     }

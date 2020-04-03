@@ -21,10 +21,10 @@
         <el-table-column label="路径" prop="path"></el-table-column>
         <el-table-column label="权限动作" prop="action">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.action === 'add'">添加</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.action === 'delete'">删除</el-tag>
-            <el-tag type="warning" v-else-if="scope.row.action === 'edit'">编辑</el-tag>
-            <el-tag type="success" v-else-if="scope.row.action === 'list'">查看</el-tag>
+            <el-tag v-if="scope.row.action === 'POST'">添加</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.action === 'DELETE'">删除</el-tag>
+            <el-tag type="warning" v-else-if="scope.row.action === 'PUT'">编辑</el-tag>
+            <el-tag type="success" v-else-if="scope.row.action === 'GET'">查看</el-tag>
             <el-tag type="info" v-else>Admin</el-tag>
           </template>
         </el-table-column>
@@ -66,10 +66,10 @@
         </el-form-item>
         <el-form-item label="动作" prop="action" label-width="90px">
           <el-select v-model="addRightsForm.action" placeholder="请选择动作" clearable>
-            <el-option label="增" value="add"></el-option>
-            <el-option label="删" value="delete"></el-option>
-            <el-option label="改" value="update"></el-option>
-            <el-option label="查" value="list"></el-option>
+            <el-option label="增" value="POST"></el-option>
+            <el-option label="删" value="DELETE"></el-option>
+            <el-option label="改" value="PUT"></el-option>
+            <el-option label="查" value="GET"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -98,10 +98,10 @@
         </el-form-item>
         <el-form-item label="动作" prop="action" label-width="90px">
           <el-select v-model="editRightsForm.action" placeholder="请选择动作" clearable>
-            <el-option label="增" value="add"></el-option>
-            <el-option label="删" value="delete"></el-option>
-            <el-option label="改" value="update"></el-option>
-            <el-option label="查" value="list"></el-option>
+            <el-option label="增" value="POST"></el-option>
+            <el-option label="删" value="DELETE"></el-option>
+            <el-option label="改" value="PUT"></el-option>
+            <el-option label="查" value="GET"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -184,9 +184,9 @@
           // console.log(res.data.results);
           this.rightsList = res.data.results;
           this.total = res.data.count;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取权限列表失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //分页
@@ -211,9 +211,9 @@
           this.$api.rightsPot(this.addRightsForm).then(res => {
             this.$message.success('添加权限成功！');
             this.getRightsList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('添加权限失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.addDialogVisible = false;
         })
@@ -239,9 +239,9 @@
           }).then(res => {
             this.$message.success('更新权限信息成功！');
             this.getRightsList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('更新权限信息失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.editDialogVisible = false;
         })
@@ -267,9 +267,9 @@
         this.$api.rightsDelete(id).then(res => {
           this.$message.success('删除权限成功！');
           this.getRightsList()
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('删除权限失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
       },
     }

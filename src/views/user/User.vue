@@ -148,9 +148,9 @@
         this.$api.userDetail(this.$store.getters.getUserId).then(res => {
           console.log(res);
           this.userForm = res.data;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error("获取用户信息失败")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //更新用户基本信息

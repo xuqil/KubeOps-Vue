@@ -136,9 +136,9 @@
         this.$api.tagsGet(this.queryInfo).then(res => {
           this.tagsList = res.data.results;
           this.total = res.data.count;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error("获取标签列表失败！")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //分页
@@ -157,9 +157,9 @@
           this.$api.tagsPot(this.addTagForm).then(res => {
             this.$message.success('添加标签成功！');
             this.getTagsList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('添加标签失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.addDialogVisible = false;
         })
@@ -184,9 +184,9 @@
           }).then(res => {
             this.$message.success('更新标签信息成功！');
             this.getTagsList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('更新标签信息失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.editDialogVisible = false;
         })
@@ -211,9 +211,9 @@
         this.$api.tagsDelete(id).then(res => {
           this.$message.success('删除标签成功！');
           this.getTagsList()
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('删除标签失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
       }
     }

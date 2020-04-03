@@ -102,7 +102,7 @@
           this.$message.success('修改成功!')
         }).catch(err => {
           console.log(err);
-          return this.$message.error('修改失败!')
+          return this.$message.error(err.response.data.detail)
         })
       },
       saveMenu() {
@@ -118,7 +118,7 @@
           this.$message.success('修改成功!')
         }).catch(err => {
           console.log(err);
-          return this.$message.error('修改失败!')
+          return this.$message.error(err.response.data.detail)
         })
       },
       saveMain() {
@@ -134,7 +134,7 @@
           this.$message.success('修改成功!')
         }).catch(err => {
           console.log(err);
-          return this.$message.error('修改失败!')
+          return this.$message.error(err.response.data.detail)
         })
       },
       restHead() {

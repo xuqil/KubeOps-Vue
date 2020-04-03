@@ -33,6 +33,16 @@
               <div class="post_time">{{items.c_time | dataFormat}}</div>
             </el-card>
           </template>
+          <!--分页区域-->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="queryInfo.page"
+            :page-sizes="[1, 2, 5, 10]"
+            :page-size="queryInfo.page_size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+          </el-pagination>
         </div>
         <!--文章详情-->
         <div id="post_detail" v-else>
@@ -119,9 +129,9 @@
           this.postsList = res.data.results;
           this.total = res.data.count;
           console.log(this.postsList)
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取wiki文章失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       // 查看文章详情
@@ -149,9 +159,9 @@
           this.$message.success('删除成功！');
           this.getPostsList()
           this.showPostDetailVisible = false;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('删除失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
       },
       //返回wiki文章列表
@@ -161,7 +171,16 @@
       //编辑文章
       showEditPost(id) {
         this.$router.push({path: '/wiki/edit',query: {id: id}});
-      }
+      },
+      //分页
+      handleSizeChange(newSize) {
+        this.queryInfo.page_size = newSize;
+        this.getPostsList()
+      },
+      handleCurrentChange(newPage) {
+        this.queryInfo.page = newPage;
+        this.getPostsList()
+      },
     },
   }
 </script>

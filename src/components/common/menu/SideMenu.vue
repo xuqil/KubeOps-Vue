@@ -68,9 +68,9 @@
         this.$api.menuTree().then(res => {
           this.menuItems = res.data;
           // console.log(res.data)
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error("获取菜单列`表失败")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       }
     },

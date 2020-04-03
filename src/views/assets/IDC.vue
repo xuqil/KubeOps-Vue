@@ -144,9 +144,9 @@
         this.$api.IDCGet(this.queryInfo).then(res => {
           this.IDCList = res.data.results;
           this.total = res.data.count;
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error("获取IDC机房列表失败！")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       //分页
@@ -164,9 +164,9 @@
           this.$api.IDCPot(this.addIDCForm).then(res => {
             this.$message.success('添加IDC机房成功！');
             this.getIDCList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('添加DC机房失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.addDialogVisible = false;
         })
@@ -194,9 +194,9 @@
           }).then(res => {
             this.$message.success('更新DC机房信息成功！');
             this.getIDCList()
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('更新DC机房信息失败！')
+          }).catch(err => {
+            console.log(err);
+            return this.$message.error(err.response.data.detail)
           });
           this.editDialogVisible = false;
         })
@@ -220,9 +220,9 @@
         this.$api.IDCDelete(id).then(res => {
           this.$message.success('删除机房成功！');
           this.getIDCList()
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('删除机房失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         });
       }
     }

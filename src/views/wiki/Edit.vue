@@ -96,9 +96,9 @@
           this.postForm = res.data;
           console.log(this.postForm)
           this.editor.txt.html(this.postForm.body);
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取文章信息失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
       getTagsList() {
@@ -106,7 +106,7 @@
           this.tagsList = res.data.results;
         }).catch(err => {
           console.log(err);
-          return this.$message.error('获取标签失败！')
+          return this.$message.error(err.response.data.detail)
         })
       },
       getCategoriesList() {
@@ -114,7 +114,7 @@
           this.categoriesList = res.data.results;
         }).catch(err => {
           console.log(err);
-          return this.$message.error('获取分类失败！')
+          return this.$message.error(err.response.data.detail)
         })
       },
       // 显示富文本编辑器
@@ -209,9 +209,9 @@
           this.$api.postPut(this.postId, this.postForm).then(res => {
             this.$message.success('修改成功！');
             this.$router.push('/wiki/');
-          }).catch(onerror => {
-            console.log(onerror);
-            this.$message.error('修改失败！')
+          }).catch(err => {
+            console.log(err.response.status);
+            return this.$message.error(err.response.data.detail)
           });
         })
       },

@@ -28,9 +28,9 @@
         this.$api.wikiCategoriesGet().then(res => {
           this.categoriesList = res.data.results;
           console.log(this.categoriesList)
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取wiki分类失败！')
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
         })
       },
     }
