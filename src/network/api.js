@@ -198,7 +198,7 @@ export default {
   },
   //删除文章
   postDelete(suffix) {
-    return request.delete('/wiki/posts/'+ suffix + '/')
+    return request.delete('/wiki/posts/' + suffix + '/')
   },
 
   //添加wiki标签
@@ -215,7 +215,7 @@ export default {
   },
   //删除文章
   wikiTagDelete(suffix) {
-    return request.delete('/wiki/tags/'+ suffix + '/')
+    return request.delete('/wiki/tags/' + suffix + '/')
   },
 
   //添加wiki分类
@@ -232,7 +232,7 @@ export default {
   },
   //删除分类
   wikiCategoryDelete(suffix) {
-    return request.delete('/wiki/categories/'+ suffix + '/')
+    return request.delete('/wiki/categories/' + suffix + '/')
   },
 
 
@@ -250,6 +250,17 @@ export default {
   },
   //删除评论
   wikiCommentDelete(suffix) {
-    return request.delete('/wiki/comments/'+ suffix + '/')
+    return request.delete('/wiki/comments/' + suffix + '/')
   },
+
+  /*****************系统设置相关******************/
+  //获取颜色
+  backgroundColorGet() {
+    return request.get('/settings/')
+  },
+  //更新颜色
+  backgroundColorPut(suffix, data) {
+    return request.put('/settings/' + suffix + '/', data)
+  }
+
 }

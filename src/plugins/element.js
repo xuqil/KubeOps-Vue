@@ -24,6 +24,7 @@ import {
   Radio, RadioGroup, RadioButton,
   Upload,
   Progress,
+  ColorPicker,
 } from 'element-ui'
 
 
@@ -81,3 +82,5 @@ Vue.use(RadioButton)
 
 Vue.use(Upload)
 Vue.use(Progress)
+
+Vue.use(ColorPicker)

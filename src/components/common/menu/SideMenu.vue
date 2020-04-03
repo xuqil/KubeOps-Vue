@@ -2,7 +2,7 @@
   <div class="sidebar">
     <el-menu
       class="sidebar-el-menu"
-      background-color="#00233C"
+      :background-color="Color"
       text-color="#bfcbd9"
       active-text-color="#20a0ff"
       unique-opened
@@ -77,6 +77,7 @@
     computed: mapState({
       // 侧栏开闭合设置
       Collapse: state => state.isCollapse,
+      Color: state => state.menuBackgroundColor,
     })
   }
 </script>

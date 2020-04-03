@@ -1,5 +1,5 @@
 <template>
-  <div class="header-bar">
+  <div class="header-bar" :style="{'background-color': getHeadBackgroundColor}">
     <div class="logo">
       <div>KubeOps运维平台</div>
     </div>
@@ -54,7 +54,8 @@
       {
         ...mapGetters([
           //登录的用户名
-          'getUsername'
+          'getUsername',
+          'getHeadBackgroundColor'
         ]),
       }
   }
@@ -66,7 +67,7 @@
     box-sizing: border-box;
     width: 100%;
     height: 70px;
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
     font-size: 22px;
     color: #00172c;
   }
