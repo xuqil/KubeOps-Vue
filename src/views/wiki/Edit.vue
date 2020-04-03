@@ -230,7 +230,7 @@
   }
 
   #post_edit {
-    width: 890px;
+    width: 938px;
     display: flex;
     justify-self: center
   }
