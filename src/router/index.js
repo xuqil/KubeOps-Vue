@@ -21,6 +21,7 @@ const Files = () => import('views/files/Files');
 const Deployment = () => import('views/deployment/Deployment');
 const Wiki = () => import('views/wiki/Wiki');
 const Edit = () => import('views/wiki/Edit');
+const Add = () => import('views/wiki/Add');
 
 const routes = [
   {
@@ -44,7 +45,8 @@ const routes = [
       { path: '/files', component: Files },
       { path: '/deploy', component: Deployment },
       { path: '/wiki', component: Wiki },
-      { path: '/wiki/:id', component: Edit },
+      { path: '/wiki/edit', component: Edit },
+      { path: '/wiki/add', component: Add },
     ]
   },
   {

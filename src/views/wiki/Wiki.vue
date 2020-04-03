@@ -160,7 +160,7 @@
       },
       //编辑文章
       showEditPost(id) {
-        this.$router.push('/wiki/' + id);
+        this.$router.push({path: '/wiki/edit',query: {id: id}});
       }
     },
   }

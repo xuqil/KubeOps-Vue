@@ -33,7 +33,8 @@
         </el-form-item>
       </el-form>
       <div style="float: right">
-        <el-button type="primary" @click="subPost">修改</el-button>
+        <el-button type="primary" @click="subPost">添加</el-button>
+        <el-button type="info" @click="restPost">重置</el-button>
       </div>
     </div>
   </div>
@@ -42,6 +43,7 @@
 <script>
   import E from "wangeditor";
   import 'wangeditor/release/wangEditor.min.css'
+  import {mapGetters} from "vuex";
 
   // wangEditor配置按钮菜单
   const btnMenu = [
@@ -66,7 +68,7 @@
     'redo', // 重复
   ];
   export default {
-    name: "Edit",
+    name: "Add",
     data() {
       return {
         postId: '',
@@ -80,9 +82,14 @@
         categoriesList: []
       }
     },
+    computed:
+      {
+        ...mapGetters([
+          //登录的用户名
+          'getUserId'
+        ]),
+      },
     created() {
-      this.postId = this.$route.query.id;
-      this.getPostDetail(this.postId);
       this.getTagsList();
       this.getCategoriesList();
     },
@@ -90,17 +97,6 @@
       this.showEdit()
     },
     methods: {
-      //获取具体文章
-      getPostDetail(id) {
-        this.$api.postDetailGet(id).then(res => {
-          this.postForm = res.data;
-          console.log(this.postForm)
-          this.editor.txt.html(this.postForm.body);
-        }).catch(onerror => {
-          console.log(onerror);
-          return this.$message.error('获取文章信息失败！')
-        })
-      },
       getTagsList() {
         this.$api.wikiTagsGet().then(res => {
           this.tagsList = res.data.results;
@@ -206,14 +202,19 @@
           if (!valid) return;
           this.content = this.editor.txt.html();
           this.postForm['body'] = this.content;
-          this.$api.postPut(this.postId, this.postForm).then(res => {
-            this.$message.success('修改成功！');
+          this.postForm['author'] = this.getUserId;
+          this.$api.postPost(this.postForm).then(res => {
+            this.$message.success('添加成功！');
             this.$router.push('/wiki/');
           }).catch(onerror => {
             console.log(onerror);
-            this.$message.error('修改失败！')
+            this.$message.error('添加失败！')
           });
         })
+      },
+      restPost() {
+        this.$refs.postFormRef.resetFields();
+        this.editor.txt.html('');
       },
       //返回wiki文章列表
       backWiki() {
