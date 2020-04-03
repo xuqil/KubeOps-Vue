@@ -18,6 +18,8 @@ const Tags = () => import('views/assets/Tags');
 const WebSSH = () => import('views/assets/WebSSH');
 const Monitor = () => import('views/monitor/Monitor');
 const Files = () => import('views/files/Files');
+const Deployment = () => import('views/deployment/Deployment');
+const Wiki = () => import('views/wiki/Wiki');
 
 const routes = [
   {
@@ -39,6 +41,8 @@ const routes = [
       { path: '/webssh', component: WebSSH },
       { path: '/monitor', component: Monitor },
       { path: '/files', component: Files },
+      { path: '/deploy', component: Deployment },
+      { path: '/wiki', component: Wiki },
     ]
   },
   {

@@ -12,7 +12,9 @@ import "assets/fonts/iconfont.css"
 //导入api
 import API from 'network/api'
 
+
 Vue.prototype.$api = API;
+
 //全局的时间过滤器
 Vue.filter('dataFormat', function (originVal) {
   const dt = new Date(originVal);
