@@ -8,7 +8,7 @@
     <!-- 卡片视图 -->
     <el-card>
       <!--系统负载折线图-->
-      <div id="cpu-load" style="width: 1200px;height:400px;"></div>
+      <div id="cpu-load" style="width: 1400px;height:400px;"></div>
       <!--内存信息-->
       <div id="memory" style="width: 600px;height:400px;"></div>
       <!--CPU信息-->
@@ -47,9 +47,13 @@
         netWorkInfo: [],
         hostIp: '',
         seriesData: [],
-        watchLoad: '',
         isLoad: true,
         memory: [],
+        cpuTime: ['22:57:01','22:57:02','22:57:03','22:57:04','22:57:06','22:57:07','22:57:08','22:57:09',
+          '22:57:10','22:57:11','22:57:12','22:57:13','22:57:14','22:57:15','22:57:16'],
+        avg1: [2.81,2.75,2.75,2.75,2.75,2.75,2.85,2.85,2.85,2.85,2.85,2.70,2.70,2.70,2.70],
+        avg5: [2.11,2.11,2.11,2.11,2.11,2.11,2.14,2.14,2.14,2.14,2.14,2.13,2.13,2.13,2.13],
+        avg15: [1.79,1.80,1.80,1.80,1.80,1.80,1.81,1.81,1.81,1.81,1.81,1.80,1.80,1.80,1.80],
       }
     },
     mounted() {
@@ -59,7 +63,7 @@
       this.getMemoryInfo();
     },
     watch: {
-      watchLoad() {
+      cpuTime() {
         this.timer()
       }
     },
@@ -99,34 +103,40 @@
       //获取系统负载
       getSystemLoad() {
         let cpuLoad = echarts.init(document.getElementById('cpu-load'));
-        if (this.isLoad) {
-          cpuLoad.showLoading();
-          this.isLoad = false;
-        }
         this.$api.systemLoad().then(res => {
-          // console.log(res.data);
-          this.watchLoad = res.data;
-          cpuLoad.hideLoading();
+          if (this.cpuTime.length >= 15) {
+            this.cpuTime.shift();
+            this.avg1.shift();
+            this.avg5.shift();
+            this.avg15.shift();
+          }
+          this.cpuTime.push(res.data['time']);
+          this.avg1.push(res.data['load_v1']);
+          this.avg5.push(res.data['load_v5']);
+          this.avg15.push(res.data['load_v15']);
+          console.log('time'+ this.cpuTime)
+          console.log('avg1' + this.avg1)
+          console.log('avg5' + this.avg5)
+          console.log('avg15' + this.avg15)
           // 填入数据
           cpuLoad.setOption({
             xAxis: {
-              data: res.data['time']
+              data: this.cpuTime
             },
             series: [{
               // 根据名字对应到相应的系列
               name: '1分钟平均负载',
-              data: res.data['load_v1']
+              data: this.avg1
             }, {
               // 根据名字对应到相应的系列
               name: '5分钟平均负载',
-              data: res.data['load_v5']
+              data: this.avg5
             }, {
               // 根据名字对应到相应的系列
               name: '15分钟平均负载',
-              data: res.data['load_v15']
+              data: this.avg15
             }]
           });
-
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
@@ -271,6 +281,9 @@
 </script>
 
 <style scoped>
+  #cpu-load {
+    margin-bottom: 30px;
+  }
   #cpu_info, #network_info {
     display: inline-block;
     width: 48%;
