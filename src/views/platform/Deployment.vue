@@ -98,7 +98,7 @@
       //获取Pod列表
       getDeploymentList() {
         this.$api.deploymentsGet(this.queryInfo).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {

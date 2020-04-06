@@ -24,6 +24,7 @@ const Edit = () => import('views/wiki/Edit');
 const Add = () => import('views/wiki/Add');
 const Settings = () => import('views/platform/Settings');
 const Kubernetes = () => import('views/platform/Kubernetes');
+const Task = () => import('views/task/Task');
 
 const routes = [
   {
@@ -51,6 +52,7 @@ const routes = [
       { path: '/wiki/add', component: Add },
       { path: '/settings', component: Settings },
       { path: '/kubernetes', component: Kubernetes },
+      { path: '/task', component: Task },
     ]
   },
   {
