@@ -16,11 +16,10 @@
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
             <p>CPU: {{ scope.row.capacity.cpu }}</p>
-            <p>临时内存: {{ scope.row.capacity.ephemeral-storage }}</p>
             <p>内存: {{ scope.row.capacity.memory }}</p>
             <p>Pod数量: {{ scope.row.capacity.pods }}</p>
             <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">分配的资源</el-tag>
+              <el-tag size="medium">主机的资源</el-tag>
             </div>
           </el-popover>
         </template>
@@ -29,7 +28,6 @@
         <template slot-scope="scope">
           <el-popover trigger="hover" placement="top">
             <p>CPU: {{ scope.row.allocatable.cpu }}</p>
-            <p>临时内存: {{ scope.row.allocatable.ephemeral-storage }}</p>
             <p>内存: {{ scope.row.allocatable.memory }}</p>
             <p>Pod数量: {{ scope.row.allocatable.pods }}</p>
             <div slot="reference" class="name-wrapper">
@@ -75,6 +73,7 @@
         this.$api.nodesGet(this.queryInfo).then(res => {
           if (res.data.status === 200) {
             this.nodeList = res.data.results;
+            console.log('============')
             console.log(this.nodeList)
           } else {
             return Promise.reject(res)

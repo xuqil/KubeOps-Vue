@@ -114,10 +114,6 @@
           this.avg1.push(res.data['load_v1']);
           this.avg5.push(res.data['load_v5']);
           this.avg15.push(res.data['load_v15']);
-          console.log('time'+ this.cpuTime)
-          console.log('avg1' + this.avg1)
-          console.log('avg5' + this.avg5)
-          console.log('avg15' + this.avg15)
           // 填入数据
           cpuLoad.setOption({
             xAxis: {
