@@ -261,6 +261,26 @@ export default {
   //更新颜色
   backgroundColorPut(suffix, data) {
     return request.put('/settings/' + suffix + '/', data)
-  }
+  },
 
+  /*****************kubernetes相关******************/
+  //获取节点
+  nodesGet() {
+    return request.get('/nodes/')
+  },
+
+  //获取命名空间
+  namespacesGet(params = null) {
+    return request.get('/namespaces/', params)
+  },
+
+  //获取Pod
+  podsGet(params = null) {
+    return request.get('/pods/', params)
+  },
+
+  //获取Deployment
+  deploymentsGet(params = null) {
+    return request.get('/deployments', params)
+  }
 }

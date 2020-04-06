@@ -25,6 +25,7 @@ import {
   Upload,
   Progress,
   ColorPicker,
+  Popover 
 } from 'element-ui'
 
 
@@ -84,3 +85,4 @@ Vue.use(Upload)
 Vue.use(Progress)
 
 Vue.use(ColorPicker)
+Vue.use(Popover)
