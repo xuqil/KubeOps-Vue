@@ -241,7 +241,7 @@
           },
           tooltip: {
             trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}kB)'
+            formatter: '{a} <br/>{b} : {c} kB'
           },
           legend: {
             orient: 'vertical',
