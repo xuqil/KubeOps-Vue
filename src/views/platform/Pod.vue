@@ -65,7 +65,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="editPod(scope.row)">编辑
+            @click="readPod(scope.row)">查看
           </el-button>
           <el-button
             size="mini"
@@ -86,6 +86,18 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
+
+    <!--详细信息-->
+    <el-dialog
+      title="详细信息"
+      :visible.sync="detailDialogVisible"
+      width="60%"
+      @close="handleClose">
+      <span>{{podInfo}}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="detailDialogVisible = false">关 闭</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -109,7 +121,10 @@
         hoverOrderArr: [],
         //筛选
         selectedNamespace: '',
-        namespaceList: ''
+        namespaceList: '',
+        //pod信息
+        podInfo: '',
+        detailDialogVisible: false
       }
     },
     created() {
@@ -159,6 +174,28 @@
       //筛选
       fileByNamespace() {
         this.getPodList(this.queryInfo);
+      },
+      //详细信息
+      readPod(row) {
+        let read = {name: row.name, namespace: row.namespace};
+        console.log(read);
+        this.$api.podDetail(read).then(res => {
+          if (res.data.status === 400) {
+            return Promise.reject(res)
+          } else {
+            this.podInfo = res.data.results;
+          }
+          this.detailDialogVisible = true;
+        }).catch(err => {
+          if (err.response.status === 500) {
+            return this.$message.error('服务器错误!')
+          } else {
+            return this.$message.error(err.response.data.detail)
+          }
+        })
+      },
+      handleClose() {
+        this.podInfo = '';
       },
       editPod(row) {
         console.log(row)

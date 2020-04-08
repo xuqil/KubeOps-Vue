@@ -286,9 +286,17 @@ export default {
   podsGet(params = null) {
     return request.get('/pods/', params)
   },
+  //获取某个Pod
+  podDetail(params = null) {
+    return request.get('/pod', params)
+  },
 
   //获取Deployment
   deploymentsGet(params = null) {
-    return request.get('/deployments', params)
+    return request.get('/deployments/', params)
+  },
+  //获取某个Deployment信息
+  deploymentsDetail(params = null) {
+    return request.get('/deployment', params)
   }
 }

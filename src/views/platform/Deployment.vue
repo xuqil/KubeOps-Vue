@@ -71,7 +71,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="editDeployment(scope.row)">编辑
+            @click="readDeployment(scope.row)">查看
           </el-button>
           <el-button
             :disabled="scope.row.namespace === 'kube-system'"
@@ -92,6 +92,19 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total">
     </el-pagination>
+
+    <!--详细信息-->
+    <el-dialog
+      title="详细信息"
+      :visible.sync="detailDialogVisible"
+      width="60%"
+      @close="handleClose">
+      <span>{{deploymentInfo}}</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="detailDialogVisible = false">关 闭</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -115,7 +128,10 @@
         hoverOrderArr: [],
         //筛选
         selectedNamespace: '',
-        namespaceList: ''
+        namespaceList: '',
+        //deployment信息
+        deploymentInfo: '',
+        detailDialogVisible: false
       }
     },
     created() {
@@ -167,8 +183,28 @@
       fileByNamespace() {
         this.getDeploymentList(this.queryInfo);
       },
-      editDeployment(row) {
-        console.log(row)
+      //详细信息
+      readDeployment(row) {
+        let read = {name: row.name, namespace: row.namespace};
+        // console.log(read);
+        this.$api.deploymentsDetail(read).then(res => {
+          if (res.data.status === 400) {
+            return Promise.reject(res)
+          } else {
+            this.deploymentInfo = res.data.results;
+          }
+          // console.log(this.deploymentInfo)
+          this.detailDialogVisible = true;
+        }).catch(err => {
+          if (err.response.status === 500) {
+            return this.$message.error('服务器错误!')
+          } else {
+            return this.$message.error(err.response.data.detail)
+          }
+        })
+      },
+      handleClose() {
+        this.deploymentInfo = '';
       },
       deleteDeployment(row) {
         console.log(row)
@@ -275,7 +311,7 @@
 </script>
 
 <style scoped>
-  .other_button{
+  .other_button {
     margin-bottom: 20px
   }
 </style>
