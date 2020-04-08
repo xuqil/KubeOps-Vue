@@ -18,12 +18,18 @@
         label="名称">
       </el-table-column>
       <el-table-column
-        prop="pod_ip"
         label="IP">
+        <template slot-scope="scope">
+          <span v-if="scope.row.pod_ip === null">无</span>
+          <span v-else>{{scope.row.pod_ip}}</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="host_ip"
         label="节点">
+        <template slot-scope="scope">
+          <span v-if="scope.row.host_ip === null">无</span>
+          <span v-else>{{scope.row.host_ip}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         label="状态">
@@ -33,7 +39,7 @@
           </el-tag>
           <el-tag v-else-if="scope.row.status === 'Unknown'" type="info" disable-transitions>{{scope.row.status}}
           </el-tag>
-          <el-tag v-else-if="scope.row.status === 'Pending'" type="success" disable-transitions>{{scope.row.status}}
+          <el-tag v-else-if="scope.row.status === 'Pending'" type="warning" disable-transitions>{{scope.row.status}}
           </el-tag>
           <el-tag v-else type="danger" disable-transitions>{{scope.row.status}}</el-tag>
         </template>
@@ -102,8 +108,8 @@
             this.total = res.data.count;
           }
         }).catch(err => {
-          if (err.data.status === 400) {
-            return this.$message.error(err.data.msg)
+          if (err.response.status === 500) {
+            return this.$message.error('服务器错误!')
           } else {
             return this.$message.error(err.response.data.detail)
           }
@@ -148,7 +154,7 @@
       },
       // 合并单元格
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
-        if (columnIndex === 0 || columnIndex === 3 || columnIndex === 4) {
+        if (columnIndex === 0) {
           for (let i = 0; i < this.orderIndexArr.length; i++) {
             let element = this.orderIndexArr[i];
             for (let j = 0; j < element.length; j++) {

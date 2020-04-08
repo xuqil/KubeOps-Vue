@@ -273,6 +273,14 @@ export default {
   namespacesGet(params = null) {
     return request.get('/namespaces/', params)
   },
+  //获取命名空间
+  namespacesPost(data) {
+    return request.post('/namespaces/', data)
+  },
+  //获取命名空间
+  namespacesDelete(data) {
+    return request.noQsdelete('/namespaces/', data)
+  },
 
   //获取Pod
   podsGet(params = null) {

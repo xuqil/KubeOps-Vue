@@ -18,16 +18,25 @@
         label="名称">
       </el-table-column>
       <el-table-column
-        prop="replicas"
         label="副本">
+        <template slot-scope="scope">
+          <span v-if="scope.row.replicas === null">0</span>
+          <span v-else>{{scope.row.replicas}}</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="available_replicas"
         label="可用副本">
+        <template slot-scope="scope">
+          <span v-if="scope.row.available_replicas === null">0</span>
+          <span v-else>{{scope.row.available_replicas}}</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="ready_replicas"
-        label="已准备的副本">
+        label="已就绪的副本">
+        <template slot-scope="scope">
+          <span v-if="scope.row.ready_replicas === null">0</span>
+          <span v-else>{{scope.row.ready_replicas}}</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="unavailable_replicas"
@@ -106,8 +115,8 @@
             this.total = res.data.count;
           }
         }).catch(err => {
-          if (err.data.status === 400) {
-            return this.$message.error(err.data.msg)
+          if (err.response.status === 500) {
+            return this.$message.error('服务器错误!')
           } else {
             return this.$message.error(err.response.data.detail)
           }
@@ -152,7 +161,7 @@
       },
       // 合并单元格
       objectSpanMethod({row, column, rowIndex, columnIndex}) {
-        if (columnIndex === 0 || columnIndex === 3 || columnIndex === 4) {
+        if (columnIndex === 0) {
           for (let i = 0; i < this.orderIndexArr.length; i++) {
             let element = this.orderIndexArr[i];
             for (let j = 0; j < element.length; j++) {

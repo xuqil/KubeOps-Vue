@@ -42,6 +42,16 @@ export default {
       }
     })
   },
+  noQsPost(url, data) {
+    return baseConfig({
+      method: 'post',
+      url,
+      data: data,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    })
+  },
   get(url, params = null) {
     return baseConfig({
       method: 'get',
@@ -71,6 +81,16 @@ export default {
       method: 'delete',
       url,
       params: Qs.stringify(data),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      }
+    })
+  },
+  noQsdelete(url, data = null) {
+    return baseConfig({
+      method: 'delete',
+      url,
+      params: data,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }

@@ -70,11 +70,6 @@
     created() {
       this.getNodeList(this.queryInfo);
     },
-    mounted() {
-      setTimeout(() => {
-        this.getOrderNumber()
-      }, 100)
-    },
     methods: {
       //获取Node列表
       getNodeList() {
@@ -85,9 +80,9 @@
             return Promise.reject(res)
           }
         }).catch(err => {
-          if (err.data.status === 400) {
+          try {
             return this.$message.error(err.data.msg)
-          } else {
+          } catch (e) {
             return this.$message.error(err.response.data.detail)
           }
         })
