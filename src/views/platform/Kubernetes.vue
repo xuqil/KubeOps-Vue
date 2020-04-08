@@ -8,20 +8,23 @@
     </el-breadcrumb>
     <!-- 卡片视图 -->
     <el-card>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="Pod管理" name="pod">
-          <Pod></Pod>
-        </el-tab-pane>
-        <el-tab-pane label="Deployment管理" name="deployment">
-          <Deployment></Deployment>
-        </el-tab-pane>
-        <el-tab-pane label="命名空间管理" name="namespace">
-          <Namespace></Namespace>
-        </el-tab-pane>
-        <el-tab-pane label="节点管理" name="node">
-          <Node></Node>
-        </el-tab-pane>
-      </el-tabs>
+<!--      <el-tabs v-model="activeName" @tab-click="handleClick">-->
+<!--        <el-tab-pane label="Pod管理" name="pod">-->
+<!--          <Pod></Pod>-->
+<!--        </el-tab-pane>-->
+<!--        <el-tab-pane label="Deployment管理" name="deployment">-->
+<!--          <Deployment></Deployment>-->
+<!--        </el-tab-pane>-->
+<!--        <el-tab-pane label="命名空间管理" name="namespace">-->
+<!--          <Namespace></Namespace>-->
+<!--        </el-tab-pane>-->
+<!--        <el-tab-pane label="节点管理" name="node">-->
+<!--          <Node></Node>-->
+<!--        </el-tab-pane>-->
+<!--        <el-tab-pane label="edit" name="edit">-->
+<!--        </el-tab-pane>-->
+<!--      </el-tabs>-->
+      <Editor></Editor>
     </el-card>
   </div>
 </template>
@@ -31,6 +34,7 @@
   import Deployment from "./Deployment";
   import Namespace from "./Namespace";
   import Node from "./Node";
+  import Editor from "../deployment/Editor"
 
   export default {
     name: "Kubernetes",
@@ -43,7 +47,8 @@
       Pod,
       Deployment,
       Namespace,
-      Node
+      Node,
+      Editor
     },
     methods: {
       handleClick(tab, event) {

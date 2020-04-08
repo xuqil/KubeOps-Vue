@@ -25,7 +25,8 @@ import {
   Upload,
   Progress,
   ColorPicker,
-  Popover 
+  Popover,
+  Notification
 } from 'element-ui'
 
 
@@ -49,6 +50,7 @@ Vue.use(Dropdown)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$notify = Notification
 
 Vue.use(Breadcrumb)
 Vue.use(BreadcrumbItem)
