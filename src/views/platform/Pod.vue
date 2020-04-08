@@ -1,5 +1,22 @@
 <template>
   <div>
+    <div class="other_button">
+      <el-form :inline="true">
+        <el-form-item prop="namespace">
+          <el-select v-model="queryInfo.namespace" clearable placeholder="请选择命名空间">
+            <el-option
+              v-for="(item, index) in namespaceList"
+              :key="index"
+              :label="item.name"
+              :value="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="fileByNamespace">筛选</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table
       :data="podList"
       :span-method="objectSpanMethod"
@@ -53,6 +70,7 @@
           <el-button
             size="mini"
             type="danger"
+            :disabled="scope.row.namespace === 'kube-system'"
             @click="deletePod(scope.row)">删除
           </el-button>
         </template>
@@ -80,17 +98,23 @@
           // 当前页数
           page: 1,
           // 每页显示多少数据
-          page_size: 5
+          page_size: 5,
+          //命名空间
+          namespace: null
         },
         total: 0,
         podList: '',
         rowIndex: '-1',
         orderIndexArr: [],
-        hoverOrderArr: []
+        hoverOrderArr: [],
+        //筛选
+        selectedNamespace: '',
+        namespaceList: ''
       }
     },
     created() {
       this.getPodList();
+      this.getNamespaceList();
     },
     mounted() {
       setTimeout(() => {
@@ -114,6 +138,27 @@
             return this.$message.error(err.response.data.detail)
           }
         })
+      },
+      //获取命名空间列表
+      getNamespaceList() {
+        this.$api.namespacesGet(this.queryInfo).then(res => {
+          if (res.data.status === 200) {
+            this.namespaceList = res.data.results;
+            console.log(this.namespaceList)
+          } else {
+            return Promise.reject(res)
+          }
+        }).catch(err => {
+          if (err.data.status === 400) {
+            return this.$message.error(err.data.msg)
+          } else {
+            return this.$message.error(err.response.data.detail)
+          }
+        })
+      },
+      //筛选
+      fileByNamespace() {
+        this.getPodList(this.queryInfo);
       },
       editPod(row) {
         console.log(row)

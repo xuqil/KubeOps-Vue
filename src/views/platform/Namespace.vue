@@ -34,16 +34,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.name === 'default' || scope.row.name === 'kube-system'"
-            disabled
-            size="mini"
-            icon="el-icon-delete"
-            type="danger"
-            @click="deleteNamespace(scope.row.name)">
-            删除
-          </el-button>
-          <el-button
-            v-else
+            :disabled="scope.row.name === 'default' || scope.row.name === 'kube-system'"
             size="mini"
             icon="el-icon-delete"
             type="danger"
@@ -81,7 +72,7 @@
       this.getNamespaceList(this.queryInfo);
     },
     methods: {
-      //获取Pod列表
+      //获取命名空间列表
       getNamespaceList() {
         this.$api.namespacesGet(this.queryInfo).then(res => {
           if (res.data.status === 200) {

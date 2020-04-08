@@ -1,5 +1,22 @@
 <template>
   <div>
+    <div class="other_button">
+      <el-form :inline="true">
+        <el-form-item prop="namespace">
+          <el-select v-model="queryInfo.namespace" clearable placeholder="请选择命名空间">
+            <el-option
+              v-for="(item, index) in namespaceList"
+              :key="index"
+              :label="item.name"
+              :value="item.name">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="fileByNamespace">筛选</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table
       :data="deploymentList"
       :span-method="objectSpanMethod"
@@ -57,6 +74,7 @@
             @click="editDeployment(scope.row)">编辑
           </el-button>
           <el-button
+            :disabled="scope.row.namespace === 'kube-system'"
             size="mini"
             type="danger"
             @click="deleteDeployment(scope.row)">删除
@@ -86,17 +104,23 @@
           // 当前页数
           page: 1,
           // 每页显示多少数据
-          page_size: 5
+          page_size: 5,
+          //命名空间
+          namespace: null
         },
         total: 0,
         deploymentList: '',
         rowIndex: '-1',
         orderIndexArr: [],
-        hoverOrderArr: []
+        hoverOrderArr: [],
+        //筛选
+        selectedNamespace: '',
+        namespaceList: ''
       }
     },
     created() {
       this.getDeploymentList(this.queryInfo);
+      this.getNamespaceList();
     },
     mounted() {
       setTimeout(() => {
@@ -104,7 +128,7 @@
       }, 1000)
     },
     methods: {
-      //获取Pod列表
+      //获取Deployment列表
       getDeploymentList() {
         this.$api.deploymentsGet(this.queryInfo).then(res => {
           // console.log(res)
@@ -121,6 +145,27 @@
             return this.$message.error(err.response.data.detail)
           }
         })
+      },
+      //获取命名空间列表
+      getNamespaceList() {
+        this.$api.namespacesGet(this.queryInfo).then(res => {
+          if (res.data.status === 200) {
+            this.namespaceList = res.data.results;
+            console.log(this.namespaceList)
+          } else {
+            return Promise.reject(res)
+          }
+        }).catch(err => {
+          if (err.data.status === 400) {
+            return this.$message.error(err.data.msg)
+          } else {
+            return this.$message.error(err.response.data.detail)
+          }
+        })
+      },
+      //筛选
+      fileByNamespace() {
+        this.getDeploymentList(this.queryInfo);
       },
       editDeployment(row) {
         console.log(row)
@@ -230,5 +275,7 @@
 </script>
 
 <style scoped>
-
+  .other_button{
+    margin-bottom: 20px
+  }
 </style>
