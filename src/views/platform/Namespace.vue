@@ -77,7 +77,7 @@
         this.$api.namespacesGet(this.queryInfo).then(res => {
           if (res.data.status === 200) {
             this.namespaceList = res.data.results;
-            console.log(this.namespaceList)
+            // console.log(this.namespaceList)
           } else {
             return Promise.reject(res)
           }

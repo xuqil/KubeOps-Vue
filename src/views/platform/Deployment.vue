@@ -99,7 +99,7 @@
       :visible.sync="detailDialogVisible"
       width="60%"
       @close="handleClose">
-      <span>{{deploymentInfo}}</span>
+      <pre>{{deploymentInfo}}</pre>
       <span slot="footer" class="dialog-footer">
         <el-button @click="detailDialogVisible = false">关 闭</el-button>
       </span>
@@ -172,10 +172,14 @@
             return Promise.reject(res)
           }
         }).catch(err => {
-          if (err.data.status === 400) {
+          try {
             return this.$message.error(err.data.msg)
-          } else {
-            return this.$message.error(err.response.data.detail)
+          } catch (e) {
+            if (err.response.status === 500) {
+              return this.$message.error('服务器错误!')
+            } else {
+              return this.$message.error(err.response.data.detail)
+            }
           }
         })
       },
@@ -187,7 +191,7 @@
       readDeployment(row) {
         let read = {name: row.name, namespace: row.namespace};
         // console.log(read);
-        this.$api.deploymentsDetail(read).then(res => {
+        this.$api.deploymentDetail(read).then(res => {
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
@@ -196,18 +200,54 @@
           // console.log(this.deploymentInfo)
           this.detailDialogVisible = true;
         }).catch(err => {
-          if (err.response.status === 500) {
-            return this.$message.error('服务器错误!')
-          } else {
-            return this.$message.error(err.response.data.detail)
+          try {
+            return this.$message.error(err.data.msg)
+          } catch (e) {
+            if (err.response.status === 500) {
+              return this.$message.error('服务器错误!')
+            } else {
+              return this.$message.error(err.response.data.detail)
+            }
           }
         })
       },
       handleClose() {
         this.deploymentInfo = '';
       },
-      deleteDeployment(row) {
-        console.log(row)
+      async deleteDeployment(row) {
+        const confirmResult = await this.$confirm(
+          '此操作将永久删除该Deployment, 是否继续?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).catch(err => err);
+        if (confirmResult !== 'confirm') {
+          return this.$message.info('已取消删除')
+        }
+        let Deployment = {name: row.name, namespace: row.namespace};
+        // console.log(msg);
+        this.$api.deploymentDelete(Deployment).then(res => {
+          // console.log(res.data.status)
+          if (res.data.status === 400) {
+            return Promise.reject(res)
+          } else {
+            this.$message.success(res.data.msg);
+            this.getDeploymentList(this.queryInfo);
+          }
+        }).catch(err => {
+          try {
+            return this.$message.error(err.data.msg)
+          } catch (e) {
+            if (err.response.status === 500) {
+              return this.$message.error('服务器错误!')
+            } else {
+              return this.$message.error(err.response.data.detail)
+            }
+          }
+        })
       },
       tableRowClassName({row, rowIndex}) {
         if (row.status === 'Running') {

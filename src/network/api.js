@@ -286,17 +286,25 @@ export default {
   podsGet(params = null) {
     return request.get('/pods/', params)
   },
-  //获取某个Pod
+  //获取某个Pod的信息
   podDetail(params = null) {
     return request.get('/pod', params)
+  },
+  //删除某个Podd的信息
+  podDelete(data) {
+    return request.noQsdelete('/pod', data)
   },
 
   //获取Deployment
   deploymentsGet(params = null) {
     return request.get('/deployments/', params)
   },
-  //获取某个Deployment信息
-  deploymentsDetail(params = null) {
+  //获取某个Deployment的信息
+  deploymentDetail(params = null) {
     return request.get('/deployment', params)
+  },
+  //删除某个Deployment的信息
+  deploymentDelete(data) {
+    return request.noQsdelete('/deployment', data)
   }
 }
