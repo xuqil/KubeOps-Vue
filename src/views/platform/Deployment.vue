@@ -99,7 +99,7 @@
       :visible.sync="detailDialogVisible"
       width="60%"
       @close="handleClose">
-      <pre>{{deploymentInfo}}</pre>
+      <Editor></Editor>
       <span slot="footer" class="dialog-footer">
         <el-button @click="detailDialogVisible = false">关 闭</el-button>
       </span>
@@ -109,8 +109,14 @@
 </template>
 
 <script>
+  import Editor from "components/common/editor/Editor";
+  import {mapGetters} from "vuex";
+
   export default {
     name: "Deployment",
+    components: {
+      Editor
+    },
     data() {
       return {
         queryInfo: {
@@ -129,14 +135,13 @@
         //筛选
         selectedNamespace: '',
         namespaceList: '',
-        //deployment信息
-        deploymentInfo: '',
         detailDialogVisible: false
       }
     },
     created() {
       this.getDeploymentList(this.queryInfo);
       this.getNamespaceList();
+      this.initCodeMirror();
     },
     mounted() {
       setTimeout(() => {
@@ -144,6 +149,15 @@
       }, 1000)
     },
     methods: {
+      ...mapGetters([
+        'getCodeValue'
+      ]),
+      initCodeMirror() {
+        this.$store.commit('saveCodeType', 'application/json')
+      },
+      initCodeValue(value) {
+        this.$store.commit('saveCodeValue', value)
+      },
       //获取Deployment列表
       getDeploymentList() {
         this.$api.deploymentsGet(this.queryInfo).then(res => {
@@ -195,9 +209,8 @@
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
-            this.deploymentInfo = res.data.results;
+            this.initCodeValue(res.data.results);
           }
-          // console.log(this.deploymentInfo)
           this.detailDialogVisible = true;
         }).catch(err => {
           try {
@@ -212,7 +225,7 @@
         })
       },
       handleClose() {
-        this.deploymentInfo = '';
+        this.initCodeValue('');
       },
       async deleteDeployment(row) {
         const confirmResult = await this.$confirm(

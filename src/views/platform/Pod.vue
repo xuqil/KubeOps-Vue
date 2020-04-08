@@ -93,7 +93,9 @@
       :visible.sync="detailDialogVisible"
       width="60%"
       @close="handleClose">
-      <pre>{{podInfo}}</pre>
+      <span v-if="detailDialogVisible">
+        <Editor></Editor>
+      </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="detailDialogVisible = false">关 闭</el-button>
       </span>
@@ -102,8 +104,13 @@
 </template>
 
 <script>
+  import Editor from "components/common/editor/Editor";
+  import {mapGetters} from "vuex";
   export default {
     name: "Pod",
+    components: {
+      Editor
+    },
     data() {
       return {
         queryInfo: {
@@ -122,14 +129,13 @@
         //筛选
         selectedNamespace: '',
         namespaceList: '',
-        //pod信息
-        podInfo: '',
         detailDialogVisible: false
       }
     },
     created() {
       this.getPodList();
       this.getNamespaceList();
+      this.initCodeMirror();
     },
     mounted() {
       setTimeout(() => {
@@ -137,6 +143,15 @@
       }, 1000)
     },
     methods: {
+      ...mapGetters([
+        'getCodeValue'
+      ]),
+      initCodeMirror() {
+        this.$store.commit('saveCodeType', 'application/json')
+      },
+      initCodeValue(value) {
+        this.$store.commit('saveCodeValue', value)
+      },
       //获取Pod列表
       getPodList() {
         this.$api.podsGet(this.queryInfo).then(res => {
@@ -188,7 +203,7 @@
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
-            this.podInfo = res.data.results;
+            this.initCodeValue(res.data.results);
           }
           this.detailDialogVisible = true;
         }).catch(err => {
@@ -204,7 +219,7 @@
         })
       },
       handleClose() {
-        this.podInfo = '';
+        this.initCodeValue('');
       },
       // editPod(row) {
       //   console.log(row)

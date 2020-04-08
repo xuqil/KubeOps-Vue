@@ -12,6 +12,9 @@ export default new Vuex.Store({
     headBackgroundColor: 'rgba(245, 245, 245, 1)',
     menuBackgroundColor: 'rgba(0, 35, 60, 1)',
     mainBackgroundColor: 'rgba(255, 255, 255, 1)',
+    codeValue: '', //编辑器代码
+    codeType: 'yaml', //编辑器语言类型
+    codeReadOnly: 'false', //编辑器是否只读
   },
   mutations: {
     isCollapse: state => {
@@ -34,7 +37,16 @@ export default new Vuex.Store({
     }),
     saveMainBackgroundColor: ((state, payload) => {
       state.mainBackgroundColor = payload
-    })
+    }),
+    saveCodeValue: ((state, payload) => {
+      state.codeValue = payload
+    }),
+    saveCodeType: ((state, payload) => {
+      state.codeType = payload
+    }),
+    saveCodeReadOnly: ((state, payload) => {
+      state.codeReadOnly = payload
+    }),
   },
   getters: {
     isCollapse: state => state.isCollapse,
@@ -43,6 +55,9 @@ export default new Vuex.Store({
     getHeadBackgroundColor: state => state.headBackgroundColor,
     getMenuBackgroundColor: state => state.menuBackgroundColor,
     getMainBackgroundColor: state => state.mainBackgroundColor,
+    getCodeValue: state => state.codeValue,
+    getCodeType: state => state.codeType,
+    getCodeReadOnly: state => state.codeReadOnly,
   },
   actions: {},
   modules: {}

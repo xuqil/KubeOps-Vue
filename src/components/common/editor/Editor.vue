@@ -1,6 +1,9 @@
 <template>
   <div id="code_editor">
-    <codemirror v-model="code" @changes="inputCheck" :options="cmOptions"/>
+    <codemirror
+      v-model="code"
+      :options="cmOptions"
+      @changes="changes"/>
     <el-button type="info" @click="checkSyntax">语法检查</el-button>
 
     <el-dialog
@@ -13,12 +16,6 @@
         <el-button type="primary" @click="syntaxDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
-
-    <el-button
-      plain
-      @click="openTip">
-      语法错误
-    </el-button>
   </div>
 </template>
 <script>
@@ -33,13 +30,19 @@
   import "codemirror/mode/yaml/yaml.js";
   import "codemirror/mode/yaml-frontmatter/yaml-frontmatter.js";
 
+  //json
+  import "codemirror/mode/javascript/javascript";
+  import "codemirror/addon/lint/lint";
+  import "codemirror/addon/lint/json-lint";
+
   import yaml from "js-yaml/dist/js-yaml.js";
+  import {mapGetters} from "vuex";
 
   export default {
     name: "Editor",
     data() {
       return {
-        code: '',
+        code: 'acd',
         cmOptions: {
           tabSize: 2,
           mode: 'yaml', //代码类型
@@ -55,41 +58,50 @@
           gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
           foldGutter: true, // 启用行槽中的代码折叠
           keyMap: "sublime", // 快键键风格
+          readOnly: false, //是否只读
         },
         syntaxDialogVisible: false,
         result: '',
         syntaxCount: 20
       }
     },
+    created() {
+      this.initCodeMirror()
+    },
     methods: {
+      ...mapGetters([
+        'getCodeValue',
+        'getCodeType',
+        'getCodeReadOnly'
+      ]),
+      initCodeMirror() {
+        this.cmOptions.mode = this.getCodeType();
+        this.cmOptions.readOnly = this.getCodeReadOnly();
+        if (this.cmOptions.mode === 'application/json') {
+          this.code = JSON.stringify(this.getCodeValue(), null, 2);
+        } else {
+          this.code = this.getCodeValue();
+        }
+        console.log(this.cmOptions.mode)
+      },
+      changes() {
+        this.$store.commit('saveCodeValue', this.code)
+      },
       //语法检查
       checkSyntax() {
-        let result = this.parseYaml(this.code);
-        if (result !== '') {
-          this.syntaxDialogVisible = true;
-          this.result = result;
-        } else {
-          this.$message.success("检测通过!")
+        if (this.cmOptions.mode === 'yaml') {
+          let result = this.parseYaml(this.code);
+          if (result !== '') {
+            this.syntaxDialogVisible = true;
+            this.result = result;
+          } else {
+            this.$message.success("检测通过!")
+          }
         }
+        this.$message.info('不是yaml格式支持检测,请自行检测')
       },
       handleClose() {
         this.result = '';
-      },
-      inputCheck() {
-        let result = this.parseYaml(this.code);
-        if (result !== '') {
-          this.syntaxCount--;
-          if (this.syntaxCount >= 0) {
-            this.syntaxCount = 20;
-            this.openTip(result);
-          }
-        }
-      },
-      openTip(value) {
-        this.$notify.error({
-          title: '语法错误',
-          message: value
-        });
       },
       //语法检测
       parseYaml(str) {
@@ -106,14 +118,24 @@
   }
 </script>
 <style>
+  .vue-codemirror {
+    margin-bottom: 10px;
+  }
+
+  #code_editor {
+    height: 100%;
+    position: relative;
+  }
+
   #code_editor .CodeMirror {
-    height: 640px !important;
-    width: auto !important;
+    height: auto;
+    min-height: 180px;
+    max-height: 900px;
     font-family: courier;
   }
 
-  .el-button {
-    margin-top: 10px;
-    float: right;
+  #code_editor .CodeMirror-scroll {
+    min-height: 180px;
+    max-height: 900px;
   }
 </style>
