@@ -61,7 +61,7 @@
           <el-tag v-else type="danger" disable-transitions>{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作"  fixed="right" width="200">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -72,7 +72,7 @@
             size="mini"
             type="danger"
             :disabled="scope.row.namespace === 'kube-system'"
-            @click="deletePod(scope.row)">删除
+            @click="deletePod(scope.row)">删 除
           </el-button>
         </template>
       </el-table-column>

@@ -67,17 +67,18 @@
         prop="updated_replicas"
         label="已更新的副本">
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" fixed="right" width="200">
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="readDeployment(scope.row)">查看
+            type="primary"
+            @click="readDeployment(scope.row)">查看和编辑
           </el-button>
           <el-button
             :disabled="scope.row.namespace === 'kube-system'"
             size="mini"
             type="danger"
-            @click="deleteDeployment(scope.row)">删除
+            @click="deleteDeployment(scope.row)">删 除
           </el-button>
         </template>
       </el-table-column>
@@ -102,6 +103,7 @@
       <Editor></Editor>
       <span slot="footer" class="dialog-footer">
         <el-button @click="detailDialogVisible = false">关 闭</el-button>
+        <el-button type="primary" @click="updateDeployment">更 新</el-button>
       </span>
     </el-dialog>
 
@@ -135,6 +137,8 @@
         //筛选
         selectedNamespace: '',
         namespaceList: '',
+        deploymentInfo: '',
+        updateInfo: '',
         detailDialogVisible: false
       }
     },
@@ -204,12 +208,14 @@
       //详细信息
       readDeployment(row) {
         let read = {name: row.name, namespace: row.namespace};
+        this.updateInfo = read;
         // console.log(read);
         this.$api.deploymentDetail(read).then(res => {
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
-            this.initCodeValue(res.data.results);
+            this.deploymentInfo = res.data.results;
+            this.initCodeValue(this.deploymentInfo);
           }
           this.detailDialogVisible = true;
         }).catch(err => {
@@ -225,7 +231,33 @@
         })
       },
       handleClose() {
+        this.deploymentInfo = '';
         this.initCodeValue('');
+      },
+      //更新Pod
+      updateDeployment() {
+        this.updateInfo['body'] = this.getCodeValue();
+        if (this.updateInfo['body'] === '') {
+          return this.$message.error('内容不能为空!')
+        }
+        this.$api.deploymentUpdate(this.updateInfo).then(res => {
+          if (res.data.status === 400) {
+            return Promise.reject(res)
+          } else {
+            this.$message.success(res.data.msg);
+          }
+          this.detailDialogVisible = false;
+        }).catch(err => {
+          try {
+            return this.$message.error(err.data.msg)
+          } catch (e) {
+            if (err.response.status === 500) {
+              return this.$message.error('服务器错误!')
+            } else {
+              return this.$message.error(err.response.data.detail)
+            }
+          }
+        })
       },
       async deleteDeployment(row) {
         const confirmResult = await this.$confirm(

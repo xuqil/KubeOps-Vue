@@ -310,5 +310,10 @@ export default {
   //删除某个Deployment的信息
   deploymentDelete(data) {
     return request.noQsdelete('/deployment', data)
-  }
+  },
+  //修改Pod
+  deploymentUpdate(data) {
+    return request.noQsPut('/deployment', data)
+  },
+
 }
