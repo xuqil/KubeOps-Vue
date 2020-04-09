@@ -290,9 +290,13 @@ export default {
   podDetail(params = null) {
     return request.get('/pod', params)
   },
-  //删除某个Podd的信息
+  //删除某个Pod的信息
   podDelete(data) {
     return request.noQsdelete('/pod', data)
+  },
+  //修改Pod
+  podUpdate(data) {
+    return request.noQsPut('/pod', data)
   },
 
   //获取Deployment

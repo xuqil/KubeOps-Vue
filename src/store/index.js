@@ -14,7 +14,7 @@ export default new Vuex.Store({
     mainBackgroundColor: 'rgba(255, 255, 255, 1)',
     codeValue: '', //编辑器代码
     codeType: 'yaml', //编辑器语言类型
-    codeReadOnly: 'false', //编辑器是否只读
+    codeReadOnly: false, //编辑器是否只读
   },
   mutations: {
     isCollapse: state => {

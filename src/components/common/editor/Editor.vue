@@ -76,13 +76,13 @@
       ]),
       initCodeMirror() {
         this.cmOptions.mode = this.getCodeType();
-        this.cmOptions.readOnly = this.getCodeReadOnly();
+        let read = this.getCodeReadOnly();
+        this.cmOptions.readOnly = !(read === false || read === 'false');
         if (this.cmOptions.mode === 'application/json') {
           this.code = JSON.stringify(this.getCodeValue(), null, 2);
         } else {
           this.code = this.getCodeValue();
         }
-        console.log(this.cmOptions.mode)
       },
       changes() {
         this.$store.commit('saveCodeValue', this.code)
