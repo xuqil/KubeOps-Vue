@@ -7,7 +7,7 @@
     <el-button type="info" @click="checkSyntax">语法检查</el-button>
 
     <el-dialog
-      title="语法提示"
+      title="语法错误提示"
       :visible.sync="syntaxDialogVisible"
       width="70%"
       :before-close="handleClose">
@@ -89,6 +89,7 @@
       },
       //语法检查
       checkSyntax() {
+        // console.log(this.cmOptions.mode)
         if (this.cmOptions.mode === 'yaml') {
           let result = this.parseYaml(this.code);
           if (result !== '') {
@@ -97,8 +98,9 @@
           } else {
             this.$message.success("检测通过!")
           }
+        } else {
+          this.$message.info('不是yaml格式支持检测,请自行检测')
         }
-        this.$message.info('不是yaml格式支持检测,请自行检测')
       },
       handleClose() {
         this.result = '';

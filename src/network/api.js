@@ -298,6 +298,10 @@ export default {
   podUpdate(data) {
     return request.noQsPut('/pod', data)
   },
+  //修改Pod
+  podCreate(data) {
+    return request.post('/pod', data)
+  },
 
   //获取Deployment
   deploymentsGet(params = null) {
@@ -311,9 +315,13 @@ export default {
   deploymentDelete(data) {
     return request.noQsdelete('/deployment', data)
   },
-  //修改Pod
+  //修改Deployment
   deploymentUpdate(data) {
     return request.noQsPut('/deployment', data)
+  },
+  //创建Deployment
+  deploymentCreate(data) {
+    return request.post('/deployment', data)
   },
 
 }

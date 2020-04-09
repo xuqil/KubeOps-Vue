@@ -8,7 +8,10 @@
         <head-bar/>
       </el-header>
       <el-main :style="{'background-color': getMainBackgroundColor}">
-        <router-view/>
+        <keep-alive >
+          <router-view v-if="$route.meta.keepAlive && isRouterActive"></router-view>
+        </keep-alive>
+        <router-view v-if="!$route.meta.keepAlive && isRouterActive"></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -21,8 +24,16 @@
 
   export default {
     name: "Home",
+    //页面刷新
+    provide() {
+      return {
+        reload: this.reload
+      }
+    },
     data() {
-      return {}
+      return {
+        isRouterActive: true,
+      }
     },
     components: {
       SideMenu,
@@ -32,6 +43,13 @@
       this.getBackgroundColor();
     },
     methods: {
+      //刷新页面
+      reload() {
+        this.isRouterActive = false;
+        this.$nextTick(function () {
+          this.isRouterActive = true
+        })
+      },
       getBackgroundColor() {
         this.$api.backgroundColorGet().then(res => {
           let backgroundColorList = res.data.results;

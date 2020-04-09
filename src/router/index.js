@@ -35,24 +35,24 @@ const routes = [
       title: '主页'
     },
     children: [
-      { path: '/home', component: Welcome },
-      { path: '/users', component: Users },
-      { path: '/user', component: User },
-      { path: '/rights', component: Rights },
-      { path: '/roles', component: Roles },
-      { path: '/server', component: Server },
-      { path: '/idc', component: IDC },
-      { path: '/tags', component: Tags },
-      { path: '/webssh', component: WebSSH },
-      { path: '/monitor', component: Monitor },
-      { path: '/files', component: Files },
-      { path: '/deploy', component: Deployment },
-      { path: '/wiki', component: Wiki },
-      { path: '/wiki/edit', component: Edit },
-      { path: '/wiki/add', component: Add },
-      { path: '/settings', component: Settings },
-      { path: '/kubernetes', component: Kubernetes },
-      { path: '/task', component: Task },
+      {path: '/home', component: Welcome, meta: {keepAlive: false}},
+      {path: '/users', component: Users, meta: {keepAlive: true}},
+      {path: '/user', component: User, meta: {keepAlive: true}},
+      {path: '/rights', component: Rights, meta: {keepAlive: true}},
+      {path: '/roles', component: Roles, meta: {keepAlive: true}},
+      {path: '/server', component: Server, meta: {keepAlive: true}},
+      {path: '/idc', component: IDC, meta: {keepAlive: true}},
+      {path: '/tags', component: Tags, meta: {keepAlive: true}},
+      {path: '/webssh', component: WebSSH, meta: {keepAlive: false}},
+      {path: '/monitor', component: Monitor, meta: {keepAlive: false}},
+      {path: '/files', component: Files, meta: {keepAlive: true}},
+      {path: '/deploy', component: Deployment, meta: {keepAlive: false}},
+      {path: '/wiki', component: Wiki, meta: {keepAlive: true}},
+      {path: '/wiki/edit', component: Edit, meta: {keepAlive: false}},
+      {path: '/wiki/add', component: Add, meta: {keepAlive: false}},
+      {path: '/settings', component: Settings, meta: {keepAlive: true}},
+      {path: '/kubernetes', component: Kubernetes, meta: {keepAlive: true}},
+      {path: '/task', component: Task, meta: {keepAlive: true}},
     ]
   },
   {
@@ -93,7 +93,7 @@ router.beforeEach((to, from, next) => {
   // 没有token, 强制跳转到登录页
   if (!tokenStr) return next('/login');
   //在各组件路由中定义meta的title
-  if(to.matched.length !== 0) document.title = to.matched[0].meta.title;
+  if (to.matched.length !== 0) document.title = to.matched[0].meta.title;
   //必须调用的函数，否则链接不能调转到next
   next()
 });
