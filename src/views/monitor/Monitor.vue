@@ -211,19 +211,16 @@
             {
               name: '1分钟平均负载',
               type: 'line',
-              stack: '总量',
               data: []
             },
             {
               name: '5分钟平均负载',
               type: 'line',
-              stack: '总量',
               data: []
             },
             {
               name: '15分钟平均负载',
               type: 'line',
-              stack: '总量',
               data: []
             },
           ]
