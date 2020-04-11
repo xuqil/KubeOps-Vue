@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import {
   Button,
-  Form, FormItem, Input,
+  Form, FormItem, Input, InputNumber,
   Container, Aside, Header, Main,
   Message,
   Menu, MenuItem, MenuItemGroup, Submenu, DropdownMenu, DropdownItem, Dropdown,
@@ -26,7 +26,9 @@ import {
   Progress,
   ColorPicker,
   Popover,
-  Notification
+  Notification,
+  Checkbox,
+  DatePicker
 } from 'element-ui'
 
 
@@ -34,6 +36,7 @@ Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
+Vue.use(InputNumber)
 
 Vue.use(Container)
 Vue.use(Aside)
@@ -88,3 +91,5 @@ Vue.use(Progress)
 
 Vue.use(ColorPicker)
 Vue.use(Popover)
+Vue.use(Checkbox)
+Vue.use(DatePicker)

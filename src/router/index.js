@@ -24,7 +24,9 @@ const Edit = () => import('views/wiki/Edit');
 const Add = () => import('views/wiki/Add');
 const Settings = () => import('views/platform/Settings');
 const Kubernetes = () => import('views/platform/Kubernetes');
-const Task = () => import('views/task/Task');
+const Tasks = () => import('views/task/Tasks');
+const TaskEdit = () => import('views/task/Edit');
+const Time = () => import('views/task/Time');
 
 const routes = [
   {
@@ -52,7 +54,9 @@ const routes = [
       {path: '/wiki/add', component: Add, meta: {keepAlive: false}},
       {path: '/settings', component: Settings, meta: {keepAlive: true}},
       {path: '/kubernetes', component: Kubernetes, meta: {keepAlive: true}},
-      {path: '/task', component: Task, meta: {keepAlive: true}},
+      {path: '/tasks', component: Tasks, meta: {keepAlive: true}},
+      {path: '/tasks/edit', component: TaskEdit, meta: {keepAlive: true}},
+      {path: '/time', component: Time, meta: {keepAlive: true}},
     ]
   },
   {
