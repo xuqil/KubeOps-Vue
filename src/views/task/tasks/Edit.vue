@@ -148,12 +148,17 @@
         <el-card>
           <div class="task_button">
             <el-button class="el-icon-arrow-left" @click="backTasks">返回</el-button>
-            <el-button class="el-icon-delete" :disabled="taskForm.name === 'celery.backend_cleanup'" type="danger"
+            <el-button class="el-icon-delete"
+                       :disabled="taskForm.task === 'celery.backend_cleanup'"
+                       type="danger"
                        @click="deleteTask(taskForm.id)">删除
             </el-button>
           </div>
           <div class="task_button task_update">
-            <el-button type="primary" @click="updateTask(taskForm.id)">修改</el-button>
+            <el-button type="primary"
+                       :disabled="taskForm.task === 'celery.backend_cleanup'"
+                       @click="updateTask(taskForm.id)">修改
+            </el-button>
           </div>
         </el-card>
       </el-form>
@@ -315,9 +320,11 @@
     font-family: 微软雅黑;
     font-size: 22px;
   }
-  .el-input, .el-textarea{
+
+  .el-input, .el-textarea {
     max-width: 600px;
   }
+
   .task_button {
     display: inline-block;
   }

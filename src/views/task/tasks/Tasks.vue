@@ -40,9 +40,8 @@
           label="状态"
           width="90">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.enabled" type="primary" disable-transitions>{{scope.row.enabled}}
-            </el-tag>
-            <el-tag v-else type="danger" disable-transitions>{{scope.row.enabled}}</el-tag>
+            <el-switch v-model="scope.row.enabled" :disabled="scope.row.task === 'celery.backend_cleanup'" @change="updateState(scope.row)">
+            </el-switch>
           </template>
         </el-table-column>
         <el-table-column
@@ -103,7 +102,7 @@
             <el-button
               size="mini"
               type="danger"
-              :disabled="scope.row.name === 'celery.backend_cleanup'"
+              :disabled="scope.row.task === 'celery.backend_cleanup'"
               @click="deleteTask(scope.row.id)">删 除
             </el-button>
           </template>
@@ -179,6 +178,18 @@
       },
       addTask() {
         this.$router.push('/tasks/add');
+      },
+      updateState(taskInfo) {
+        console.log(taskInfo)
+        this.$api.taskPut(
+          taskInfo.id,
+          taskInfo
+        ).then(res => {
+          this.$message.success("更新任务状态成功")
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
+        });
       },
       //分页
       handleSizeChange(newSize) {
