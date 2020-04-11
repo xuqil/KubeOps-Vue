@@ -6,14 +6,17 @@
       <el-breadcrumb-item>Clocked</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
+      <div class="add_button">
+        <el-button type="primary" @click="addClock">添加</el-button>
+      </div>
       <el-row>
         <el-col :span="18">
-          <el-link type="primary">
+          <el-link type="info">
             CLOCK TIME
           </el-link>
         </el-col>
         <el-col :span="6">
-          <el-link type="primary">
+          <el-link type="info">
             ENABLED
           </el-link>
         </el-col>
@@ -76,6 +79,9 @@
       editClocked(id) {
         this.$router.push({path: '/clocked/edit', query: {id: id}});
       },
+      addClock() {
+        this.$router.push('/clocked/add');
+      },
       //分页
       handleSizeChange(newSize) {
         this.queryInfo.page_size = newSize;
@@ -97,5 +103,9 @@
   .el-link {
     font-size: 18px;
     font-weight: bold;
+  }
+
+  .add_button {
+    margin-bottom: 15px;
   }
 </style>

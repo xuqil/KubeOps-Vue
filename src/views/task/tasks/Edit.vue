@@ -255,7 +255,7 @@
           if (!valid) return;
           this.$api.taskPut(id, this.taskForm).then(res => {
             this.$message.success('修改成功！');
-            this.$router.push('/tasks/');
+            this.backTasks();
           }).catch(err => {
             console.log(err.response.status);
             return this.$message.error(err.response.data.detail)

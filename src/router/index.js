@@ -8,30 +8,42 @@ const Register = () => import('components/common/login/Register');
 
 const Home = () => import('views/home/Home');
 const Welcome = () => import('views/home/Welcome');
+
 const Users = () => import('views/user/Users');
 const User = () => import('views/user/User');
+
 const Rights = () => import('views/power/Rights');
 const Roles = () => import('views/power/Roles');
+
 const Server = () => import('views/assets/Server');
 const IDC = () => import('views/assets/IDC');
 const Tags = () => import('views/assets/Tags');
 const WebSSH = () => import('views/assets/WebSSH');
+
 const Monitor = () => import('views/monitor/Monitor');
 const Files = () => import('views/files/Files');
+
 const Deployment = () => import('views/deployment/Deployment');
+
 const Wiki = () => import('views/wiki/Wiki');
 const Edit = () => import('views/wiki/Edit');
 const Add = () => import('views/wiki/Add');
+
 const Settings = () => import('views/platform/Settings');
 const Kubernetes = () => import('views/platform/Kubernetes');
-const Tasks = () => import('views/task/Tasks');
-const TaskEdit = () => import('views/task/Edit');
+
+const Tasks = () => import('views/task/tasks/Tasks');
+const TaskEdit = () => import('views/task/tasks/Edit');
+const TaskAdd = () => import('views/task/tasks/Add');
 const Crontab = () => import('views/task/crontab/Crontab');
 const CrontabEdit = () => import('views/task/crontab/Edit');
+const CrontabAdd = () => import('views/task/crontab/Add');
 const Clocked = () => import('views/task/clocked/Clocked');
 const ClockedEdit = () => import('views/task/clocked/Edit');
+const ClockedAdd = () => import('views/task/clocked/Add');
 const Intervals = () => import('views/task/intervals/Intervals');
 const IntervalsEdit = () => import('views/task/intervals/Edit');
+const IntervalsAdd = () => import('views/task/intervals/Add');
 
 const routes = [
   {
@@ -59,14 +71,18 @@ const routes = [
       {path: '/wiki/add', component: Add, meta: {keepAlive: false}},
       {path: '/settings', component: Settings, meta: {keepAlive: true}},
       {path: '/kubernetes', component: Kubernetes, meta: {keepAlive: true}},
-      {path: '/tasks', component: Tasks, meta: {keepAlive: true}},
-      {path: '/tasks/edit', component: TaskEdit, meta: {keepAlive: true}},
-      {path: '/crontab', component: Crontab, meta: {keepAlive: true}},
-      {path: '/crontab/edit', component: CrontabEdit, meta: {keepAlive: true}},
-      {path: '/clocked', component: Clocked, meta: {keepAlive: true}},
-      {path: '/clocked/edit', component: ClockedEdit, meta: {keepAlive: true}},
-      {path: '/intervals', component: Intervals, meta: {keepAlive: true}},
-      {path: '/intervals/edit', component: IntervalsEdit, meta: {keepAlive: true}},
+      {path: '/tasks', component: Tasks, meta: {keepAlive: false}},
+      {path: '/tasks/edit', component: TaskEdit, meta: {keepAlive: false}},
+      {path: '/tasks/add', component: TaskAdd, meta: {keepAlive: false}},
+      {path: '/crontab', component: Crontab, meta: {keepAlive: false}},
+      {path: '/crontab/edit', component: CrontabEdit, meta: {keepAlive: false}},
+      {path: '/crontab/add', component: CrontabAdd, meta: {keepAlive: false}},
+      {path: '/clocked', component: Clocked, meta: {keepAlive: false}},
+      {path: '/clocked/edit', component: ClockedEdit, meta: {keepAlive: false}},
+      {path: '/clocked/add', component: ClockedAdd, meta: {keepAlive: false}},
+      {path: '/intervals', component: Intervals, meta: {keepAlive: false}},
+      {path: '/intervals/edit', component: IntervalsEdit, meta: {keepAlive: false}},
+      {path: '/intervals/add', component: IntervalsAdd, meta: {keepAlive: false}},
     ]
   },
   {

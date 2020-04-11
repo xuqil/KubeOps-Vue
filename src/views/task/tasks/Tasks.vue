@@ -7,6 +7,9 @@
     </el-breadcrumb>
     <!-- 卡片视图 -->
     <el-card>
+      <div class="add_button">
+        <el-button type="primary" @click="addTask">添加</el-button>
+      </div>
       <el-table
         :data="tasksList">
         <el-table-column
@@ -174,6 +177,9 @@
           return this.$message.error(err.response.data.detail)
         })
       },
+      addTask() {
+        this.$router.push('/tasks/add');
+      },
       //分页
       handleSizeChange(newSize) {
         this.queryInfo.page_size = newSize;
@@ -188,5 +194,7 @@
 </script>
 
 <style scoped>
-
+  .add_button {
+    margin-bottom: 15px;
+  }
 </style>

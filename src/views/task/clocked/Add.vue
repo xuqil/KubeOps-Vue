@@ -11,8 +11,7 @@
         label-position="left"
         label-width="150px">
         <el-card>
-
-          <el-form-item label="Clock Time:">
+          <el-form-item label="Clock Time:" prop="clocked_time">
             <el-date-picker
               v-model="clockedForm.clocked_time"
               type="datetime"
@@ -23,7 +22,7 @@
             <div class="tip_message">按时执行任务</div>
           </el-form-item>
           <el-form-item label="Enabled:" prop="enabled">
-            <el-checkbox v-model="clockedForm.enabled" disabled></el-checkbox>
+            <el-checkbox v-model="clockedForm.enabled"></el-checkbox>
             <div class="tip_message">设置为False可禁用计划
             </div>
           </el-form-item>
@@ -32,12 +31,9 @@
       <el-card>
         <div class="clocked_button">
           <el-button class="el-icon-arrow-left" @click="backClocked">返回</el-button>
-          <el-button class="el-icon-delete" type="danger"
-                     @click="deleteClocked">删除
-          </el-button>
         </div>
         <div class="clocked_button clocked_update">
-          <el-button type="primary" @click="updateClocked">修改</el-button>
+          <el-button type="primary" @click="addClocked">添加</el-button>
         </div>
       </el-card>
     </div>
@@ -46,12 +42,16 @@
 
 <script>
   export default {
-    name: "Edit",
+    name: "Add",
     data() {
       return {
-        clockedId: '',
-        clockedForm: '',
-        clockedFormRules: {},
+        clockedForm: {
+          clocked_time: '',
+          enabled: true
+        },
+        clockedFormRules: {
+          clocked_time: [{required: true, message: '请选择计时时间', trigger: 'change'}]
+        },
         pickerOptions: {
           shortcuts: [{
             text: '今天',
@@ -76,47 +76,15 @@
         },
       }
     },
-    created() {
-      this.clockedId = this.$route.query.id;
-      this.getClockedDetail(this.clockedId);
-    },
     methods: {
-      getClockedDetail(id) {
-        this.$api.clockedDetailGet(id).then(res => {
-          this.clockedForm = res.data;
-        }).catch(err => {
-          console.log(err);
-          return this.$message.error(err.response.data.detail)
-        })
-      },
-      async deleteClocked() {
-        const confirmResult = await this.$confirm(
-          '此操作将永久删除该clocked, 是否继续?',
-          '提示',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }
-        ).catch(err => err);
-        if (confirmResult !== 'confirm') {
-          return this.$message.info('已取消删除')
-        }
-        this.$api.clockedDelete(this.clockedId).then(res => {
-          this.backClocked()
-        }).catch(err => {
-          console.log(err);
-          return this.$message.error(err.response.data.detail)
-        })
-      },
-      updateClocked() {
+      addClocked() {
         this.$refs.clockedFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.clockedPut(this.clockedId, this.clockedForm).then(res => {
-            this.$message.success('修改成功！');
-            this.backClocked();
+          this.$api.clockedPost(this.clockedForm).then(res => {
+            this.$message.success('添加成功！');
+            this.backClocked()
           }).catch(err => {
-            console.log(err.response.status);
+            console.log(err);
             return this.$message.error(err.response.data.detail)
           });
         })

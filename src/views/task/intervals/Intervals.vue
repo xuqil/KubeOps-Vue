@@ -6,6 +6,9 @@
       <el-breadcrumb-item>Interval</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
+      <div class="add_button">
+        <el-button type="primary" @click="addInterval">添加</el-button>
+      </div>
       <el-row>
         <el-col>
           <el-link type="info">
@@ -67,6 +70,9 @@
       editInterval(id) {
         this.$router.push({path: '/intervals/edit', query: {id: id}});
       },
+      addInterval() {
+        this.$router.push('/intervals/add')
+      },
       //分页
       handleSizeChange(newSize) {
         this.queryInfo.page_size = newSize;
@@ -88,5 +94,9 @@
   .el-link {
     font-size: 18px;
     font-weight: bold;
+  }
+
+  .add_button {
+    margin-bottom: 15px;
   }
 </style>
