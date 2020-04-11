@@ -16,7 +16,7 @@
           </el-link>
         </el-col>
       </el-row>
-      <el-row v-for="item in crontabScheduleList">
+      <el-row v-for="item in crontabScheduleList" :key="item.id">
         <el-col>
           <el-link type="primary" @click="editCrontab(item.id)">
             {{item.minute}}

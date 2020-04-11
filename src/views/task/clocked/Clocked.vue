@@ -21,7 +21,7 @@
           </el-link>
         </el-col>
       </el-row>
-      <el-row v-for="item in clockedScheduleList">
+      <el-row v-for="item in clockedScheduleList" :key="item.id">
         <el-col :span="18">
           <el-link type="primary" @click="editClocked(item.id)">
             {{item.clocked_time}}

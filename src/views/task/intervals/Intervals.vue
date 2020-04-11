@@ -16,7 +16,7 @@
           </el-link>
         </el-col>
       </el-row>
-      <el-row v-for="item in intervalsScheduleList">
+      <el-row v-for="item in intervalsScheduleList" :key="item.id">
         <el-col>
           <el-link type="primary" @click="editInterval(item.id)">
             {{item.every}}{{item.period}}
