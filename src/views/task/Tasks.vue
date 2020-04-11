@@ -8,8 +8,7 @@
     <!-- 卡片视图 -->
     <el-card>
       <el-table
-        :data="tasksList"
-        border>
+        :data="tasksList">
         <el-table-column
           prop="name"
           label="名称"
@@ -74,7 +73,7 @@
         <!--        </el-table-column>-->
         <!--        <el-table-column-->
         <!--          prop="interval"-->
-        <!--          label="时间间隔"-->
+        <!--          label="间隔"-->
         <!--          width="180">-->
         <!--        </el-table-column>-->
         <!--        <el-table-column-->

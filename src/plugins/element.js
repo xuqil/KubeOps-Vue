@@ -28,7 +28,8 @@ import {
   Popover,
   Notification,
   Checkbox,
-  DatePicker
+  DatePicker,
+  Link
 } from 'element-ui'
 
 
@@ -93,3 +94,4 @@ Vue.use(ColorPicker)
 Vue.use(Popover)
 Vue.use(Checkbox)
 Vue.use(DatePicker)
+Vue.use(Link)

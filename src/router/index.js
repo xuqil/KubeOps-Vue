@@ -26,7 +26,12 @@ const Settings = () => import('views/platform/Settings');
 const Kubernetes = () => import('views/platform/Kubernetes');
 const Tasks = () => import('views/task/Tasks');
 const TaskEdit = () => import('views/task/Edit');
-const Time = () => import('views/task/Time');
+const Crontab = () => import('views/task/crontab/Crontab');
+const CrontabEdit = () => import('views/task/crontab/Edit');
+const Clocked = () => import('views/task/clocked/Clocked');
+const ClockedEdit = () => import('views/task/clocked/Edit');
+const Intervals = () => import('views/task/intervals/Intervals');
+const IntervalsEdit = () => import('views/task/intervals/Edit');
 
 const routes = [
   {
@@ -56,7 +61,12 @@ const routes = [
       {path: '/kubernetes', component: Kubernetes, meta: {keepAlive: true}},
       {path: '/tasks', component: Tasks, meta: {keepAlive: true}},
       {path: '/tasks/edit', component: TaskEdit, meta: {keepAlive: true}},
-      {path: '/time', component: Time, meta: {keepAlive: true}},
+      {path: '/crontab', component: Crontab, meta: {keepAlive: true}},
+      {path: '/crontab/edit', component: CrontabEdit, meta: {keepAlive: true}},
+      {path: '/clocked', component: Clocked, meta: {keepAlive: true}},
+      {path: '/clocked/edit', component: ClockedEdit, meta: {keepAlive: true}},
+      {path: '/intervals', component: Intervals, meta: {keepAlive: true}},
+      {path: '/intervals/edit', component: IntervalsEdit, meta: {keepAlive: true}},
     ]
   },
   {

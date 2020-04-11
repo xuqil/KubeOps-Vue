@@ -1,6 +1,5 @@
 <template>
   <div id="task_edit">
-
     <div>
       <el-button type="text" icon="el-icon-d-arrow-left" @click="backTasks">返回</el-button>
     </div>
@@ -70,7 +69,7 @@
             </el-date-picker>
             <div class="tip_message">按计划运行任务。只设置一个计划类型，其余为空。</div>
           </el-form-item>
-          <el-form-item label="关闭时间" prop="clocked">
+          <el-form-item label="计时" prop="clocked">
             <el-select v-model="taskForm.clocked" placeholder="请选择关闭时间">
               <el-option
                 v-for="item in clockedScheduleList"
@@ -199,8 +198,8 @@
       }
     },
     created() {
-      this.taskId = this.$route.query.id;
-      this.getTaskDetail(this.taskId);
+      let taskId = this.$route.query.id;
+      this.getTaskDetail(taskId);
       this.getIntervalScheduleList();
       this.getCrontabScheduleList();
       // this.getSolarScheduleList();
@@ -294,13 +293,13 @@
 
 <style scoped>
   #task_edit {
-    width: 1200px;
+    width: 100%;
     display: flex;
     justify-self: center
   }
 
   .task_detail {
-    width: 1200px;
+    width: 100%;
     margin-top: 30px;
   }
 
@@ -316,7 +315,9 @@
     font-family: 微软雅黑;
     font-size: 22px;
   }
-
+  .el-input, .el-textarea{
+    max-width: 600px;
+  }
   .task_button {
     display: inline-block;
   }
