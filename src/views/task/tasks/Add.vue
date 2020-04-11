@@ -17,8 +17,15 @@
           <el-form-item label="任务名称" prop="name">
             <el-input v-model="taskForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="任务函数(registered)" prop="task">
-            <el-input v-model="taskForm.task"></el-input>
+          <el-form-item label="任务函数" prop="task">
+            <el-select v-model="taskForm.task" placeholder="请选择任务函数">
+              <el-option
+                v-for="(item, index) in taskRegistered"
+                :key="index"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="启用" prop="enabled">
             <el-checkbox v-model="taskForm.enabled"></el-checkbox>
@@ -165,12 +172,14 @@
     data() {
       return {
         taskForm: {
+          enabled: true,
           args: '[]'
         },
         taskFormRules: {
           name: [{required: true, message: '必填项', trigger: 'blur'}],
           task: [{required: true, message: '必填项', trigger: 'blur'}],
         },
+        taskRegistered: '',
         intervalScheduleList: '',
         crontabScheduleList: '',
         solarScheduleList: '',
@@ -200,12 +209,28 @@
       }
     },
     created() {
+      this.getTaskRegistered();
       this.getIntervalScheduleList();
       this.getCrontabScheduleList();
       // this.getSolarScheduleList();
       this.getClockedScheduleList();
     },
     methods: {
+      getTaskRegistered() {
+        this.$api.taskRegisteredGet().then(res => {
+          if (res.data.status === 200) {
+            this.taskRegistered = res.data.results;
+          } else {
+            return Promise.reject(res)
+          }
+        }).catch(err => {
+          if (err.data.status === 400) {
+            return this.$message.error(err.data.msg)
+          } else {
+            return this.$message.error(err.response.data.detail)
+          }
+        })
+      },
       getIntervalScheduleList() {
         this.$api.intervalsGet().then(res => {
           this.intervalScheduleList = res.data.results;

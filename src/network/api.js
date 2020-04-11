@@ -326,6 +326,11 @@ export default {
   },
 
   /*****************任务相关******************/
+  //获取已注册的任务
+  taskRegisteredGet() {
+    return request.get('/tasks/task/')
+  },
+
   //获取任务
   tasksGet(data) {
     return request.get('/tasks/periodic_task/', data)

@@ -17,8 +17,15 @@
           <el-form-item label="任务名称" prop="name">
             <el-input v-model="taskForm.name"></el-input>
           </el-form-item>
-          <el-form-item label="任务函数(registered)" prop="task">
-            <el-input v-model="taskForm.task"></el-input>
+          <el-form-item label="任务函数" prop="task">
+            <el-select v-model="taskForm.task" placeholder="请选择任务函数">
+              <el-option
+                v-for="(item, index) in taskRegistered"
+                :key="index"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="启用" prop="enabled">
             <el-checkbox v-model="taskForm.enabled"></el-checkbox>
@@ -174,6 +181,7 @@
       return {
         taskForm: '',
         taskFormRules: {},
+        taskRegistered: '',
         intervalScheduleList: '',
         crontabScheduleList: '',
         solarScheduleList: '',
@@ -205,6 +213,7 @@
     created() {
       let taskId = this.$route.query.id;
       this.getTaskDetail(taskId);
+      this.getTaskRegistered();
       this.getIntervalScheduleList();
       this.getCrontabScheduleList();
       // this.getSolarScheduleList();
@@ -219,6 +228,21 @@
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
+        })
+      },
+      getTaskRegistered() {
+        this.$api.taskRegisteredGet().then(res => {
+          if (res.data.status === 200) {
+            this.taskRegistered = res.data.results;
+          } else {
+            return Promise.reject(res)
+          }
+        }).catch(err => {
+          if (err.data.status === 400) {
+            return this.$message.error(err.data.msg)
+          } else {
+            return this.$message.error(err.response.data.detail)
+          }
         })
       },
       getIntervalScheduleList() {
