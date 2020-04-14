@@ -93,6 +93,5 @@
 
   .el-aside {
     text-align: left;
-    flex: 0 1 auto;
   }
 </style>
