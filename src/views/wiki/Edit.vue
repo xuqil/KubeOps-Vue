@@ -11,6 +11,9 @@
         <el-form-item label="正文">
           <div id="editor"></div>
         </el-form-item>
+        <el-form-item label="摘要">
+          <el-input type="textarea" v-model="postForm.excerpt"></el-input>
+        </el-form-item>
         <el-form-item label="分类" prop="category">
           <el-select v-model="postForm.category" clearable placeholder="请选择">
             <el-option

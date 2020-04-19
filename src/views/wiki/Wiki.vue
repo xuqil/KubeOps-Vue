@@ -10,7 +10,7 @@
       <el-col :span="16">
         <!--文章列表-->
         <div id="posts_list" v-if="!showPostDetailVisible">
-          <template v-for="(items, index) in postsList">
+          <template v-for="items in postsList">
             <el-card>
               <!--标题--->
               <div class="post_title">{{items.title}}</div>
@@ -19,7 +19,11 @@
                 <span class="post_category">分类: {{items.category}}</span>
                 <span>
                     <i class="el-icon-collection-tag"></i>:
-                    <el-tag :type="tagsColors[i]" size="mini" v-for="(item, i) in items.tags" :key="i">{{item}}
+                    <el-tag style="margin-right: 5px"
+                            :type="tagsColors[i]"
+                            size="mini"
+                            v-for="(item, i) in items.tags"
+                            :key="i">{{item}}
                     </el-tag>
                   </span>
               </div>
@@ -188,7 +192,7 @@
 <style scoped>
   #posts_list .el-card {
     margin-bottom: 20px;
-    background-color: #eeeeee;
+    background-color: #f8f8f8;
   }
 
   .post_title {

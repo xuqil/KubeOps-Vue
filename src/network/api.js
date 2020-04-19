@@ -195,7 +195,7 @@ export default {
   },
   //修改文章
   postPut(suffix, data) {
-    return request.put('/wiki/posts/' + suffix + '/', data)
+    return request.noQsPut('/wiki/posts/' + suffix + '/', data)
   },
   //删除文章
   postDelete(suffix) {

@@ -66,7 +66,7 @@ const routes = [
       {path: '/monitor', component: Monitor, meta: {keepAlive: false}},
       {path: '/files', component: Files, meta: {keepAlive: true}},
       {path: '/deploy', component: Deployment, meta: {keepAlive: false}},
-      {path: '/wiki', component: Wiki, meta: {keepAlive: true}},
+      {path: '/wiki', component: Wiki, meta: {keepAlive: false}},
       {path: '/wiki/edit', component: Edit, meta: {keepAlive: false}},
       {path: '/wiki/add', component: Add, meta: {keepAlive: false}},
       {path: '/settings', component: Settings, meta: {keepAlive: true}},
