@@ -14,9 +14,13 @@
       <!--CPU信息-->
       <div id="cpu_info">
         <el-card header="CPU信息" shadow="always">
-          <p>CPU型号: {{cpuInfo.cpu_model}}</p>
-          <p>核心数量: {{cpuInfo.cpu_core}}</p>
-          <p>线程数量: {{cpuInfo.thread_count}}</p>
+          <template v-for="item in cpuInfo">
+            <p>物理CPU ID: {{item.physical_id}}</p>
+            <p>CPU型号: {{item.model_name}}</p>
+            <p>CPU频率: {{item.frequency}}Mhz</p>
+            <p>核心数量: {{item.cores}}</p>
+            <p>线程数量: {{item.siblings}}</p>
+          </template>
         </el-card>
       </div>
       <!--网卡信息-->
