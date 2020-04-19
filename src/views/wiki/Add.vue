@@ -1,9 +1,6 @@
 <template>
   <div id="post_edit">
-    <div>
-      <el-button type="text" icon="el-icon-d-arrow-left" @click="backWiki">返回</el-button>
-    </div>
-    <div style="margin-top: 40px">
+    <div style="margin-top: 20px">
       <el-form :model="postForm" :rules="postFormRules" ref="postFormRef" label-position="top" size="small">
         <el-form-item label="标题" prop="title">
           <el-input v-model="postForm.title"></el-input>
@@ -219,23 +216,11 @@
         this.$refs.postFormRef.resetFields();
         this.editor.txt.html('');
       },
-      //返回wiki文章列表
-      backWiki() {
-        this.$router.push('/wiki/');
-      }
     }
 
   }
 </script>
 
 <style scoped>
-  .w-e-toolbar {
-    flex-wrap: wrap;
-  }
 
-  #post_edit {
-    width: 938px;
-    display: flex;
-    justify-self: center
-  }
 </style>

@@ -3,18 +3,18 @@
     <div>
       <el-button type="text" icon="el-icon-d-arrow-left" @click="backWiki">返回</el-button>
     </div>
-    <div style="margin-top: 40px">
+    <div style="margin-top: 10px">
       <el-form :model="postForm" :rules="postFormRules" ref="postFormRef" label-position="top" size="small">
-        <el-form-item label="标题" prop="title">
+        <el-form-item label="标题:" prop="title">
           <el-input v-model="postForm.title"></el-input>
         </el-form-item>
-        <el-form-item label="正文">
+        <el-form-item label="正文:">
           <div id="editor"></div>
         </el-form-item>
-        <el-form-item label="摘要">
+        <el-form-item label="摘要:">
           <el-input type="textarea" v-model="postForm.excerpt"></el-input>
         </el-form-item>
-        <el-form-item label="分类" prop="category">
+        <el-form-item label="分类:" prop="category">
           <el-select v-model="postForm.category" clearable placeholder="请选择">
             <el-option
               v-for="item in categoriesList"
@@ -24,7 +24,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="标签" prop="tag">
+        <el-form-item label="标签:" prop="tag">
           <el-select v-model="postForm.tags" multiple placeholder="请选择">
             <el-option
               v-for="item in tagsList"
@@ -211,16 +211,16 @@
           this.postForm['body'] = this.content;
           this.$api.postPut(this.postId, this.postForm).then(res => {
             this.$message.success('修改成功！');
-            this.$router.push('/wiki/');
+            this.backWiki();
           }).catch(err => {
             console.log(err.response.status);
             return this.$message.error(err.response.data.detail)
           });
         })
       },
-      //返回wiki文章列表
+      //返回
       backWiki() {
-        this.$router.push('/wiki/');
+        this.$router.go(-1);
       }
     }
 
@@ -228,13 +228,5 @@
 </script>
 
 <style scoped>
-  .w-e-toolbar {
-    flex-wrap: wrap;
-  }
 
-  #post_edit {
-    width: 938px;
-    display: flex;
-    justify-self: center
-  }
 </style>

@@ -9,7 +9,7 @@
       <!--文章-->
       <el-col :span="16">
         <!--文章列表-->
-        <div id="posts_list" v-if="!showPostDetailVisible">
+        <div id="posts_list">
           <template v-for="items in postsList">
             <el-card>
               <!--标题--->
@@ -34,7 +34,7 @@
               <div class="post_read">
                 <el-button type="text" @click="showPostDetail(items.id)">继续阅读</el-button>
               </div>
-              <div class="post_time">{{items.c_time | dataFormat}}</div>
+              <div class="post_time">更新时间: {{items.u_time | dataFormat}}</div>
             </el-card>
           </template>
           <!--分页区域-->
@@ -47,31 +47,6 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="total">
           </el-pagination>
-        </div>
-        <!--文章详情-->
-        <div id="post_detail" v-else>
-          <el-button type="text" icon="el-icon-back" @click="backWiki">返回</el-button>
-          <el-card>
-            <!--标题--->
-            <div class="post_title">{{detailPostForm.title}}</div>
-            <div class="post_title_bottom">
-              <span class="post_author"><i class="el-icon-user"></i>: {{detailPostForm.author}}</span>
-              <span>
-                  <i class="el-icon-collection-tag"></i>:
-                  <el-tag :type="tagsColors[i]" size="mini" v-for="(tag, i) in detailPostForm.tags" :key="i">{{tag}}
-                  </el-tag>
-                </span>
-            </div>
-            <!--主体--->
-            <div class="post_body">
-              <div v-html="detailPostForm.body"></div>
-            </div>
-            <div class="post_operation">
-              <el-button type="text" icon="el-icon-edit" @click="deletePost(detailPostForm.id)">删除</el-button>
-              <el-button type="text" icon="el-icon-delete" @click="showEditPost(detailPostForm.id)">编辑</el-button>
-            </div>
-            <div class="post_time">创建时间:{{detailPostForm.c_time | dataFormat}}</div>
-          </el-card>
         </div>
       </el-col>
       <!--侧边栏-->
@@ -114,8 +89,6 @@
         total: 0,
         postsList: [],
         tagsColors: ['success', 'info', 'warning', 'danger', 'success', 'info', 'warning', 'danger'],
-        showPostDetailVisible: false,
-        detailPostForm: [],
       }
     },
     components: {
@@ -140,10 +113,7 @@
       },
       // 查看文章详情
       showPostDetail(id) {
-        this.detailPostForm = this.postsList.find(function (obj) {
-          return obj.id === id
-        });
-        this.showPostDetailVisible = true
+        this.$router.push({path: '/wiki/detail', query: {id: id}});
       },
       //删除文章
       async deletePost(id) {
@@ -168,13 +138,9 @@
           return this.$message.error(err.response.data.detail)
         });
       },
-      //返回wiki文章列表
-      backWiki() {
-        this.showPostDetailVisible = false;
-      },
       //编辑文章
       showEditPost(id) {
-        this.$router.push({path: '/wiki/edit',query: {id: id}});
+        this.$router.push({path: '/wiki/edit', query: {id: id}});
       },
       //分页
       handleSizeChange(newSize) {
@@ -214,21 +180,9 @@
     margin-right: 10px
   }
 
-  .post_excerpt {
-    width: 890px;
-  }
-
-  .post_body {
-    width: 890px;
-  }
-
   .post_read {
     margin-top: 10px;
     text-align: center;
-  }
-
-  .post_operation {
-    margin-top: 10px;
   }
 
   .post_time {
