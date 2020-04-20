@@ -180,7 +180,7 @@
     methods: {
       //获取权限列表
       getRightsList() {
-        this.$api.rightsGet(this.queryInfo).then(res => {
+        this.$api.Rights.rightsGet(this.queryInfo).then(res => {
           // console.log(res.data.results);
           this.rightsList = res.data.results;
           this.total = res.data.count;
@@ -208,7 +208,7 @@
         this.$refs.addRightsFormRef.validate(valid => {
           // 表单预校验失败
           if (!valid) return;
-          this.$api.rightsPot(this.addRightsForm).then(res => {
+          this.$api.Rights.rightsPot(this.addRightsForm).then(res => {
             this.$message.success('添加权限成功！');
             this.getRightsList()
           }).catch(err => {
@@ -232,7 +232,7 @@
           // console.log(valid)
           // 表单预校验失败
           if (!valid) return;
-          this.$api.rightsPut(this.editRightsForm.id, {
+          this.$api.Rights.rightsPut(this.editRightsForm.id, {
             title: this.editRightsForm.title,
             path: this.editRightsForm.path,
             action: this.editRightsForm.action
@@ -264,7 +264,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.rightsDelete(id).then(res => {
+        this.$api.Rights.rightsDelete(id).then(res => {
           this.$message.success('删除权限成功！');
           this.getRightsList()
         }).catch(err => {

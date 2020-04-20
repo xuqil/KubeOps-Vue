@@ -53,11 +53,11 @@
         seriesData: [],
         isLoad: true,
         memory: [],
-        cpuTime: ['22:57:01', '22:57:02', '22:57:03', '22:57:04', '22:57:06', '22:57:07', '22:57:08', '22:57:09',
-          '22:57:10', '22:57:11', '22:57:12', '22:57:13', '22:57:14', '22:57:15', '22:57:16'],
-        avg1: [2.81, 2.75, 2.75, 2.75, 2.75, 2.75, 2.85, 2.85, 2.85, 2.85, 2.85, 2.70, 2.70, 2.70, 2.70],
-        avg5: [2.11, 2.11, 2.11, 2.11, 2.11, 2.11, 2.14, 2.14, 2.14, 2.14, 2.14, 2.13, 2.13, 2.13, 2.13],
-        avg15: [1.79, 1.80, 1.80, 1.80, 1.80, 1.80, 1.81, 1.81, 1.81, 1.81, 1.81, 1.80, 1.80, 1.80, 1.80],
+        cpuTime: ['22:57:01','22:57:02','22:57:03','22:57:04','22:57:06','22:57:07','22:57:08','22:57:09',
+          '22:57:10','22:57:11','22:57:12','22:57:13','22:57:14','22:57:15','22:57:16'],
+        avg1: [2.81,2.75,2.75,2.75,2.75,2.75,2.85,2.85,2.85,2.85,2.85,2.70,2.70,2.70,2.70],
+        avg5: [2.11,2.11,2.11,2.11,2.11,2.11,2.14,2.14,2.14,2.14,2.14,2.13,2.13,2.13,2.13],
+        avg15: [1.79,1.80,1.80,1.80,1.80,1.80,1.81,1.81,1.81,1.81,1.81,1.80,1.80,1.80,1.80],
       }
     },
     mounted() {
@@ -79,7 +79,7 @@
     methods: {
       //获取CPU信息
       getCpuInfo() {
-        this.$api.cpuInfo().then(res => {
+        this.$api.Monitor.cpuInfo().then(res => {
           this.cpuInfo = res.data;
         }).catch(err => {
           console.log(err);
@@ -88,7 +88,7 @@
       },
       //获取网卡信息
       getNetWorkInfo() {
-        this.$api.netWorkInfo().then(res => {
+        this.$api.Monitor.netWorkInfo().then(res => {
           this.netWorkInfo = res.data;
         }).catch(err => {
           console.log(err);
@@ -97,7 +97,7 @@
       },
       //获取平台IP
       getHostIp() {
-        this.$api.hostIp().then(res => {
+        this.$api.Monitor.hostIp().then(res => {
           this.hostIp = res.data;
         }).catch(err => {
           console.log(err);
@@ -107,7 +107,7 @@
       //获取系统负载
       getSystemLoad() {
         let cpuLoad = echarts.init(document.getElementById('cpu-load'));
-        this.$api.systemLoad().then(res => {
+        this.$api.Monitor.systemLoad().then(res => {
           if (this.cpuTime.length >= 15) {
             this.cpuTime.shift();
             this.avg1.shift();
@@ -145,7 +145,7 @@
       //获取内存信息
       getMemoryInfo() {
         let memory = echarts.init(document.getElementById('memory'));
-        this.$api.memoryInfo().then(res => {
+        this.$api.Monitor.memoryInfo().then(res => {
           // memory.hideLoading();
           this.memory = res.data;
           // console.log(this.memory);
@@ -281,7 +281,6 @@
   #cpu-load {
     margin-bottom: 30px;
   }
-
   #cpu_info, #network_info {
     display: inline-block;
     width: 48%;

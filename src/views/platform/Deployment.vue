@@ -164,7 +164,7 @@
       },
       //获取Deployment列表
       getDeploymentList() {
-        this.$api.deploymentsGet(this.queryInfo).then(res => {
+        this.$api.K8S.deploymentsGet(this.queryInfo).then(res => {
           // console.log(res)
           if (res.data.status === 400) {
             return Promise.reject(res)
@@ -182,7 +182,7 @@
       },
       //获取命名空间列表
       getNamespaceList() {
-        this.$api.namespacesGet(this.queryInfo).then(res => {
+        this.$api.K8S.namespacesGet(this.queryInfo).then(res => {
           if (res.data.status === 200) {
             this.namespaceList = res.data.results;
             console.log(this.namespaceList)
@@ -210,7 +210,7 @@
         let read = {name: row.name, namespace: row.namespace};
         this.updateInfo = read;
         // console.log(read);
-        this.$api.deploymentDetail(read).then(res => {
+        this.$api.K8S.deploymentDetail(read).then(res => {
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
@@ -240,7 +240,7 @@
         if (this.updateInfo['body'] === '') {
           return this.$message.error('内容不能为空!')
         }
-        this.$api.deploymentUpdate(this.updateInfo).then(res => {
+        this.$api.K8S.deploymentUpdate(this.updateInfo).then(res => {
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
@@ -274,7 +274,7 @@
         }
         let Deployment = {name: row.name, namespace: row.namespace};
         // console.log(msg);
-        this.$api.deploymentDelete(Deployment).then(res => {
+        this.$api.K8S.deploymentDelete(Deployment).then(res => {
           // console.log(res.data.status)
           if (res.data.status === 400) {
             return Promise.reject(res)

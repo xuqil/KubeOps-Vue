@@ -133,7 +133,7 @@
     methods: {
       //获取标签列表
       getTagsList() {
-        this.$api.tagsGet(this.queryInfo).then(res => {
+        this.$api.Assets.tagsGet(this.queryInfo).then(res => {
           this.tagsList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {
@@ -154,7 +154,7 @@
       addTag() {
         this.$refs.addTagFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.tagsPot(this.addTagForm).then(res => {
+          this.$api.Assets.tagsPot(this.addTagForm).then(res => {
             this.$message.success('添加标签成功！');
             this.getTagsList()
           }).catch(err => {
@@ -178,7 +178,7 @@
       editTag() {
         this.$refs.editTagFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.tagsPut(this.editTagForm.id, {
+          this.$api.Assets.tagsPut(this.editTagForm.id, {
             name: this.editTagForm.name,
             desc: this.editTagForm.desc,
           }).then(res => {
@@ -208,7 +208,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.tagsDelete(id).then(res => {
+        this.$api.Assets.tagsDelete(id).then(res => {
           this.$message.success('删除标签成功！');
           this.getTagsList()
         }).catch(err => {

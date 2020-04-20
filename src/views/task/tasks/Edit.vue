@@ -222,7 +222,7 @@
     methods: {
       //获取任务信息
       getTaskDetail(id) {
-        this.$api.taskDetailGet(id).then(res => {
+        this.$api.Tasks.taskDetailGet(id).then(res => {
           this.taskForm = res.data;
           // console.log(this.taskForm)
         }).catch(err => {
@@ -231,7 +231,7 @@
         })
       },
       getTaskRegistered() {
-        this.$api.taskRegisteredGet().then(res => {
+        this.$api.Tasks.taskRegisteredGet().then(res => {
           if (res.data.status === 200) {
             this.taskRegistered = res.data.results;
           } else {
@@ -246,7 +246,7 @@
         })
       },
       getIntervalScheduleList() {
-        this.$api.intervalsGet().then(res => {
+        this.$api.Tasks.intervalsGet().then(res => {
           this.intervalScheduleList = res.data.results;
           // console.log(this.intervalScheduleList)
         }).catch(err => {
@@ -255,7 +255,7 @@
         })
       },
       getCrontabScheduleList() {
-        this.$api.crontabsGet().then(res => {
+        this.$api.Tasks.crontabsGet().then(res => {
           this.crontabScheduleList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -263,7 +263,7 @@
         })
       },
       getSolarScheduleList() {
-        this.$api.solarsGet().then(res => {
+        this.$api.Tasks.solarsGet().then(res => {
           this.solarScheduleList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -271,7 +271,7 @@
         })
       },
       getClockedScheduleList() {
-        this.$api.clockedGet().then(res => {
+        this.$api.Tasks.clockedGet().then(res => {
           this.clockedScheduleList = res.data.results;
           // console.log(this.clockedScheduleList)
         }).catch(err => {
@@ -282,7 +282,7 @@
       updateTask(id) {
         this.$refs.taskFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.taskPut(id, this.taskForm).then(res => {
+          this.$api.Tasks.taskPut(id, this.taskForm).then(res => {
             this.$message.success('修改成功！');
             this.backTasks();
           }).catch(err => {
@@ -305,7 +305,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.taskDelete(id).then(res => {
+        this.$api.Tasks.taskDelete(id).then(res => {
           this.backTasks()
         }).catch(err => {
           console.log(err);

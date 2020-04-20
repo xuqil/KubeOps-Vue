@@ -144,7 +144,7 @@
     methods: {
       //获取任务列表
       getTasksList() {
-        this.$api.tasksGet(this.queryInfo).then(res => {
+        this.$api.Tasks.tasksGet(this.queryInfo).then(res => {
           this.tasksList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {
@@ -169,7 +169,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.taskDelete(id).then(res => {
+        this.$api.Tasks.taskDelete(id).then(res => {
           this.getTasksList()
         }).catch(err => {
           console.log(err);
@@ -181,7 +181,7 @@
       },
       updateState(taskInfo) {
         console.log(taskInfo)
-        this.$api.taskPut(
+        this.$api.Tasks.taskPut(
           taskInfo.id,
           taskInfo
         ).then(res => {

@@ -192,7 +192,7 @@
     methods: {
       //获取角色列表
       getRolesList() {
-        this.$api.rolesGet(this.queryInfo).then(res => {
+        this.$api.Rights.rolesGet(this.queryInfo).then(res => {
           this.rolesList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {
@@ -235,7 +235,7 @@
         }
         role.permissions.forEach(value => this.updateRights.push(value.id));
         this.removeArray(rightId, this.updateRights);
-        this.$api.rolesPut(role.id, {
+        this.$api.Rights.rolesPut(role.id, {
           permissions: this.updateRights,
         }).then(res => {
           // console.log(res);
@@ -250,7 +250,7 @@
       //显示分配权限对话框
       showSetRights(roles) {
         this.currentRoleId = roles.id;
-        this.$api.rightsGet().then(res => {
+        this.$api.Rights.rightsGet().then(res => {
           this.rightsTree = res.data.results;
           this.rightFlag = true;
         }).catch(err => {
@@ -269,7 +269,7 @@
           ...this.$refs.rightsRef.getCheckedKeys(),
           ...this.$refs.rightsRef.getHalfCheckedKeys()
         ];
-        this.$api.rolesPut(this.currentRoleId, {
+        this.$api.Rights.rolesPut(this.currentRoleId, {
           permissions: permissionsKeys,
         }).then(res => {
           // console.log(res);
@@ -287,7 +287,7 @@
         this.$refs.addUserFormRef.validate(valid => {
           // 表单预校验失败
           if (!valid) return;
-          this.$api.rolesPot(this.addRoleForm).then(res => {
+          this.$api.Rights.rolesPot(this.addRoleForm).then(res => {
             this.$message.success('添加角色成功！');
             this.getRolesList()
           }).catch(err => {
@@ -321,7 +321,7 @@
           // console.log(valid)
           // 表单预校验失败
           if (!valid) return;
-          this.$api.rolesPut(this.editRoleForm.id, {
+          this.$api.Rights.rolesPut(this.editRoleForm.id, {
             title: this.editRoleForm.title,
             desc: this.editRoleForm.desc
           }).then(res => {
@@ -348,7 +348,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.rolesDelete(id).then(res => {
+        this.$api.Rights.rolesDelete(id).then(res => {
           this.$message.success('删除角色成功！');
           this.getRolesList()
         }).catch(err => {

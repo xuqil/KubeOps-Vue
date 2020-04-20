@@ -141,7 +141,7 @@
     methods: {
       //获取IDC列表
       getIDCList() {
-        this.$api.IDCGet(this.queryInfo).then(res => {
+        this.$api.Assets.IDCGet(this.queryInfo).then(res => {
           this.IDCList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {
@@ -161,7 +161,7 @@
       addIDC() {
         this.$refs.addIDCFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.IDCPot(this.addIDCForm).then(res => {
+          this.$api.Assets.IDCPot(this.addIDCForm).then(res => {
             this.$message.success('添加IDC机房成功！');
             this.getIDCList()
           }).catch(err => {
@@ -186,7 +186,7 @@
       editIDC() {
         this.$refs.editIDCFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.IDCPut(this.editIDCForm.id, {
+          this.$api.Assets.IDCPut(this.editIDCForm.id, {
             name: this.editIDCForm.name,
             address: this.editIDCForm.address,
             mobile: this.editIDCForm.mobile,
@@ -217,7 +217,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.IDCDelete(id).then(res => {
+        this.$api.Assets.IDCDelete(id).then(res => {
           this.$message.success('删除机房成功！');
           this.getIDCList()
         }).catch(err => {

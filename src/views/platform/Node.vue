@@ -73,7 +73,7 @@
     methods: {
       //获取Node列表
       getNodeList() {
-        this.$api.nodesGet(this.queryInfo).then(res => {
+        this.$api.K8S.nodesGet(this.queryInfo).then(res => {
           if (res.data.status === 200) {
             this.nodeList = res.data.results;
           } else {

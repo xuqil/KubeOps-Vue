@@ -95,7 +95,7 @@
     methods: {
       //获取具体文章
       getPostDetail(id) {
-        this.$api.postDetailGet(id).then(res => {
+        this.$api.Wiki.postDetailGet(id).then(res => {
           this.postForm = res.data;
           console.log(this.postForm)
           this.editor.txt.html(this.postForm.body);
@@ -105,7 +105,7 @@
         })
       },
       getTagsList() {
-        this.$api.wikiTagsGet().then(res => {
+        this.$api.Wiki.wikiTagsGet().then(res => {
           this.tagsList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -113,7 +113,7 @@
         })
       },
       getCategoriesList() {
-        this.$api.wikiCategoriesGet().then(res => {
+        this.$api.Wiki.wikiCategoriesGet().then(res => {
           this.categoriesList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -209,7 +209,7 @@
           if (!valid) return;
           this.content = this.editor.txt.html();
           this.postForm['body'] = this.content;
-          this.$api.postPut(this.postId, this.postForm).then(res => {
+          this.$api.Wiki.postPut(this.postId, this.postForm).then(res => {
             this.$message.success('修改成功！');
             this.backWiki();
           }).catch(err => {

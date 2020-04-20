@@ -59,7 +59,7 @@
     },
     methods: {
       getIntervalDetail(id) {
-        this.$api.intervalDetailGet(id).then(res => {
+        this.$api.Tasks.intervalDetailGet(id).then(res => {
           this.intervalForm = res.data;
         }).catch(err => {
           console.log(err);
@@ -79,7 +79,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.intervalDelete(this.intervalId).then(res => {
+        this.$api.Tasks.intervalDelete(this.intervalId).then(res => {
           this.backInterval()
         }).catch(err => {
           console.log(err);
@@ -89,7 +89,7 @@
       updateInterval() {
         this.$refs.intervalFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.intervalPut(this.intervalId, this.intervalForm).then(res => {
+          this.$api.Tasks.intervalPut(this.intervalId, this.intervalForm).then(res => {
             this.$message.success('修改成功！');
             this.backInterval();
           }).catch(err => {

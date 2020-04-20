@@ -263,7 +263,7 @@
     },
     methods: {
       getUserList() {
-        this.$api.usersGet(this.queryInfo).then(res => {
+        this.$api.Users.usersGet(this.queryInfo).then(res => {
           this.userList = res.data.results;
           console.log(this.userList);
           this.total = res.data.count;
@@ -284,7 +284,7 @@
       //    更新用户状态
       userStateChange(userInfo) {
         console.log(userInfo);
-        this.$api.usersPut(
+        this.$api.Users.usersPut(
           userInfo.id,
           {'active': userInfo.active}
         ).then(res => {
@@ -304,7 +304,7 @@
         this.$refs.addUserFormRef.validate(valid => {
           // 表单预校验失败
           if (!valid) return;
-          this.$api.userAdd(this.addUserForm).then(res => {
+          this.$api.Users.userAdd(this.addUserForm).then(res => {
             this.$message.success('添加用户成功！');
             this.getUserList()
           }).catch(err => {
@@ -333,7 +333,7 @@
           // console.log(valid)
           // 表单预校验失败
           if (!valid) return;
-          this.$api.usersPut(this.editUserForm.id, {
+          this.$api.Users.usersPut(this.editUserForm.id, {
             username: this.editUserForm.username,
             email: this.editUserForm.email,
             mobile: this.editUserForm.mobile
@@ -364,7 +364,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.userDelete(id).then(res => {
+        this.$api.Users.userDelete(id).then(res => {
           this.$message.success('删除用户成功！');
           this.getUserList()
         }).catch(err => {
@@ -377,7 +377,7 @@
       showSetRole(role) {
         this.userInfo = role;
         // 展示对话框之前，获取所有角色列表
-        this.$api.rolesGet().then(res => {
+        this.$api.Users.rolesGet().then(res => {
           console.log(res.data.results);
           this.rolesList = res.data.results;
         }).catch(err => {
@@ -391,7 +391,7 @@
         if (!this.selectRoleId) {
           return this.$message.error('请选择要分配的角色')
         }
-        this.$api.usersPut(this.userInfo.id, {roles: this.selectRoleId}).then(res => {
+        this.$api.Users.usersPut(this.userInfo.id, {roles: this.selectRoleId}).then(res => {
           console.log(res);
           this.$message.success('更新角色成功！');
           this.getUserList();

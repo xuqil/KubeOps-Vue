@@ -217,7 +217,7 @@
     },
     methods: {
       getTaskRegistered() {
-        this.$api.taskRegisteredGet().then(res => {
+        this.$api.Tasks.taskRegisteredGet().then(res => {
           if (res.data.status === 200) {
             this.taskRegistered = res.data.results;
           } else {
@@ -232,7 +232,7 @@
         })
       },
       getIntervalScheduleList() {
-        this.$api.intervalsGet().then(res => {
+        this.$api.Tasks.intervalsGet().then(res => {
           this.intervalScheduleList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -240,7 +240,7 @@
         })
       },
       getCrontabScheduleList() {
-        this.$api.crontabsGet().then(res => {
+        this.$api.Tasks.crontabsGet().then(res => {
           this.crontabScheduleList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -248,7 +248,7 @@
         })
       },
       getSolarScheduleList() {
-        this.$api.solarsGet().then(res => {
+        this.$api.Tasks.solarsGet().then(res => {
           this.solarScheduleList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -256,7 +256,7 @@
         })
       },
       getClockedScheduleList() {
-        this.$api.clockedGet().then(res => {
+        this.$api.Tasks.clockedGet().then(res => {
           this.clockedScheduleList = res.data.results;
           // console.log(this.clockedScheduleList)
         }).catch(err => {
@@ -267,7 +267,7 @@
       addTask(id) {
         this.$refs.taskFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.taskPost(this.taskForm).then(res => {
+          this.$api.Tasks.taskPost(this.taskForm).then(res => {
             this.$message.success('添加成功！');
             this.backTasks();
           }).catch(err => {

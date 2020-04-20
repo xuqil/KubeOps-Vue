@@ -25,7 +25,7 @@
     methods: {
       //获取分类
       getCategories() {
-        this.$api.wikiCategoriesGet().then(res => {
+        this.$api.Wiki.wikiCategoriesGet().then(res => {
           this.categoriesList = res.data.results;
           console.log(this.categoriesList)
         }).catch(err => {

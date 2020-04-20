@@ -96,7 +96,7 @@
     data() {
       return {
         fileList: [],
-        uploadUrl: this.$api.uploadFilesURL(),
+        uploadUrl: this.$api.Files.uploadFilesURL(),
         queryInfo: {
           // 当前页数
           page: 1,
@@ -148,12 +148,12 @@
       downloadFile() {
         this.$refs.serverFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.downloadFiles(this.serverForm).then(res => {
+          this.$api.Files.downloadFiles(this.serverForm).then(res => {
             let pos = this.serverForm.path.lastIndexOf('/');//'/所在的最后位置'
             let fileName = this.serverForm.path.substr(pos + 1);//截取文件名称字符串
             this.download(res.data, fileName);
             //删除临时文件
-            this.$api.deleteTmpFiles(this.serverForm).then(res => {
+            this.$api.Files.deleteTmpFiles(this.serverForm).then(res => {
             }).catch(err => {
               console.log(err);
             });
@@ -194,7 +194,7 @@
       },
       //获取服务器列表
       getServersList() {
-        this.$api.serversGet(this.queryInfo).then(res => {
+        this.$api.Assets.serversGet(this.queryInfo).then(res => {
           this.serversList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {

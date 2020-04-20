@@ -102,7 +102,7 @@
     methods: {
       //获取文章
       getPostsList() {
-        this.$api.postsGet(this.queryInfo).then(res => {
+        this.$api.Wiki.postsGet(this.queryInfo).then(res => {
           this.postsList = res.data.results;
           this.total = res.data.count;
           console.log(this.postsList)
@@ -129,7 +129,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.postDelete(id).then(res => {
+        this.$api.Wiki.postDelete(id).then(res => {
           this.$message.success('删除成功！');
           this.getPostsList()
           this.showPostDetailVisible = false;

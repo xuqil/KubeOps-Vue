@@ -64,7 +64,7 @@
     },
     methods: {
       getCrontabScheduleList() {
-        this.$api.crontabsGet(this.queryInfo).then(res => {
+        this.$api.Tasks.crontabsGet(this.queryInfo).then(res => {
           this.crontabScheduleList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {

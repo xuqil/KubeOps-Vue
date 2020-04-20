@@ -24,7 +24,7 @@
     methods: {
       //获取标签
       getTags() {
-        this.$api.wikiTagsGet().then(res => {
+        this.$api.Wiki.wikiTagsGet().then(res => {
           this.tagsList = res.data.results;
           console.log(this.tagsList)
         }).catch(err => {

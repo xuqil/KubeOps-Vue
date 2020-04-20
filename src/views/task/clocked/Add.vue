@@ -80,7 +80,7 @@
       addClocked() {
         this.$refs.clockedFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.clockedPost(this.clockedForm).then(res => {
+          this.$api.Tasks.clockedPost(this.clockedForm).then(res => {
             this.$message.success('添加成功！');
             this.backClocked()
           }).catch(err => {

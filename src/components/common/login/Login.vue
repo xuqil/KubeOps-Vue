@@ -62,7 +62,7 @@
         this.$refs.loginFormRef.validate(valid => {
           // console.log(valid);
           if (!valid) return false;
-          this.$api.login(this.loginForm).then(res => {
+          this.$api.Users.login(this.loginForm).then(res => {
             console.log(res.data);
             this.$store.commit('saveUsername', res.data.username);
             this.$store.commit('saveUserId', res.data.id)

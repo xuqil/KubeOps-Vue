@@ -77,7 +77,7 @@
     },
     methods: {
       getCrontabDetail(id) {
-        this.$api.crontabDetailGet(id).then(res => {
+        this.$api.Tasks.crontabDetailGet(id).then(res => {
           this.crontabForm = res.data;
         }).catch(err => {
           console.log(err);
@@ -97,7 +97,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.crontabDelete(this.crontabId).then(res => {
+        this.$api.Tasks.crontabDelete(this.crontabId).then(res => {
           this.backCrontab()
         }).catch(err => {
           console.log(err);
@@ -107,7 +107,7 @@
       updateCrontab() {
         this.$refs.crontabFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.crontabPut(this.crontabId, this.crontabForm).then(res => {
+          this.$api.Tasks.crontabPut(this.crontabId, this.crontabForm).then(res => {
             this.$message.success('修改成功！');
             this.$router.push('/crontab/');
           }).catch(err => {

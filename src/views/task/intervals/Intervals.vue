@@ -58,7 +58,7 @@
     },
     methods: {
       getIntervalsScheduleList() {
-        this.$api.intervalsGet(this.queryInfo).then(res => {
+        this.$api.Tasks.intervalsGet(this.queryInfo).then(res => {
           // console.log(res.data)
           this.intervalsScheduleList = res.data.results;
           this.total = res.data.count;

@@ -281,7 +281,7 @@
     },
     methods: {
       getServersList() {
-        this.$api.serversGet(this.queryInfo).then(res => {
+        this.$api.Assets.serversGet(this.queryInfo).then(res => {
           this.serversList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {
@@ -312,7 +312,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.serversDelete(id).then(res => {
+        this.$api.Assets.serversDelete(id).then(res => {
           this.$message.success('删除主机成功！');
           this.getServersList()
         }).catch(err => {
@@ -323,7 +323,7 @@
       addServer() {
         this.$refs.addServerFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.serversPot(this.addServerForm).then(res => {
+          this.$api.Assets.serversPot(this.addServerForm).then(res => {
             this.$message.success('添加主机成功！');
             this.getServersList()
           }).catch(err => {
@@ -369,7 +369,7 @@
             this.editServerForm.tags = this.selectedTags;
           }
           console.log(this.editServerForm)
-          this.$api.serversPut(this.editServerForm.id, this.editServerForm).then(res => {
+          this.$api.Assets.serversPut(this.editServerForm.id, this.editServerForm).then(res => {
             this.$message.success('更新主机信息成功！');
             this.getServersList()
           }).catch(err => {
@@ -381,7 +381,7 @@
       },
       //获取IDC列表
       getIDCList() {
-        this.$api.IDCGet(this.queryInfo).then(res => {
+        this.$api.Assets.IDCGet(this.queryInfo).then(res => {
           this.IDCList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -390,7 +390,7 @@
       },
       //获取标签列表
       getTagsList() {
-        this.$api.tagsGet(this.queryInfo).then(res => {
+        this.$api.Assets.tagsGet(this.queryInfo).then(res => {
           this.tagsList = res.data.results;
         }).catch(err => {
           console.log(err);

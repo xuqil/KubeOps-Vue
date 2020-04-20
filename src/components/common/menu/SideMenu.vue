@@ -65,7 +65,7 @@
         this.isCollapse()
       },
       getMenuTree() {
-        this.$api.menuTree().then(res => {
+        this.$api.Rights.menuTree().then(res => {
           this.menuItems = res.data;
           // console.log(res.data)
         }).catch(err => {

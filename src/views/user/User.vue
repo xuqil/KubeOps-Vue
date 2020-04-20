@@ -145,7 +145,7 @@
     },
     methods: {
       getUserDetail() {
-        this.$api.userDetail(this.$store.getters.getUserId).then(res => {
+        this.$api.Users.userDetail(this.$store.getters.getUserId).then(res => {
           console.log(res);
           this.userForm = res.data;
         }).catch(err => {
@@ -159,7 +159,7 @@
         this.$refs.userFormRef.validate(valid => {
           // 表单预校验失败
           if (!valid) return;
-          this.$api.userUpdate(this.userForm.id, this.userForm).then(res => {
+          this.$api.Users.userUpdate(this.userForm.id, this.userForm).then(res => {
             this.$message.success('修改成功！');
             this.getUserDetail()
           }).catch(onerror => {
@@ -172,7 +172,7 @@
       updatePassword() {
         this.$refs.updatePasswordFormRef.validate((valid) => {
           if (!valid) return;
-          this.$api.passwordUpdate(this.updatePasswordForm).then(res => {
+          this.$api.Users.passwordUpdate(this.updatePasswordForm).then(res => {
             this.$message.success('修改成功！');
             window.sessionStorage.clear();
             this.$router.push('/login')

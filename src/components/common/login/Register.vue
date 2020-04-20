@@ -80,7 +80,7 @@
         this.$refs[formName].validate((valid) => {
           console.log(valid);
           if (valid) {
-            this.$api.register(this.registerForm).then(res => {
+            this.$api.Users.register(this.registerForm).then(res => {
               console.log(res);
               this.$message.success("注册成功")
             }).catch(err => {

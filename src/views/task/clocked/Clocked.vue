@@ -68,7 +68,7 @@
     },
     methods: {
       getClockedScheduleList() {
-        this.$api.clockedGet(this.queryInfo).then(res => {
+        this.$api.Tasks.clockedGet(this.queryInfo).then(res => {
           this.clockedScheduleList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {

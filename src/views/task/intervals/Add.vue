@@ -58,7 +58,7 @@
       addInterval() {
         this.$refs.intervalFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.intervalPost(this.intervalForm).then(res => {
+          this.$api.Tasks.intervalPost(this.intervalForm).then(res => {
             this.$message.success('添加成功！');
             this.backInterval()
           }).catch(err => {

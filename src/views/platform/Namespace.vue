@@ -74,7 +74,7 @@
     methods: {
       //获取命名空间列表
       getNamespaceList() {
-        this.$api.namespacesGet(this.queryInfo).then(res => {
+        this.$api.K8S.namespacesGet(this.queryInfo).then(res => {
           if (res.data.status === 200) {
             this.namespaceList = res.data.results;
             // console.log(this.namespaceList)
@@ -103,7 +103,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.namespacesDelete({'namespace': namespace}).then(res => {
+        this.$api.K8S.namespacesDelete({'namespace': namespace}).then(res => {
           if (res.data.status !== 200) {
             return Promise.reject(res)
           }
@@ -125,7 +125,7 @@
       addNamespace() {
         this.$refs.addedNamespaceRef.validate(valid => {
           if (!valid) return;
-          this.$api.namespacesPost(this.addedNamespace).then(res => {
+          this.$api.K8S.namespacesPost(this.addedNamespace).then(res => {
             if (res.data.status !== 200) {
               return Promise.reject(res)
             }

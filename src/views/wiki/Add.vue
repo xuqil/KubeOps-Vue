@@ -98,7 +98,7 @@
     },
     methods: {
       getTagsList() {
-        this.$api.wikiTagsGet().then(res => {
+        this.$api.Wiki.wikiTagsGet().then(res => {
           this.tagsList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -106,7 +106,7 @@
         })
       },
       getCategoriesList() {
-        this.$api.wikiCategoriesGet().then(res => {
+        this.$api.Wiki.wikiCategoriesGet().then(res => {
           this.categoriesList = res.data.results;
         }).catch(err => {
           console.log(err);
@@ -203,7 +203,7 @@
           this.content = this.editor.txt.html();
           this.postForm['body'] = this.content;
           this.postForm['author'] = this.getUserId;
-          this.$api.postPost(this.postForm).then(res => {
+          this.$api.Wiki.postPost(this.postForm).then(res => {
             this.$message.success('添加成功！');
             this.$router.push('/wiki/');
           }).catch(err => {

@@ -3,7 +3,6 @@
     <!-- 面包屑导航区 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>监控管理</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片视图 -->
     <el-card>
@@ -79,7 +78,7 @@
     methods: {
       //获取CPU信息
       getCpuInfo() {
-        this.$api.cpuInfo().then(res => {
+        this.$api.Monitor.cpuInfo().then(res => {
           this.cpuInfo = res.data;
         }).catch(err => {
           console.log(err);
@@ -88,7 +87,7 @@
       },
       //获取网卡信息
       getNetWorkInfo() {
-        this.$api.netWorkInfo().then(res => {
+        this.$api.Monitor.netWorkInfo().then(res => {
           this.netWorkInfo = res.data;
         }).catch(err => {
           console.log(err);
@@ -97,7 +96,7 @@
       },
       //获取平台IP
       getHostIp() {
-        this.$api.hostIp().then(res => {
+        this.$api.Monitor.hostIp().then(res => {
           this.hostIp = res.data;
         }).catch(err => {
           console.log(err);
@@ -107,7 +106,7 @@
       //获取系统负载
       getSystemLoad() {
         let cpuLoad = echarts.init(document.getElementById('cpu-load'));
-        this.$api.systemLoad().then(res => {
+        this.$api.Monitor.systemLoad().then(res => {
           if (this.cpuTime.length >= 15) {
             this.cpuTime.shift();
             this.avg1.shift();
@@ -145,7 +144,7 @@
       //获取内存信息
       getMemoryInfo() {
         let memory = echarts.init(document.getElementById('memory'));
-        this.$api.memoryInfo().then(res => {
+        this.$api.Monitor.memoryInfo().then(res => {
           // memory.hideLoading();
           this.memory = res.data;
           // console.log(this.memory);

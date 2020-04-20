@@ -160,7 +160,7 @@
       },
       //获取Pod列表
       getPodList() {
-        this.$api.podsGet(this.queryInfo).then(res => {
+        this.$api.K8S.podsGet(this.queryInfo).then(res => {
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
@@ -178,7 +178,7 @@
       },
       //获取命名空间列表
       getNamespaceList() {
-        this.$api.namespacesGet(this.queryInfo).then(res => {
+        this.$api.K8S.namespacesGet(this.queryInfo).then(res => {
           if (res.data.status === 200) {
             this.namespaceList = res.data.results;
             // console.log(this.namespaceList)
@@ -206,7 +206,7 @@
         let read = {name: row.name, namespace: row.namespace};
         this.updateInfo = read;
         // console.log(read);
-        this.$api.podDetail(read).then(res => {
+        this.$api.K8S.podDetail(read).then(res => {
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
@@ -237,7 +237,7 @@
         if (this.updateInfo['body'] === '') {
           return this.$message.error('内容不能为空!')
         }
-        this.$api.podUpdate(this.updateInfo).then(res => {
+        this.$api.K8S.podUpdate(this.updateInfo).then(res => {
           if (res.data.status === 400) {
             return Promise.reject(res)
           } else {
@@ -271,7 +271,7 @@
         }
         let pod = {name: row.name, namespace: row.namespace};
         // console.log(msg);
-        this.$api.podDelete(pod).then(res => {
+        this.$api.K8S.podDelete(pod).then(res => {
           // console.log(res.data.status)
           if (res.data.status === 400) {
             return Promise.reject(res)

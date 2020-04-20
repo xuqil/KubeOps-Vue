@@ -51,7 +51,7 @@
         })
       },
       getBackgroundColor() {
-        this.$api.backgroundColorGet().then(res => {
+        this.$api.Settings.backgroundColorGet().then(res => {
           let backgroundColorList = res.data.results;
           this.$store.commit('saveBackgroundColor', backgroundColorList);
           backgroundColorList.forEach(value => {

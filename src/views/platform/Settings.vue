@@ -97,7 +97,7 @@
             resultHead = value;
           }
         });
-        this.$api.backgroundColorPut(resultHead.id, resultHead).then(res => {
+        this.$api.Settings.backgroundColorPut(resultHead.id, resultHead).then(res => {
           console.log(resultHead.id)
           this.$message.success('修改成功!')
         }).catch(err => {
@@ -113,7 +113,7 @@
             resultMenu = value;
           }
         });
-        this.$api.backgroundColorPut(resultMenu.id, resultMenu).then(res => {
+        this.$api.Settings.backgroundColorPut(resultMenu.id, resultMenu).then(res => {
           console.log(resultMenu.id)
           this.$message.success('修改成功!')
         }).catch(err => {
@@ -129,7 +129,7 @@
             resultMain = value;
           }
         });
-        this.$api.backgroundColorPut(resultMain.id, resultMain).then(res => {
+        this.$api.Settings.backgroundColorPut(resultMain.id, resultMain).then(res => {
           console.log(resultMain.id)
           this.$message.success('修改成功!')
         }).catch(err => {

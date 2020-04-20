@@ -82,7 +82,7 @@
     },
     methods: {
       getClockedDetail(id) {
-        this.$api.clockedDetailGet(id).then(res => {
+        this.$api.Tasks.clockedDetailGet(id).then(res => {
           this.clockedForm = res.data;
         }).catch(err => {
           console.log(err);
@@ -102,7 +102,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.clockedDelete(this.clockedId).then(res => {
+        this.$api.Tasks.clockedDelete(this.clockedId).then(res => {
           this.backClocked()
         }).catch(err => {
           console.log(err);
@@ -112,7 +112,7 @@
       updateClocked() {
         this.$refs.clockedFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.clockedPut(this.clockedId, this.clockedForm).then(res => {
+          this.$api.Tasks.clockedPut(this.clockedId, this.clockedForm).then(res => {
             this.$message.success('修改成功！');
             this.backClocked();
           }).catch(err => {

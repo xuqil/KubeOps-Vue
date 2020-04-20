@@ -84,7 +84,7 @@
       addCrontab(){
         this.$refs.crontabFormRef.validate(valid => {
           if (!valid) return;
-          this.$api.crontabPost(this.crontabForm).then(res => {
+          this.$api.Tasks.crontabPost(this.crontabForm).then(res => {
             this.$message.success('添加成功！');
             this.backCrontab()
           }).catch(err => {

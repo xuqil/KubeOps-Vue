@@ -92,7 +92,7 @@
       },
       //获取命名空间列表
       getNamespaceList() {
-        this.$api.namespacesGet(this.queryInfo).then(res => {
+        this.$api.K8S.namespacesGet(this.queryInfo).then(res => {
           if (res.data.status === 200) {
             this.namespaceList = res.data.results;
           } else {
@@ -114,9 +114,9 @@
             return;
           }
           if (this.deployInfo.type === "Pod") {
-            this.startPush(this.$api.podCreate);
+            this.startPush(this.$api.K8S.podCreate);
           } else if (this.deployInfo.type === "Deployment") {
-            this.startPush(this.$api.deploymentCreate)
+            this.startPush(this.$api.K8S.deploymentCreate)
           }
         })
       },

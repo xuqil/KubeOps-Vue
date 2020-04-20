@@ -50,7 +50,7 @@
     },
     methods: {
       getPostDetail(id) {
-        this.$api.postDetailGet(id).then(res => {
+        this.$api.Wiki.postDetailGet(id).then(res => {
           this.detailPostForm = res.data;
         }).catch(err => {
           console.log(err);
@@ -75,7 +75,7 @@
         if (confirmResult !== 'confirm') {
           return this.$message.info('已取消删除')
         }
-        this.$api.postDelete(id).then(res => {
+        this.$api.Wiki.postDelete(id).then(res => {
           this.$message.success('删除成功！');
           this.backWiki()
         }).catch(err => {

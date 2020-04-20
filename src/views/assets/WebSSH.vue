@@ -72,7 +72,7 @@
 
           <el-form-item label="秘钥文件" v-else>
             <el-upload
-              :action="this.$api.uploadKeyUrl()"
+              :action="this.$api.Assets.uploadKeyUrl()"
               :before-remove="beforeRemove"
               :before-upload="beforeKeyUpload"
               :on-success="uploadSuccess"
@@ -115,7 +115,7 @@
           </el-form-item>
           <el-form-item label="秘钥文件" v-else>
             <el-upload
-              :action="this.$api.uploadKeyUrl()"
+              :action="this.$api.Assets.uploadKeyUrl()"
               :before-remove="beforeRemove"
               :before-upload="beforeKeyUpload"
               :on-success="uploadSuccess"
@@ -187,7 +187,7 @@
       },
       //获取服务器列表
       getServersList() {
-        this.$api.serversGet(this.queryInfo).then(res => {
+        this.$api.Assets.serversGet(this.queryInfo).then(res => {
           this.serversList = res.data.results;
           this.total = res.data.count;
         }).catch(err => {
