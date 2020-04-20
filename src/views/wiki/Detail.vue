@@ -10,15 +10,6 @@
       <el-card>
         <!--标题--->
         <div class="post_title">{{detailPostForm.title}}</div>
-        <div class="post_title_bottom">
-          <span class="post_author"><i class="el-icon-user"></i>: {{detailPostForm.author}}</span>
-          <span class="post_category">分类: {{detailPostForm.category}}</span>
-          <span>
-            <i class="el-icon-collection-tag"></i>:
-            <el-tag :type="tagsColors[i]" size="mini" v-for="(tag, i) in detailPostForm.tags" :key="i">{{tag}}
-            </el-tag>
-          </span>
-        </div>
         <!--主体--->
         <div class="post_body">
           <div v-html="detailPostForm.body"></div>
@@ -93,17 +84,9 @@
 <style scoped>
   .post_title {
     text-align: center;
-    font-size: 20px;
-  }
-
-  .post_title_bottom {
-    font-size: 12px;
-    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
     margin-bottom: 30px;
-  }
-
-  .post_author, .post_category {
-    margin-right: 10px
   }
 
   .post_operation {
