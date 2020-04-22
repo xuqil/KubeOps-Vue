@@ -377,7 +377,7 @@
       showSetRole(role) {
         this.userInfo = role;
         // 展示对话框之前，获取所有角色列表
-        this.$api.Users.rolesGet().then(res => {
+        this.$api.Rights.rolesGet().then(res => {
           console.log(res.data.results);
           this.rolesList = res.data.results;
         }).catch(err => {
