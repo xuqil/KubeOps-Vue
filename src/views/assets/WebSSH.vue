@@ -241,7 +241,7 @@
             cursorBlink: true
           }),
           protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
-          socketURL = protocol + '127.0.0.1:8000' + '/webssh/?' + connectInfo + '&width=' + cols + '&height=' + rows;
+          socketURL = protocol + this.$api.Assets.websshUrl() + '?' + connectInfo + '&width=' + cols + '&height=' + rows;
 
         let sock = new WebSocket(socketURL);
         console.log(sock)

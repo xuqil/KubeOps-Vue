@@ -4,7 +4,7 @@ export default {
   /*****************文件相关******************/
   //文件上传
   uploadFilesURL() {
-    return 'http://127.0.0.1:8000/api/v1/up_files'
+    return request.getBaseUrl() + 'up_files'
   },
   //文件下载
   downloadFiles(data = null) {

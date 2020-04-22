@@ -1,11 +1,13 @@
 import axios from 'axios'
 import Qs from 'qs'
 
+const baseURL = 'http://127.0.0.1:8000/api/v1/';
+const websocketUrl = '127.0.0.1:8000/webssh/';
 
 function baseConfig(config) {
   // 1.创建axios的实例
   const instance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/v1/',
+    baseURL: baseURL,
     timeout: 50000
   });
 
@@ -32,6 +34,12 @@ function baseConfig(config) {
 
 // get，post请求方法
 export default {
+  getBaseUrl() {
+    return baseURL
+  },
+  getWebsocketUrl() {
+    return websocketUrl
+  },
   post(url, data) {
     return baseConfig({
       method: 'post',

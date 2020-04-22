@@ -56,6 +56,11 @@ export default {
   },
   //上传key
   uploadKeyUrl() {
-    return 'http://127.0.0.1:8000/api/v1/upload_key'
+    return request.getBaseUrl() + 'upload_key'
   },
+
+  /*****************webssh相关******************/
+  websshUrl() {
+    return request.getWebsocketUrl()
+  }
 }
