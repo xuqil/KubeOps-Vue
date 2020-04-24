@@ -5,6 +5,11 @@
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>wiki</el-breadcrumb-item>
     </el-breadcrumb>
+    <el-button type="text"
+               icon="el-icon-back"
+               @click="backWiki"
+               v-show="showBack">返回
+    </el-button>
     <el-row :gutter="20">
       <!--文章-->
       <el-col :span="16">
@@ -15,12 +20,14 @@
               <!--标题--->
               <div class="post_title">{{items.title}}</div>
               <div class="post_title_bottom">
-                <span class="post_author"><i class="el-icon-user"></i>: {{items.author}}</span>
-                <span class="post_category">分类: {{items.category}}</span>
+                <span class="post_author"
+                      @click="searchByAuthor(items.author)">
+                  <i class="el-icon-user"></i>: <span>{{items.author}}</span></span>
+                <span class="post_category"><i class="el-icon-price-tag"></i>: <span>{{items.category}}</span></span>
                 <span>
                     <i class="el-icon-collection-tag"></i>:
                     <el-tag style="margin-right: 5px"
-                            :type="tagsColors[i]"
+                            :type="typeColors[i]"
                             size="mini"
                             v-for="(item, i) in items.tags"
                             :key="i">{{item}}
@@ -52,17 +59,37 @@
       <!--侧边栏-->
       <el-col :span="6">
         <div id="aside_right">
+          <div class="search_input">
+            <el-input placeholder="搜索文章 (用户 | 标题 | 文章主体)"
+                      v-model="queryInfo.search"
+                      @change="clickSearch"
+                      prefix-icon="el-icon-search">
+            </el-input>
+          </div>
           <el-card>
             <div slot="header" class="aside_header">
               <span>分类</span>
             </div>
-            <Category/>
+            <el-tag
+              v-for="(item, index) in categoriesList"
+              :key="item.id"
+              :type="typeColors[index]"
+              @click="searchByCategory(item.name)"
+              effect="plain">
+              {{ item.name }}
+            </el-tag>
           </el-card>
           <el-card>
             <div slot="header" class="aside_header">
               <span>标签</span>
             </div>
-            <Tag/>
+            <el-tag
+              v-for="(item, index) in tagsList"
+              :key="item.id"
+              :type="typeColors[index]"
+              @click="searchByTag(item.name)">
+              {{ item.name }}
+            </el-tag>
           </el-card>
         </div>
       </el-col>
@@ -71,33 +98,31 @@
 </template>
 
 <script>
-
-  import Category from "./Category";
-  import Tag from "./Tag";
-
-
   export default {
     name: "Wiki",
+    inject: ['reload'],
     data() {
       return {
         queryInfo: {
-          // 当前页数
           page: 1,
-          // 每页显示多少数据
-          page_size: 5
+          page_size: 5,
+          search: null,
+          category: null,
+          tags: null,
+          author: null
         },
         total: 0,
         postsList: [],
-        tagsColors: ['success', 'info', 'warning', 'danger', 'success', 'info', 'warning', 'danger'],
+        categoriesList: [],
+        tagsList: [],
+        showBack: false,
+        typeColors: ['', 'success', 'info', 'danger', 'warning', '', 'success', 'info', 'danger', 'warning', '', 'success', 'info', 'danger', 'warning', '', 'success', 'info', 'danger', 'warning',]
       }
     },
-    components: {
-      Category,
-      Tag
-    },
-
     created() {
       this.getPostsList();
+      this.getCategories();
+      this.getTags();
     },
     methods: {
       //获取文章
@@ -105,7 +130,30 @@
         this.$api.Wiki.postsGet(this.queryInfo).then(res => {
           this.postsList = res.data.results;
           this.total = res.data.count;
-          console.log(this.postsList)
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
+        })
+      },
+      initQueryInfo() {
+        this.queryInfo.search = null;
+        this.queryInfo.category = null;
+        this.queryInfo.tags = null;
+        this.queryInfo.author = null;
+      },
+      //获取分类
+      getCategories() {
+        this.$api.Wiki.wikiCategoriesGet().then(res => {
+          this.categoriesList = res.data.results;
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
+        })
+      },
+      //获取标签
+      getTags() {
+        this.$api.Wiki.wikiTagsGet().then(res => {
+          this.tagsList = res.data.results;
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
@@ -132,11 +180,34 @@
         this.$api.Wiki.postDelete(id).then(res => {
           this.$message.success('删除成功！');
           this.getPostsList()
-          this.showPostDetailVisible = false;
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
         });
+      },
+      backWiki() {
+        this.showBack = false;
+        this.reload();
+        this.initQueryInfo();
+      },
+      clickSearch() {
+        this.getPostsList();
+        this.showBack = true;
+      },
+      searchByAuthor(username) {
+        this.queryInfo.author = username;
+        this.getPostsList();
+        this.showBack = true;
+      },
+      searchByCategory(name) {
+        this.queryInfo.category = name;
+        this.getPostsList();
+        this.showBack = true;
+      },
+      searchByTag(name) {
+        this.queryInfo.tags = name;
+        this.getPostsList();
+        this.showBack = true;
       },
       //编辑文章
       showEditPost(id) {
@@ -171,9 +242,18 @@
   }
 
   .post_title_bottom {
-    font-size: 10px;
+    font-size: 12px;
     text-align: center;
     margin-bottom: 30px;
+  }
+
+  .post_author span {
+    cursor: pointer;
+    color: #4f4ce7;
+  }
+
+  .post_category span {
+    color: #801221;
   }
 
   .post_author, .post_category {
@@ -196,5 +276,17 @@
 
   .aside_header {
     height: 10px
+  }
+
+  .el-tag {
+    margin-right: 10px;
+  }
+
+  #aside_right .el-tag {
+    cursor: pointer;
+  }
+
+  .search_input {
+    margin-bottom: 20px;
   }
 </style>
