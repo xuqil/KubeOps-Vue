@@ -10,8 +10,35 @@
     <el-card>
       <!-- 添加主机按钮 -->
       <el-row>
-        <el-col>
-          <el-button type="primary" @click="addDialogVisible = true">添加主机</el-button>
+        <el-col :span="4">
+          <el-button type="primary"
+                     @click="addDialogVisible = true"
+                     v-if="showAdd">添加主机
+          </el-button>
+          <el-button type="text"
+                     icon="el-icon-back"
+                     @click="onBack"
+                     v-else>返回
+          </el-button>
+        </el-col>
+        <el-col :span="20">
+          <el-form :inline="true" :model="queryInfo" class="search_form">
+            <el-form-item>
+              <el-input v-model="queryInfo.hostname" placeholder="主机名" clearable></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="queryInfo.os_type" placeholder="操作系统类型" clearable></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="queryInfo.ip" placeholder="服务器IP" clearable></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="queryInfo.idc" placeholder="所在机房" clearable></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitSearch">筛选</el-button>
+            </el-form-item>
+          </el-form>
         </el-col>
       </el-row>
       <!--主机列表-->
@@ -19,9 +46,11 @@
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="主机名" prop="hostname"></el-table-column>
         <el-table-column label="IP" prop="ip"></el-table-column>
-        <el-table-column label="设备类型" prop="device_type"></el-table-column>
+        <el-table-column label="操作系统类型" prop="os_type"></el-table-column>
         <el-table-column label="操作系统版本" prop="os_version"></el-table-column>
+        <el-table-column label="设备类型" prop="device_type"></el-table-column>
         <el-table-column label="应用环境" prop="app_env"></el-table-column>
+        <el-table-column label="所在机房" prop="idc.name"></el-table-column>
         <el-table-column label="服务器状态" prop="status"></el-table-column>
         <el-table-column label="操作" width="300px">
           <template slot-scope="scope">
@@ -217,6 +246,7 @@
 <script>
   export default {
     name: "Server",
+    inject: ['reload'],
     data() {
       // 自定义IPV4规则
       const checkIPV4 = (rule, value, callback) => {
@@ -229,12 +259,15 @@
       };
       return {
         queryInfo: {
-          // 当前页数
           page: 1,
-          // 每页显示多少数据
-          page_size: 5
+          page_size: 5,
+          hostname: null,
+          os_type: null,
+          ip: null,
+          idc: null
         },
         total: 0,
+        showAdd: true,
         //服务器列表
         serversList: [],
         addDialogVisible: false,
@@ -288,6 +321,18 @@
           console.log(err);
           return this.$message.error(err.response.data.detail)
         })
+      },
+      submitSearch() {
+        this.getServersList();
+        this.showAdd = false;
+      },
+      onBack() {
+        this.showAdd = true;
+        this.queryInfo.hostname = null;
+        this.queryInfo.os_type = null;
+        this.queryInfo.ip = null;
+        this.queryInfo.idc = null;
+        this.reload();
       },
       //分页
       handleSizeChange(newSize) {
@@ -405,5 +450,8 @@
 </script>
 
 <style scoped>
-
+  .search_form {
+    float: right;
+    margin: 0;
+  }
 </style>

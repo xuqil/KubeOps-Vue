@@ -60,7 +60,7 @@ const routes = [
       {path: '/user', component: User, meta: {keepAlive: true}},
       {path: '/rights', component: Rights, meta: {keepAlive: true}},
       {path: '/roles', component: Roles, meta: {keepAlive: true}},
-      {path: '/server', component: Server, meta: {keepAlive: true}},
+      {path: '/server', component: Server, meta: {keepAlive: false}},
       {path: '/idc', component: IDC, meta: {keepAlive: true}},
       {path: '/tags', component: Tags, meta: {keepAlive: true}},
       {path: '/webssh', component: WebSSH, meta: {keepAlive: false}},
