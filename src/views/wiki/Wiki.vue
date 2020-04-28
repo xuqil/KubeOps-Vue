@@ -191,21 +191,33 @@
         this.initQueryInfo();
       },
       clickSearch() {
+        this.queryInfo.category = null;
+        this.queryInfo.tags = null;
+        this.queryInfo.author = null;
         this.getPostsList();
         this.showBack = true;
       },
       searchByAuthor(username) {
         this.queryInfo.author = username;
+        this.queryInfo.category = null;
+        this.queryInfo.tags = null;
+        this.queryInfo.search = null;
         this.getPostsList();
         this.showBack = true;
       },
       searchByCategory(name) {
         this.queryInfo.category = name;
+        this.queryInfo.search = null;
+        this.queryInfo.tags = null;
+        this.queryInfo.author = null;
         this.getPostsList();
         this.showBack = true;
       },
       searchByTag(name) {
         this.queryInfo.tags = name;
+        this.queryInfo.category = null;
+        this.queryInfo.search = null;
+        this.queryInfo.author = null;
         this.getPostsList();
         this.showBack = true;
       },

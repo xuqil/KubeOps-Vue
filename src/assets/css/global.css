@@ -24,10 +24,9 @@ html, body, #app {
   display: table-cell !important;
 }
 
-/*.el-table thead {*/
-/*  !*color: #646464;*!*/
-/*  !*background-color: #eeeeee !important;*!*/
-/*}*/
+.el-form-item .el-button{
+  margin-left: 10px;
+}
 
 .el-pagination {
   margin-top: 15px;
