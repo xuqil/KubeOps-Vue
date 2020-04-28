@@ -17,6 +17,11 @@ html, body , #app{
     margin-top: 15px;
     font-size: 12px;
 }
+/* 解决table表格控件表头与内容列不对齐问题 */
+.el-table th.gutter{
+  display: table-cell!important;
+}
+
 .el-pagination{
     margin-top: 15px;
 }
