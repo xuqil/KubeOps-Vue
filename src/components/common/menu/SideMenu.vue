@@ -2,20 +2,17 @@
   <div class="sidebar">
     <el-menu
       class="sidebar-el-menu"
-      :background-color="Color"
+      :background-color="getMenuBackgroundColor"
       text-color="#bfcbd9"
       active-text-color="#20a0ff"
       unique-opened
-      :collapse="Collapse"
+      :collapse="getCollapse"
       :collapse-transition="false"
       router
       :default-active="$route.path"
     >
-      <el-menu-item index="">
-        <div class="collapse-btn" @click="changeCollapse">
-          <i v-if="Collapse" class="el-icon-s-fold"></i>
-          <i v-else class="el-icon-s-unfold"></i>
-        </div>
+      <el-menu-item index="/home" v-show="!getCollapse">
+        <span class="menu-logo">KubeOps运维平台</span>
       </el-menu-item>
       <template v-for="item in menuItems">
         <!--一级菜单-->
@@ -44,7 +41,7 @@
 </template>
 
 <script>
-  import {mapMutations, mapState} from "vuex";
+  import {mapGetters} from "vuex";
 
   export default {
     name: "SideMenu",
@@ -57,13 +54,6 @@
       this.getMenuTree();
     },
     methods: {
-      ...mapMutations([
-        //修改侧栏开闭
-        'isCollapse'
-      ]),
-      changeCollapse() {
-        this.isCollapse()
-      },
       getMenuTree() {
         this.$api.Rights.menuTree().then(res => {
           this.menuItems = res.data;
@@ -74,11 +64,12 @@
         })
       }
     },
-    computed: mapState({
-      // 侧栏开闭合设置
-      Collapse: state => state.isCollapse,
-      Color: state => state.menuBackgroundColor,
-    })
+    computed: {
+      ...mapGetters([
+        'getMenuBackgroundColor',
+        'getCollapse'
+      ]),
+    }
   }
 </script>
 
@@ -104,7 +95,9 @@
     height: 100%;
   }
 
-  .collapse-btn {
-    cursor: pointer;
+  .menu-logo {
+    font-family: 微软雅黑;
+    font-weight: bold;
+    font-size: 20px
   }
 </style>

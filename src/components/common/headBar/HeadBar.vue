@@ -1,7 +1,10 @@
 <template>
   <div class="header-bar" :style="{'background-color': getHeadBackgroundColor}">
     <div class="logo">
-      <div>KubeOps运维平台</div>
+      <div class="collapse-btn" @click="changeCollapse">
+        <i v-if="getCollapse" class="el-icon-s-fold"></i>
+        <i v-else class="el-icon-s-unfold"></i>
+      </div>
     </div>
     <div class="header-container">
       <div class="header-items">
@@ -22,7 +25,7 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
+  import {mapGetters, mapMutations} from 'vuex'
 
   export default {
     name: "HeadBar",
@@ -30,6 +33,13 @@
       return {};
     },
     methods: {
+      ...mapMutations([
+        //修改侧栏开闭
+        'isCollapse'
+      ]),
+      changeCollapse() {
+        this.$store.commit('saveCollapse')
+      },
       //全屏函数
       changeFullScreen() {
         if (!document.fullscreenElement) {
@@ -55,7 +65,8 @@
         ...mapGetters([
           //登录的用户名
           'getUsername',
-          'getHeadBackgroundColor'
+          'getHeadBackgroundColor',
+          'getCollapse'
         ]),
       }
   }
@@ -117,5 +128,9 @@
     display: inline-block;
     height: 100%;
     font-size: 17px;
+  }
+
+  .collapse-btn {
+    cursor: pointer;
   }
 </style>

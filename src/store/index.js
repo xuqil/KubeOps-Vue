@@ -17,7 +17,7 @@ export default new Vuex.Store({
     codeReadOnly: false, //编辑器是否只读
   },
   mutations: {
-    isCollapse: state => {
+    saveCollapse: state => {
       state.isCollapse = !state.isCollapse
     },
     saveUsername: ((state, payload) => {
@@ -49,7 +49,7 @@ export default new Vuex.Store({
     }),
   },
   getters: {
-    isCollapse: state => state.isCollapse,
+    getCollapse: state => state.isCollapse,
     getUsername: state => state.username,
     getUserId: state => state.userId,
     getHeadBackgroundColor: state => state.headBackgroundColor,
