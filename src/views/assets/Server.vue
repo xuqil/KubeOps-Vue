@@ -46,19 +46,19 @@
         <el-table-column type="index" label="#" align="center"></el-table-column>
         <el-table-column label="主机名" prop="hostname" align="center" min-width="100px" sortable="custom"></el-table-column>
         <el-table-column label="IP" prop="ip" align="center" min-width="100px" sortable="custom"></el-table-column>
-        <el-table-column label="操作系统类型" prop="os_type" align="center" min-width="120px" sortable="custom"></el-table-column>
-        <el-table-column label="操作系统版本" prop="os_version" align="center" min-width="120px" sortable="custom"></el-table-column>
-        <el-table-column label="设备类型" prop="device_type" align="center" min-width="100px" sortable="custom"></el-table-column>
-        <el-table-column label="应用环境" prop="app_env" align="center" min-width="100px" sortable="custom"></el-table-column>
-        <el-table-column label="所在机房" prop="idc.name" align="center" min-width="100px" sortable="custom"></el-table-column>
+        <el-table-column label="操作系统类型" prop="os_type" align="center" min-width="150px" sortable="custom"></el-table-column>
+        <el-table-column label="操作系统版本" prop="os_version" align="center" min-width="150px" sortable="custom"></el-table-column>
+        <el-table-column label="设备类型" prop="device_type" align="center" min-width="120px" sortable="custom"></el-table-column>
+        <el-table-column label="应用环境" prop="app_env" align="center" min-width="120px" sortable="custom"></el-table-column>
+        <el-table-column label="所在机房" prop="idc.name" align="center" min-width="120px" sortable="custom"></el-table-column>
         <el-table-column label="服务器状态" prop="status" align="center" min-width="120px" sortable="custom"></el-table-column>
-        <el-table-column label="序列号" prop="sn" align="center" min-width="100px" sortable="custom"></el-table-column>
+        <el-table-column label="序列号" prop="sn" align="center" min-width="120px" sortable="custom"></el-table-column>
         <el-table-column label="上架日期" prop="shelves_date" align="center" min-width="130px" sortable="custom"></el-table-column>
         <el-table-column label="保修日期" prop="maintenance_date" align="center" min-width="130px" sortable="custom"></el-table-column>
-        <el-table-column label="创建日期" prop="c_time" align="center" min-width="130px" sortable="custom">
+        <el-table-column label="创建日期" prop="c_time" align="center" min-width="150px" sortable="custom">
           <template slot-scope="scope">{{scope.row.c_time | dataFormat }}</template>
         </el-table-column>
-        <el-table-column label="更新日期" prop="u_time" align="center" min-width="130px" sortable="custom">
+        <el-table-column label="更新日期" prop="u_time" align="center" min-width="150px" sortable="custom">
           <template slot-scope="scope">{{scope.row.u_time | dataFormat }}</template>
         </el-table-column>
         <el-table-column label="备注" prop="marks" align="center" min-width="200px"></el-table-column>

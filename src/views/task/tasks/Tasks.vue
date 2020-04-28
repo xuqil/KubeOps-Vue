@@ -33,7 +33,7 @@
           label="是否只执行一次"
           prop="one_off"
           sortable="custom"
-          width="120">
+          width="150">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.one_off" type="primary" disable-transitions>{{scope.row.one_off}}
             </el-tag>
@@ -55,7 +55,7 @@
           prop="total_run_count"
           label="已执行次数"
           sortable="custom"
-          width="100">
+          width="120">
         </el-table-column>
         <el-table-column
           label="开始时间"

@@ -41,6 +41,7 @@
         label="状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.status === 'Ready'" type="primary" disable-transitions>{{scope.row.status}}</el-tag>
+          <el-tag v-if="scope.row.status === 'True'" type="primary" disable-transitions>{{scope.row.status}}</el-tag>
           <el-tag v-else-if="scope.row.status === 'Error'" type="danger" disable-transitions>{{scope.row.status}}
           </el-tag>
           <el-tag v-else-if="scope.row.status === 'Unknown'" type="info" disable-transitions>{{scope.row.status}}

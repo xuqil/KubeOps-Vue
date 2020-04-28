@@ -13,25 +13,29 @@
       <!--CPU信息-->
       <div id="cpu_info">
         <el-card header="CPU信息" shadow="always">
-          <template v-for="item in cpuInfo">
-            <p>物理CPU ID: {{item.physical_id}}</p>
-            <p>CPU型号: {{item.model_name}}</p>
-            <p>CPU频率: {{item.frequency}}Mhz</p>
-            <p>核心数量: {{item.cores}}</p>
-            <p>线程数量: {{item.siblings}}</p>
-          </template>
+          <el-table :data="cpuInfo" :header-cell-style="cpuTableStyle">
+            <el-table-column type="index" label="序号" align="center" width="100px"></el-table-column>
+            <el-table-column label="CPU线程 ID" prop="processor" sortable align="center" width="150px"></el-table-column>
+            <el-table-column label="物理CPU ID" prop="physical_id" sortable align="center"></el-table-column>
+            <el-table-column label="CPU型号" prop="model_name" sortable align="center"
+                             min-width="150px"></el-table-column>
+            <el-table-column label="CPU频率" prop="frequency" sortable align="center">
+              <template slot-scope="scope">
+                {{scope.row.frequency}} Mhz
+              </template>
+            </el-table-column>
+            <el-table-column label="核心数量" prop="cores" sortable align="center"></el-table-column>
+            <el-table-column label="线程数量" prop="siblings" sortable align="center"></el-table-column>
+          </el-table>
         </el-card>
       </div>
       <!--网卡信息-->
       <div id="network_info">
         <el-card header="网卡信息" shadow="always">
-          <template v-for="(items, i) in netWorkInfo">
-            <template v-for="(item, index) in items">
-              <p style="display: inline-block; margin-right: 19px" v-if="index === 0">{{i}}: {{item}}</p>
-              <p style="display: inline-block" v-if="index === 1">网卡名称: {{item}}</p>
-            </template>
-            <br/>
-          </template>
+          <el-table :data="netWorkInfo" :header-cell-style="cpuTableStyle">
+            <el-table-column label="IP" prop="ip" sortable></el-table-column>
+            <el-table-column label="设备名称" prop="dev" sortable></el-table-column>
+          </el-table>
           <p>平台IP:{{hostIp['ip']}}</p>
         </el-card>
       </div>
@@ -50,13 +54,14 @@
         netWorkInfo: [],
         hostIp: '',
         seriesData: [],
+        cpuTableStyle: {'background-color': '#eeeeee'},
         isLoad: true,
         memory: [],
-        cpuTime: ['22:57:01','22:57:02','22:57:03','22:57:04','22:57:06','22:57:07','22:57:08','22:57:09',
-          '22:57:10','22:57:11','22:57:12','22:57:13','22:57:14','22:57:15','22:57:16'],
-        avg1: [2.81,2.75,2.75,2.75,2.75,2.75,2.85,2.85,2.85,2.85,2.85,2.70,2.70,2.70,2.70],
-        avg5: [2.11,2.11,2.11,2.11,2.11,2.11,2.14,2.14,2.14,2.14,2.14,2.13,2.13,2.13,2.13],
-        avg15: [1.79,1.80,1.80,1.80,1.80,1.80,1.81,1.81,1.81,1.81,1.81,1.80,1.80,1.80,1.80],
+        cpuTime: ['22:57:01', '22:57:02', '22:57:03', '22:57:04', '22:57:06', '22:57:07', '22:57:08', '22:57:09',
+          '22:57:10', '22:57:11', '22:57:12', '22:57:13', '22:57:14', '22:57:15', '22:57:16'],
+        avg1: [2.81, 2.75, 2.75, 2.75, 2.75, 2.75, 2.85, 2.85, 2.85, 2.85, 2.85, 2.70, 2.70, 2.70, 2.70],
+        avg5: [2.11, 2.11, 2.11, 2.11, 2.11, 2.11, 2.14, 2.14, 2.14, 2.14, 2.14, 2.13, 2.13, 2.13, 2.13],
+        avg15: [1.79, 1.80, 1.80, 1.80, 1.80, 1.80, 1.81, 1.81, 1.81, 1.81, 1.81, 1.80, 1.80, 1.80, 1.80],
       }
     },
     mounted() {
@@ -89,6 +94,7 @@
       getNetWorkInfo() {
         this.$api.Monitor.netWorkInfo().then(res => {
           this.netWorkInfo = res.data;
+          console.log(this.netWorkInfo)
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
@@ -280,18 +286,9 @@
   #cpu-load {
     margin-bottom: 30px;
   }
+
   #cpu_info, #network_info {
-    display: inline-block;
-    width: 48%;
-    padding-left: 10px;
-  }
-
-  #cpu_info .el-card {
-    background-color: #0086b3;
-  }
-
-  #network_info .el-card {
-    background-color: #63a35c;
+    margin-top: 20px;
   }
 
 </style>
