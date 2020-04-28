@@ -30,8 +30,15 @@
         </el-table-column>
         <el-table-column label="操作" width="180px">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button>
-            <el-button type="danger" icon="el-icon-delete" size="mini"
+            <el-button type="primary"
+                       icon="el-icon-edit"
+                       size="mini"
+                       :disabled="scope.row.title === 'admin'"
+                       @click="showEditDialog(scope.row.id)"></el-button>
+            <el-button type="danger"
+                       icon="el-icon-delete"
+                       size="mini"
+                       :disabled="scope.row.title === 'admin'"
                        @click="removeRightsById(scope.row.id)"></el-button>
           </template>
         </el-table-column>

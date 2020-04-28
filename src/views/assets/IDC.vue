@@ -15,19 +15,19 @@
         </el-col>
       </el-row>
       <!--IDC机房列表-->
-      <el-table :data="IDCList" border stripe>
-        <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="机房名" prop="name"></el-table-column>
-        <el-table-column label="地址" prop="address"></el-table-column>
-        <el-table-column label="联系方式" prop="mobile"></el-table-column>
-        <el-table-column label="楼层" prop="floor"></el-table-column>
-        <el-table-column label="创建日期">
+      <el-table :data="IDCList" @sort-change="sortChange">
+        <el-table-column type="index" label="#" align="center"></el-table-column>
+        <el-table-column label="机房名" prop="name" align="center" sortable="custom"></el-table-column>
+        <el-table-column label="地址" prop="address" align="center" sortable="custom"></el-table-column>
+        <el-table-column label="联系方式" prop="mobile" align="center"></el-table-column>
+        <el-table-column label="楼层" prop="floor" align="center" sortable="custom"></el-table-column>
+        <el-table-column label="创建日期" prop="c_time" align="center" sortable="custom">
           <template slot-scope="scope">{{scope.row.c_time | dataFormat }}</template>
         </el-table-column>
-        <el-table-column label="更新日期">
+        <el-table-column label="更新日期" prop="u_time" align="center" sortable="custom">
           <template slot-scope="scope">{{scope.row.u_time | dataFormat }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="300px">
+        <el-table-column label="操作" width="180px" align="center">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row.id)" size="mini">编辑
             </el-button>
@@ -114,10 +114,9 @@
     data() {
       return {
         queryInfo: {
-          // 当前页数
           page: 1,
-          // 每页显示多少数据
-          page_size: 5
+          page_size: 5,
+          ordering: null,
         },
         total: 0,
         IDCList: [],
@@ -148,6 +147,17 @@
           console.log(err);
           return this.$message.error(err.response.data.detail)
         })
+      },
+      //排序
+      sortChange(order) {
+        if (order.order === 'ascending') {
+          this.queryInfo.ordering = order.prop
+        } else if (order.order === 'descending') {
+          this.queryInfo.ordering = '-' + order.prop
+        } else {
+          this.queryInfo.ordering = null
+        }
+        this.getIDCList()
       },
       //分页
       handleSizeChange(newSize) {

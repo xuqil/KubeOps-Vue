@@ -11,10 +11,12 @@
         <el-button type="primary" @click="addTask">添加</el-button>
       </div>
       <el-table
-        :data="tasksList">
+        :data="tasksList"
+        @sort-change="sortChange">
         <el-table-column
           prop="name"
           label="名称"
+          sortable="custom"
           width="180">
         </el-table-column>
         <el-table-column
@@ -29,6 +31,8 @@
         </el-table-column>
         <el-table-column
           label="是否只执行一次"
+          prop="one_off"
+          sortable="custom"
           width="120">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.one_off" type="primary" disable-transitions>{{scope.row.one_off}}
@@ -38,19 +42,25 @@
         </el-table-column>
         <el-table-column
           label="状态"
+          prop="enabled"
+          sortable="custom"
           width="90">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.enabled" :disabled="scope.row.task === 'celery.backend_cleanup'" @change="updateState(scope.row)">
+            <el-switch v-model="scope.row.enabled" :disabled="scope.row.task === 'celery.backend_cleanup'"
+                       @change="updateState(scope.row)">
             </el-switch>
           </template>
         </el-table-column>
         <el-table-column
           prop="total_run_count"
           label="已执行次数"
+          sortable="custom"
           width="100">
         </el-table-column>
         <el-table-column
           label="开始时间"
+          prop="start_time"
+          sortable="custom"
           width="180">
           <template slot-scope="scope">
             <span v-if="scope.row.start_time">{{scope.row.start_time | dataFormat }}</span>
@@ -59,39 +69,58 @@
         </el-table-column>
         <el-table-column
           label="最后一次执行时间"
+          prop="last_run_at"
           width="180">
           <template slot-scope="scope">
             <span v-if="scope.row.last_run_at">{{scope.row.last_run_at | dataFormat }}</span>
             <span v-else>无</span>
           </template>
         </el-table-column>
-        <!--        <el-table-column-->
-        <!--          label="更新时间"-->
-        <!--          width="180">-->
-        <!--          <template slot-scope="scope">-->
-        <!--            <span v-if="scope.row.date_changed">{{scope.row.date_changed | dataFormat }}</span>-->
-        <!--            <span v-else>无</span>-->
-        <!--            </template>-->
-        <!--        </el-table-column>-->
-        <!--        <el-table-column-->
-        <!--          prop="interval"-->
-        <!--          label="间隔"-->
-        <!--          width="180">-->
-        <!--        </el-table-column>-->
-        <!--        <el-table-column-->
-        <!--          prop="crontab"-->
-        <!--          label="crontab"-->
-        <!--          width="180">-->
-        <!--        </el-table-column>-->
-        <!--        <el-table-column-->
-        <!--          prop="clocked"-->
-        <!--          label="clocked"-->
-        <!--          width="180">-->
-        <!--        </el-table-column>-->
-        <!--    <el-table-column-->
-        <!--          prop="description"-->
-        <!--          label="描述">-->
-        <!--        </el-table-column>-->
+        <el-table-column
+          prop="interval"
+          label="间隔"
+          sortable="custom"
+          width="180">
+          <template slot-scope="scope">
+            <span v-if="scope.row.interval">{{scope.row.interval | dataFormat }}</span>
+            <span v-else>无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="crontab"
+          label="crontab"
+          sortable="custom"
+          width="180">
+          <template slot-scope="scope">
+            <span v-if="scope.row.crontab">{{scope.row.crontab | dataFormat }}</span>
+            <span v-else>无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="clocked"
+          label="clocked"
+          sortable="custom"
+          width="180">
+          <template slot-scope="scope">
+            <span v-if="scope.row.clocked">{{scope.row.clocked | dataFormat }}</span>
+            <span v-else>无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="更新时间"
+          prop="date_changed"
+          sortable="custom"
+          width="180">
+          <template slot-scope="scope">
+            <span v-if="scope.row.date_changed">{{scope.row.date_changed | dataFormat }}</span>
+            <span v-else>无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="description"
+          label="描述"
+          min-width="100px">
+        </el-table-column>
         <el-table-column label="操作" fixed="right" width="200">
           <template slot-scope="scope">
             <el-button
@@ -128,10 +157,9 @@
     data() {
       return {
         queryInfo: {
-          // 当前页数
           page: 1,
-          // 每页显示多少数据
-          page_size: 5
+          page_size: 5,
+          ordering: null
         },
         total: 0,
         tasksList: "",
@@ -151,6 +179,17 @@
           console.log(err);
           return this.$message.error(err.response.data.detail)
         })
+      },
+      //排序
+      sortChange(order) {
+        if (order.order === 'ascending') {
+          this.queryInfo.ordering = order.prop
+        } else if (order.order === 'descending') {
+          this.queryInfo.ordering = '-' + order.prop
+        } else {
+          this.queryInfo.ordering = null
+        }
+        this.getTasksList()
       },
       readTask(id) {
         this.$router.push({path: '/tasks/edit', query: {id: id}});

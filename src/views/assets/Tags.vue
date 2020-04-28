@@ -15,17 +15,17 @@
         </el-col>
       </el-row>
       <!--标签列表-->
-      <el-table :data="tagsList" border stripe>
-        <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="标签" prop="name"></el-table-column>
-        <el-table-column label="描述" prop="desc"></el-table-column>
-        <el-table-column label="创建日期">
+      <el-table :data="tagsList" stripe>
+        <el-table-column type="index" label="#" align="center"></el-table-column>
+        <el-table-column label="标签" prop="name" align="center"></el-table-column>
+        <el-table-column label="描述" prop="desc" align="center" min-width="100px"></el-table-column>
+        <el-table-column label="创建日期" align="center">
           <template slot-scope="scope">{{scope.row.c_time | dataFormat }}</template>
         </el-table-column>
-        <el-table-column label="更新日期">
+        <el-table-column label="更新日期" align="center">
           <template slot-scope="scope">{{scope.row.u_time | dataFormat }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="300px">
+        <el-table-column label="操作" width="180px" align="center">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row.id)" size="mini">编辑
             </el-button>

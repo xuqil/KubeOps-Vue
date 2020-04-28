@@ -42,21 +42,31 @@
         </el-col>
       </el-row>
       <!--主机列表-->
-      <el-table :data="serversList" border stripe>
-        <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="主机名" prop="hostname"></el-table-column>
-        <el-table-column label="IP" prop="ip"></el-table-column>
-        <el-table-column label="操作系统类型" prop="os_type"></el-table-column>
-        <el-table-column label="操作系统版本" prop="os_version"></el-table-column>
-        <el-table-column label="设备类型" prop="device_type"></el-table-column>
-        <el-table-column label="应用环境" prop="app_env"></el-table-column>
-        <el-table-column label="所在机房" prop="idc.name"></el-table-column>
-        <el-table-column label="服务器状态" prop="status"></el-table-column>
-        <el-table-column label="操作" width="300px">
+      <el-table :data="serversList" @sort-change="sortChange">
+        <el-table-column type="index" label="#" align="center"></el-table-column>
+        <el-table-column label="主机名" prop="hostname" align="center" min-width="100px" sortable="custom"></el-table-column>
+        <el-table-column label="IP" prop="ip" align="center" min-width="100px" sortable="custom"></el-table-column>
+        <el-table-column label="操作系统类型" prop="os_type" align="center" min-width="120px" sortable="custom"></el-table-column>
+        <el-table-column label="操作系统版本" prop="os_version" align="center" min-width="120px" sortable="custom"></el-table-column>
+        <el-table-column label="设备类型" prop="device_type" align="center" min-width="100px" sortable="custom"></el-table-column>
+        <el-table-column label="应用环境" prop="app_env" align="center" min-width="100px" sortable="custom"></el-table-column>
+        <el-table-column label="所在机房" prop="idc.name" align="center" min-width="100px" sortable="custom"></el-table-column>
+        <el-table-column label="服务器状态" prop="status" align="center" min-width="120px" sortable="custom"></el-table-column>
+        <el-table-column label="序列号" prop="sn" align="center" min-width="100px" sortable="custom"></el-table-column>
+        <el-table-column label="上架日期" prop="shelves_date" align="center" min-width="130px" sortable="custom"></el-table-column>
+        <el-table-column label="保修日期" prop="maintenance_date" align="center" min-width="130px" sortable="custom"></el-table-column>
+        <el-table-column label="创建日期" prop="c_time" align="center" min-width="130px" sortable="custom">
+          <template slot-scope="scope">{{scope.row.c_time | dataFormat }}</template>
+        </el-table-column>
+        <el-table-column label="更新日期" prop="u_time" align="center" min-width="130px" sortable="custom">
+          <template slot-scope="scope">{{scope.row.u_time | dataFormat }}</template>
+        </el-table-column>
+        <el-table-column label="备注" prop="marks" align="center" min-width="200px"></el-table-column>
+        <el-table-column label="操作" align="center" width="120px" fixed="right">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row.id)" size="mini">编辑
+            <el-button type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row.id)" size="mini">
             </el-button>
-            <el-button type="danger" icon="el-icon-delete" @click="removeServerById(scope.row.id)" size="mini">删除
+            <el-button type="danger" icon="el-icon-delete" @click="removeServerById(scope.row.id)" size="mini">
             </el-button>
           </template>
         </el-table-column>
@@ -264,7 +274,8 @@
           hostname: null,
           os_type: null,
           ip: null,
-          idc: null
+          idc: null,
+          ordering: null
         },
         total: 0,
         showAdd: true,
@@ -326,12 +337,24 @@
         this.getServersList();
         this.showAdd = false;
       },
+      //排序
+      sortChange(order) {
+        if (order.order === 'ascending') {
+          this.queryInfo.ordering = order.prop
+        } else if (order.order === 'descending') {
+          this.queryInfo.ordering = '-' + order.prop
+        } else {
+          this.queryInfo.ordering = null
+        }
+        this.getServersList()
+      },
       onBack() {
         this.showAdd = true;
         this.queryInfo.hostname = null;
         this.queryInfo.os_type = null;
         this.queryInfo.ip = null;
         this.queryInfo.idc = null;
+        this.queryInfo.ordering = null;
         this.reload();
       },
       //分页

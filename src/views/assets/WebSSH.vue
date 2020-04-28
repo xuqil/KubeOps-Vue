@@ -16,15 +16,15 @@
           </el-col>
         </el-row>
         <!--主机列表-->
-        <el-table :data="serversList" border stripe>
-          <el-table-column type="index" label="#"></el-table-column>
-          <el-table-column label="主机名" prop="hostname"></el-table-column>
-          <el-table-column label="IP" prop="ip"></el-table-column>
-          <el-table-column label="设备类型" prop="device_type"></el-table-column>
-          <el-table-column label="操作系统版本" prop="os_version"></el-table-column>
-          <el-table-column label="应用环境" prop="app_env"></el-table-column>
-          <el-table-column label="登录用户" prop="username"></el-table-column>
-          <el-table-column label="操作" width="300px">
+        <el-table :data="serversList" stripe @sort-change="sortChange">
+          <el-table-column type="index" label="#" align="center"></el-table-column>
+          <el-table-column label="主机名" prop="hostname" align="center" sortable="custom"></el-table-column>
+          <el-table-column label="IP" prop="ip" align="center" sortable="custom"></el-table-column>
+          <el-table-column label="设备类型" prop="device_type" align="center" sortable="custom"></el-table-column>
+          <el-table-column label="操作系统版本" prop="os_version" align="center" sortable="custom"></el-table-column>
+          <el-table-column label="应用环境" prop="app_env" align="center" sortable="custom"></el-table-column>
+          <el-table-column label="登录用户" prop="username" align="center"></el-table-column>
+          <el-table-column label="操作" width="230px" align="center">
             <template slot-scope="scope">
               <el-button type="primary" @click="showTableConnectServer(scope.row.id)" size="mini">远程登录
               </el-button>
@@ -147,10 +147,9 @@
     data() {
       return {
         queryInfo: {
-          // 当前页数
           page: 1,
-          // 每页显示多少数据
-          page_size: 5
+          page_size: 5,
+          ordering: null
         },
         total: 0,
         //服务器列表
@@ -194,6 +193,17 @@
           console.log(err);
           return this.$message.error(err.response.data.detail)
         })
+      },
+      //排序
+      sortChange(order) {
+        if (order.order === 'ascending') {
+          this.queryInfo.ordering = order.prop
+        } else if (order.order === 'descending') {
+          this.queryInfo.ordering = '-' + order.prop
+        } else {
+          this.queryInfo.ordering = null
+        }
+        this.getServersList()
       },
       //分页
       handleSizeChange(newSize) {
