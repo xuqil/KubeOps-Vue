@@ -115,7 +115,7 @@
       return {
         queryInfo: {
           page: 1,
-          page_size: 5,
+          page_size: 10,
           ordering: null,
         },
         total: 0,

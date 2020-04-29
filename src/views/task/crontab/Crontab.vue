@@ -50,10 +50,8 @@
     data() {
       return {
         queryInfo: {
-          // 当前页数
           page: 1,
-          // 每页显示多少数据
-          page_size: 5
+          page_size: 10
         },
         total: 0,
         crontabScheduleList: ''

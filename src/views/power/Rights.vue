@@ -25,7 +25,7 @@
             <el-tag type="danger" v-else-if="scope.row.action === 'DELETE'">删除</el-tag>
             <el-tag type="warning" v-else-if="scope.row.action === 'PUT'">编辑</el-tag>
             <el-tag type="success" v-else-if="scope.row.action === 'GET'">查看</el-tag>
-            <el-tag type="info" v-else>Admin</el-tag>
+            <el-tag type="info" v-else>全部</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="180px">
@@ -33,12 +33,12 @@
             <el-button type="primary"
                        icon="el-icon-edit"
                        size="mini"
-                       :disabled="scope.row.title === 'admin'"
+                       :disabled="scope.row.path === '.*'"
                        @click="showEditDialog(scope.row.id)"></el-button>
             <el-button type="danger"
                        icon="el-icon-delete"
                        size="mini"
-                       :disabled="scope.row.title === 'admin'"
+                       :disabled="scope.row.action === '*'"
                        @click="removeRightsById(scope.row.id)"></el-button>
           </template>
         </el-table-column>
@@ -136,10 +136,8 @@
         // 权限列表
         rightsList: [],
         queryInfo: {
-          // 当前页数
           page: 1,
-          // 每页显示多少数据
-          page_size: 5
+          page_size: 10
         },
         //总条目
         total: 0,

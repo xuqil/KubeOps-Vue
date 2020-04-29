@@ -151,10 +151,8 @@
     data() {
       return {
         queryInfo: {
-          // 当前页数
           page: 1,
-          // 每页显示多少数据
-          page_size: 5
+          page_size: 10
         },
         //总条目
         total: 0,
@@ -252,7 +250,6 @@
         this.currentRoleId = roles.id;
         this.$api.Rights.rightsGet().then(res => {
           this.rightsTree = res.data.results;
-          this.rightFlag = true;
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
