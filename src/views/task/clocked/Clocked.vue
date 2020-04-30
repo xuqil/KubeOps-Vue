@@ -54,7 +54,7 @@
     data() {
       return {
         queryInfo: {
-          page: 10,
+          page: 1,
           page_size: 10
         },
         total: 0,

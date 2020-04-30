@@ -18,7 +18,7 @@
             <el-input v-model="taskForm.name"></el-input>
           </el-form-item>
           <el-form-item label="任务函数" prop="task">
-            <el-select v-model="taskForm.task" placeholder="请选择任务函数">
+            <el-select v-model="taskForm.task" clearable placeholder="请选择任务函数">
               <el-option
                 v-for="(item, index) in taskRegistered"
                 :key="index"
@@ -40,7 +40,7 @@
             <span>时间表</span>
           </div>
           <el-form-item label="时间间隔" prop="interval">
-            <el-select v-model="taskForm.interval" placeholder="请选择时间间隔">
+            <el-select v-model="taskForm.interval" clearable placeholder="请选择时间间隔">
               <el-option
                 v-for="item in intervalScheduleList"
                 :key="item.id"
@@ -51,7 +51,7 @@
             <div class="tip_message">运行任务的时间间隔计划。只设置一个计划类型，其余为空。</div>
           </el-form-item>
           <el-form-item label="定时器" prop="crontab">
-            <el-select v-model="taskForm.crontab" placeholder="请选择定时器">
+            <el-select v-model="taskForm.crontab" clearable placeholder="请选择定时器">
               <el-option
                 v-for="item in crontabScheduleList"
                 :key="item.id"
@@ -77,7 +77,7 @@
             <div class="tip_message">按计划运行任务。只设置一个计划类型，其余为空。</div>
           </el-form-item>
           <el-form-item label="计时" prop="clocked">
-            <el-select v-model="taskForm.clocked" placeholder="请选择关闭时间">
+            <el-select v-model="taskForm.clocked" clearable placeholder="请选择关闭时间">
               <el-option
                 v-for="item in clockedScheduleList"
                 :key="item.id"

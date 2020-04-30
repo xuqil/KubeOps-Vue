@@ -78,33 +78,21 @@
         </el-table-column>
         <el-table-column
           prop="interval"
-          label="间隔"
+          label="间隔ID"
           sortable="custom"
           width="180">
-          <template slot-scope="scope">
-            <span v-if="scope.row.interval">{{scope.row.interval | dataFormat }}</span>
-            <span v-else>无</span>
-          </template>
         </el-table-column>
         <el-table-column
           prop="crontab"
-          label="crontab"
+          label="crontab ID"
           sortable="custom"
           width="180">
-          <template slot-scope="scope">
-            <span v-if="scope.row.crontab">{{scope.row.crontab | dataFormat }}</span>
-            <span v-else>无</span>
-          </template>
         </el-table-column>
         <el-table-column
           prop="clocked"
-          label="clocked"
+          label="clocked ID"
           sortable="custom"
           width="180">
-          <template slot-scope="scope">
-            <span v-if="scope.row.clocked">{{scope.row.clocked | dataFormat }}</span>
-            <span v-else>无</span>
-          </template>
         </el-table-column>
         <el-table-column
           label="更新时间"

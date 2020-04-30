@@ -27,7 +27,7 @@
         <el-table-column label="电话" prop="mobile"  align="center"></el-table-column>
         <el-table-column label="角色" prop="roles[0].name"  align="center">
           <template slot-scope="scope">
-            <el-tag v-for="item in scope.row.roles" effect="plain" size="mini">{{item.name}}</el-tag>
+            <el-tag v-for="(item, index) in scope.row.roles" :key="index" effect="plain" size="mini">{{item.name}}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="是否为管理员" prop="is_staff" align="center">
