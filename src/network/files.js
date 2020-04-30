@@ -10,10 +10,10 @@ export default {
   },
   //文件下载
   downloadFiles(data = null) {
-    return request.post(basePath + '/down_files', data)
+    return request.post(basePath + '/down_files/', data)
   },
   //文件下载
   deleteTmpFiles(data = null) {
-    return request.put(basePath + '/down_files', data)
+    return request.put(basePath + '/down_files/', data)
   },
 }

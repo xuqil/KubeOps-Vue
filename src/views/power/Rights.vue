@@ -56,7 +56,7 @@
     </el-card>
     <!--添加权限区域-->
     <el-dialog
-      title="添加用户"
+      title="添加权限"
       :visible.sync="addDialogVisible"
       width="50%"
       @close="addDialogClosed">
@@ -68,8 +68,18 @@
         <el-form-item label="权限名称" prop="name">
           <el-input v-model="addRightsForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="URL路径" prop="path">
-          <el-input v-model="addRightsForm.path"></el-input>
+        <el-form-item label="URL路径" prop="path" label-width="90px">
+          <el-select v-model="addRightsForm.path"
+                     filterable
+                     allow-create
+                     clearable placeholder="请选择">
+            <el-option
+              v-for="(item, index) in rightPath"
+              :key="index"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="动作" prop="method" label-width="90px">
           <el-select v-model="addRightsForm.method" placeholder="请选择动作" clearable>
@@ -192,6 +202,7 @@
     },
     created() {
       this.getRightsList()
+      this.getPath()
     },
     methods: {
       //获取权限列表
@@ -239,12 +250,14 @@
         this.editRightsForm = this.rightsList.find(function (obj) {
           return obj.id === id
         });
+        this.editDialogVisible = true
+      },
+      getPath() {
         this.$api.Rights.pathGet().then(res => {
           this.rightPath = res.data.path
         }).catch(err => {
           return this.$message.error(err.response.data.msg)
         });
-        this.editDialogVisible = true
       },
       //编辑权限
       editRights() {

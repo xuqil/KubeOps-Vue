@@ -1,6 +1,6 @@
 import request from "./request";
 
-const basePath = '/rbac';
+const basePath = '/power';
 
 export default {
 

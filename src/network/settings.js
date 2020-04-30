@@ -1,6 +1,6 @@
 import request from "./request";
 
-const basePath = '/settings';
+const basePath = '/platform';
 
 export default {
   /*****************系统设置相关******************/

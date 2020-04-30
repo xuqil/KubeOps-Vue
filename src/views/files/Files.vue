@@ -67,6 +67,7 @@
             ref="upload"
             drag
             :action="uploadUrl"
+            :headers="header"
             :on-remove="handleRemove"
             :file-list="fileList"
             :on-error="uploadError"
@@ -120,6 +121,9 @@
       this.getServersList()
     },
     computed: {
+      header() {
+        return {'Authorization': 'jwt ' + window.sessionStorage.getItem('token')}
+      },
       //上传的额外参数
       upData: function () {
         let uploadForm = {
@@ -180,15 +184,11 @@
         console.log(file, fileList);
       },
       uploadError(err, file, fileList) {
-        this.$message.error('上传失败!请检查路径和密码是否有误.');
         console.log(err);
+        this.$message.error('上传失败!请检查路径和密码是否有误.');
       },
       uploadSucceed(response, file, fileList) {
-        if (response.status === 200) {
-          this.$message.success(response.message)
-        } else {
-          return this.$message.error(response.message)
-        }
+          this.$message.success(response.msg)
       },
       //获取服务器列表
       getServersList() {
