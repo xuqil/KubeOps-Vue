@@ -21,27 +21,52 @@
       </el-row>
       <!--用户列表区-->
       <el-table :data="userList" border stripe>
-        <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="姓名" prop="username"></el-table-column>
-        <el-table-column label="邮箱" prop="email"></el-table-column>
-        <el-table-column label="电话" prop="mobile"></el-table-column>
-        <el-table-column label="角色" prop="roles[0].title"></el-table-column>
-        <el-table-column label="状态">
+        <el-table-column type="index" label="#"  align="center"></el-table-column>
+        <el-table-column label="姓名" prop="username"  align="center"></el-table-column>
+        <el-table-column label="邮箱" prop="email"  align="center"></el-table-column>
+        <el-table-column label="电话" prop="mobile"  align="center"></el-table-column>
+        <el-table-column label="角色" prop="roles[0].name"  align="center">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.active" @change="userStateChange(scope.row)">
+            <el-tag v-for="item in scope.row.roles" effect="plain" size="mini">{{item.name}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否为管理员" prop="is_staff" align="center">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.is_staff"
+                       @change="userStaffChange(scope.row)"
+                       :disabled="scope.row.username === 'admin'">
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="c_time">
-          <template slot-scope="scope">{{scope.row.c_time | dataFormat }}</template>
-        </el-table-column>
-        <el-table-column label="操作" width="180px">
+        <el-table-column label="状态" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button>
+            <el-switch v-model="scope.row.is_active"
+                       @change="userActiveChange(scope.row)"
+                       :disabled="scope.row.username === 'admin'">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" prop="date_joined"  align="center">
+          <template slot-scope="scope">{{scope.row.date_joined | dataFormat }}</template>
+        </el-table-column>
+        <el-table-column label="上次登录时间" prop="last_login"  align="center">
+          <template slot-scope="scope" v-if="scope.row.last_login">{{scope.row.last_login | dataFormat }}</template>
+        </el-table-column>
+        <el-table-column label="操作" width="180px" align="center">
+          <template slot-scope="scope">
+            <el-button type="primary" icon="el-icon-edit" size="mini"
+                       @click="showEditDialog(scope.row.id)"
+                       :disabled="scope.row.username === 'admin'"></el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini"
-                       @click="removeUserById(scope.row.id)"></el-button>
-            <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini" @click="showSetRole(scope.row)"></el-button>
+                       @click="removeUserById(scope.row.id)"
+                       :disabled="scope.row.username === 'admin'"></el-button>
+            <el-tooltip effect="dark" content="分配角色"
+                        placement="top"
+                        :enterable="false"
+                        :disabled="scope.row.username === 'admin'">
+              <el-button type="warning" icon="el-icon-setting" size="mini"
+                         @click="showSetRole(scope.row)"
+                         :disabled="scope.row.username === 'admin'"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -125,15 +150,15 @@
       <p>当前用户：{{userInfo.username}}</p>
       <div class="roles_container">当前角色：
         <span v-if="userInfo.roles.length > 1" v-for="(role, index) in userInfo.roles" :key="index"
-              :class="index === userInfo.roles.length-1 ? '' : 'last_role'">{{role.title}}</span>
-        <span v-else v-for="role in userInfo.roles">{{role.title}}</span>
+              :class="index === userInfo.roles.length-1 ? '' : 'last_role'">{{role.name}}</span>
+        <span v-else v-for="role in userInfo.roles">{{role.name}}</span>
       </div>
       分配角色：
       <el-select v-model="selectRoleId" placeholder="请选择">
         <el-option
           v-for="item in rolesList"
           :key="item.id"
-          :label="item.title"
+          :label="item.name"
           :value="item.id">
         </el-option>
       </el-select>
@@ -279,16 +304,26 @@
         this.queryInfo.page = newPage;
         this.getUserList()
       },
-      //    更新用户状态
-      userStateChange(userInfo) {
+      userStaffChange(userInfo) {
         console.log(userInfo);
         this.$api.Users.usersPut(
           userInfo.id,
-          {'active': userInfo.active}
+          {'is_staff': userInfo.is_staff, 'username': userInfo.username}
+        ).then(res => {
+          this.$message.success("更新成功")
+        }).catch(err => {
+          return this.$message.error(err.response.data.detail)
+        });
+      },
+      //    更新用户状态
+      userActiveChange(userInfo) {
+        console.log(userInfo);
+        this.$api.Users.usersPut(
+          userInfo.id,
+          {'is_active': userInfo.is_active, 'username': userInfo.username}
         ).then(res => {
           this.$message.success("更新用户状态成功")
         }).catch(err => {
-          console.log(err);
           return this.$message.error(err.response.data.detail)
         });
       },

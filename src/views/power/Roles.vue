@@ -23,26 +23,26 @@
                 <template v-for="item in scope.row.permissions">
                   <el-tag v-if="item.action==='add'"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}
+                          closable>{{ item.name }}
                   </el-tag>
                   <el-tag v-else-if="item.action==='delete'"
                           type="danger"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}
+                          closable>{{ item.name }}
                   </el-tag>
                   <el-tag v-else-if="item.action==='edit'"
                           type="warning"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}
+                          closable>{{ item.name }}
                   </el-tag>
                   <el-tag v-else-if="item.action==='list'"
                           type="success"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}
+                          closable>{{ item.name }}
                   </el-tag>
                   <el-tag v-else type="info"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.title }}
+                          closable>{{ item.name }}
                   </el-tag>
                 </template>
               </el-col>
@@ -50,7 +50,7 @@
           </template>
         </el-table-column>
         <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="角色名称" prop="title"></el-table-column>
+        <el-table-column label="角色名称" prop="name"></el-table-column>
         <el-table-column label="角色描述" prop="desc"></el-table-column>
         <el-table-column label="操作" width="300px">
           <template slot-scope="scope">
@@ -108,7 +108,7 @@
         ref="addUserFormRef"
         label-width="70px">
         <el-form-item label="角色">
-          <el-input v-model="addRoleForm.title"></el-input>
+          <el-input v-model="addRoleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="addRoleForm.desc" type="textarea" :autosize="{ minRows: 2, maxRows: 4}"></el-input>
@@ -131,7 +131,7 @@
         ref="editRoleFormRef"
         label-width="70px">
         <el-form-item label="角色">
-          <el-input v-model="editRoleForm.title"></el-input>
+          <el-input v-model="editRoleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="editRoleForm.desc"></el-input>
@@ -170,13 +170,13 @@
         //显示规则
         rightsProps: {
           children: 'children',
-          label: 'title'
+          label: 'name'
         },
         //添加角色对话框
         addDialogVisible: false,
         // 用户添加
         addRoleForm: {
-          title: '',
+          name: '',
           desc: ''
         },
         // 修改角色
@@ -247,7 +247,7 @@
       },
       //显示分配权限对话框
       showSetRights(roles) {
-        this.currentRoleId = roles.id;
+        this.currentRole = roles;
         this.$api.Rights.rightsGet().then(res => {
           this.rightsTree = res.data.results;
         }).catch(err => {
@@ -257,23 +257,24 @@
         //获取默认的权限
         this.defaultRights = [];
         roles.permissions.forEach(value => this.defaultRights.push(value.id));
-        console.log(this.defaultRights);
+        // console.log(this.defaultRights);
         this.rightsDialogVisible = true;
       },
       //保持修改的权限
-      saveRoleRights() {
+      saveRoleRights(role) {
         const permissionsKeys = [
           ...this.$refs.rightsRef.getCheckedKeys(),
           ...this.$refs.rightsRef.getHalfCheckedKeys()
         ];
-        this.$api.Rights.rolesPut(this.currentRoleId, {
+        this.$api.Rights.rolesPut(this.currentRole.id, {
           permissions: permissionsKeys,
+          name: this.currentRole.name
         }).then(res => {
           // console.log(res);
           this.$message.success("分配成功");
           this.getRolesList()
         }).catch(err => {
-          console.log(err);
+          console.log(err.response.data);
           return this.$message.error(err.response.data.detail)
         });
         this.rightsDialogVisible = false;
@@ -297,7 +298,7 @@
       },
       //关闭添加角色对话框
       addDialogClosed() {
-        this.addRoleForm.title = '';
+        this.addRoleForm.name = '';
         this.addRoleForm.desc = '';
       },
       // 显示编辑角色信息对话框
@@ -319,7 +320,7 @@
           // 表单预校验失败
           if (!valid) return;
           this.$api.Rights.rolesPut(this.editRoleForm.id, {
-            title: this.editRoleForm.title,
+            name: this.editRoleForm.name,
             desc: this.editRoleForm.desc
           }).then(res => {
             this.$message.success('更新角色信息成功！');

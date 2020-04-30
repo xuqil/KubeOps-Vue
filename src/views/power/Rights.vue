@@ -17,14 +17,14 @@
       <!--权限表格-->
       <el-table :data="rightsList" border stripe>
         <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="权限名称" prop="title"></el-table-column>
+        <el-table-column label="权限名称" prop="name"></el-table-column>
         <el-table-column label="路径" prop="path"></el-table-column>
-        <el-table-column label="权限动作" prop="action">
+        <el-table-column label="权限动作" prop="method">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.action === 'POST'">添加</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.action === 'DELETE'">删除</el-tag>
-            <el-tag type="warning" v-else-if="scope.row.action === 'PUT'">编辑</el-tag>
-            <el-tag type="success" v-else-if="scope.row.action === 'GET'">查看</el-tag>
+            <el-tag v-if="scope.row.method === 'POST'">添加</el-tag>
+            <el-tag type="danger" v-else-if="scope.row.method === 'DELETE'">删除</el-tag>
+            <el-tag type="warning" v-else-if="scope.row.method === 'PUT'">编辑</el-tag>
+            <el-tag type="success" v-else-if="scope.row.method === 'GET'">查看</el-tag>
             <el-tag type="info" v-else>全部</el-tag>
           </template>
         </el-table-column>
@@ -38,7 +38,7 @@
             <el-button type="danger"
                        icon="el-icon-delete"
                        size="mini"
-                       :disabled="scope.row.action === '*'"
+                       :disabled="scope.row.method === '*'"
                        @click="removeRightsById(scope.row.id)"></el-button>
           </template>
         </el-table-column>
@@ -65,14 +65,14 @@
         ref="addRightsFormRef"
         label-width="90px"
         :rules="addRightsRules">
-        <el-form-item label="权限名称" prop="title">
-          <el-input v-model="addRightsForm.title"></el-input>
+        <el-form-item label="权限名称" prop="name">
+          <el-input v-model="addRightsForm.name"></el-input>
         </el-form-item>
         <el-form-item label="URL路径" prop="path">
           <el-input v-model="addRightsForm.path"></el-input>
         </el-form-item>
-        <el-form-item label="动作" prop="action" label-width="90px">
-          <el-select v-model="addRightsForm.action" placeholder="请选择动作" clearable>
+        <el-form-item label="动作" prop="method" label-width="90px">
+          <el-select v-model="addRightsForm.method" placeholder="请选择动作" clearable>
             <el-option label="增" value="POST"></el-option>
             <el-option label="删" value="DELETE"></el-option>
             <el-option label="改" value="PUT"></el-option>
@@ -97,14 +97,24 @@
         ref="editRightsFormRef"
         :rules="editRightsFormRules"
         label-width="70px">
-        <el-form-item label="权限">
-          <el-input v-model="editRightsForm.title"></el-input>
+        <el-form-item label="权限" label-width="90px">
+          <el-input v-model="editRightsForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="路径" prop="path">
-          <el-input v-model="editRightsForm.path"></el-input>
+        <el-form-item label="路径" prop="path" label-width="90px">
+          <el-select v-model="editRightsForm.path"
+                     filterable
+                     allow-create
+                     clearable placeholder="请选择">
+            <el-option
+              v-for="(item, index) in rightPath"
+              :key="index"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="动作" prop="action" label-width="90px">
-          <el-select v-model="editRightsForm.action" placeholder="请选择动作" clearable>
+        <el-form-item label="动作" prop="method" label-width="90px">
+          <el-select v-model="editRightsForm.method" placeholder="请选择动作" clearable>
             <el-option label="增" value="POST"></el-option>
             <el-option label="删" value="DELETE"></el-option>
             <el-option label="改" value="PUT"></el-option>
@@ -145,19 +155,19 @@
         addDialogVisible: false,
         //权限表单
         addRightsForm: {
-          title: '',
+          name: '',
           path: '',
-          action: ''
+          method: ''
         },
         addRightsRules: {
-          title: [
+          name: [
             {required: true, message: '请输入权限名称', trigger: 'blur'}
           ],
           path: [
             {required: true, message: '请输入路径', trigger: 'blur'},
             {validator: checkPath, trigger: 'blur'}
           ],
-          action: [
+          method: [
             {required: true, message: '请输入动作', trigger: 'blur'}
           ],
         },
@@ -165,15 +175,16 @@
         editDialogVisible: false,
         //编辑的权限表单
         editRightsForm: {},
+        rightPath: [],
         editRightsFormRules: {
-          title: [
+          name: [
             {required: true, message: '请输入权限名称', trigger: 'blur'}
           ],
           path: [
             {required: true, message: '请输入路径', trigger: 'blur'},
             {validator: checkPath, trigger: 'blur'}
           ],
-          action: [
+          method: [
             {required: true, message: '请输入动作', trigger: 'blur'}
           ],
         }
@@ -228,6 +239,11 @@
         this.editRightsForm = this.rightsList.find(function (obj) {
           return obj.id === id
         });
+        this.$api.Rights.pathGet().then(res => {
+          this.rightPath = res.data.path
+        }).catch(err => {
+          return this.$message.error(err.response.data.msg)
+        });
         this.editDialogVisible = true
       },
       //编辑权限
@@ -238,9 +254,9 @@
           // 表单预校验失败
           if (!valid) return;
           this.$api.Rights.rightsPut(this.editRightsForm.id, {
-            title: this.editRightsForm.title,
+            name: this.editRightsForm.name,
             path: this.editRightsForm.path,
-            action: this.editRightsForm.action
+            method: this.editRightsForm.method
           }).then(res => {
             this.$message.success('更新权限信息成功！');
             this.getRightsList()

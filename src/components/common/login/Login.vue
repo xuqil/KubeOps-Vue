@@ -60,26 +60,18 @@
       //登录及表单校验
       login() {
         this.$refs.loginFormRef.validate(valid => {
-          // console.log(valid);
           if (!valid) return false;
           this.$api.Users.login(this.loginForm).then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             this.$store.commit('saveUsername', res.data.username);
-            this.$store.commit('saveUserId', res.data.id)
-            if (res.data.status !== 200) {
-              return this.$message.error(res.data.msg)
-            }
+            this.$store.commit('saveUserId', res.data.id);
             this.$message.success("登录成功");
-            //保持token
             let token = res.data.token;
             window.sessionStorage.setItem('token', token);
-            // 2、通过编程式导航跳转到后台主页, 路由地址为：/home
             this.$router.push('/home')
           }).catch(err => {
-            console.log(err);
-            return false;
+            return this.$message.error(err.response.data.msg)
           })
-
         })
       }
     }

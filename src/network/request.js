@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Qs from 'qs'
 
-const baseURL = 'http://127.0.0.1:8000/api/v1/';
+const baseURL = 'http://127.0.0.1:8000/v1/';
 const websocketUrl = '127.0.0.1:8000/webssh/';
 
 function baseConfig(config) {

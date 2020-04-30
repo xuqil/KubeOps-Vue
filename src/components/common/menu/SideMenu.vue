@@ -16,24 +16,29 @@
       </el-menu-item>
       <template v-for="item in menuItems">
         <!--一级菜单-->
-        <el-submenu v-if="item.children" :index="item.id + ''">
+        <el-submenu v-if="item.children && item.is_active" :index="item.id + ''">
           <template slot="title">
             <i v-if="item.icon" :class="item.icon"></i>
-            <span>{{item.title}}</span>
+            <span>{{item.name}}</span>
           </template>
           <!-- 二级菜单 -->
-          <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id">
+          <el-menu-item :index="subItem.path"
+                        v-for="subItem in item.children"
+                        :key="subItem.id"
+                        v-if="subItem.is_active">
             <template slot="title">
               <i v-if="subItem.icon" :class="subItem.icon"></i>
               <i v-else class="el-icon-menu"></i>
-              <span>{{subItem.title}}</span>
+              <span>{{subItem.name}}</span>
             </template>
           </el-menu-item>
         </el-submenu>
         <!--没有二级菜单的一级菜单-->
         <el-menu-item v-else :index="item.path">
-          <i v-if="item.icon" :class="item.icon"></i>
-          <span slot="title">{{item.title}}</span>
+          <template v-if="item.is_active">
+            <i v-if="item.icon" :class="item.icon"></i>
+            <span slot="title">{{item.name}}</span>
+          </template>
         </el-menu-item>
       </template>
     </el-menu>
@@ -57,7 +62,6 @@
       getMenuTree() {
         this.$api.Rights.menuTree().then(res => {
           this.menuItems = res.data;
-          // console.log(res.data)
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
