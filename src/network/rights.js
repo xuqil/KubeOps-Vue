@@ -49,4 +49,12 @@ export default {
   rightsDelete(suffix) {
     return request.delete(basePath + '/permissions/' + suffix + '/')
   },
+  //获取权限树
+  rightTreeGet() {
+    return request.get(basePath + '/permissions/tree/')
+  },
+  //获取所有权限
+  rightAllGet() {
+    return request.get(basePath + '/permissions/all/')
+  },
 }

@@ -23,47 +23,64 @@
                 <template v-for="item in scope.row.permissions">
                   <el-tag v-if="item.action==='add'"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.name }}
+                          :closable="scope.row.name !== '管理员'">{{ item.name }}
                   </el-tag>
                   <el-tag v-else-if="item.action==='delete'"
                           type="danger"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.name }}
+                          :closable="scope.row.name !== '管理员'">{{ item.name }}
                   </el-tag>
                   <el-tag v-else-if="item.action==='edit'"
                           type="warning"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.name }}
+                          :closable="scope.row.name !== '管理员'">{{ item.name }}
                   </el-tag>
                   <el-tag v-else-if="item.action==='list'"
                           type="success"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.name }}
+                          :closable="scope.row.name !== '管理员'">{{ item.name }}
                   </el-tag>
                   <el-tag v-else type="info"
                           @close="removeRightById(scope.row, item.id)"
-                          closable>{{ item.name }}
+                          :closable="scope.row.name !== '管理员'">{{ item.name }}
                   </el-tag>
                 </template>
               </el-col>
             </el-row>
           </template>
         </el-table-column>
-        <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="角色名称" prop="name"></el-table-column>
-        <el-table-column label="角色描述" prop="desc"></el-table-column>
-        <el-table-column label="操作" width="300px">
+        <el-table-column type="index" label="#" align="center"></el-table-column>
+        <el-table-column label="角色名称" prop="name" align="center"></el-table-column>
+        <el-table-column label="角色描述" prop="desc" align="center"></el-table-column>
+        <el-table-column label="操作" width="400px" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" @click="showEditDialog(scope.row.id)" size="mini">编辑
+            <el-button type="primary"
+                       icon="el-icon-edit"
+                       @click="showEditDialog(scope.row.id)"
+                       :disabled="scope.row.name === '管理员'"
+                       size="mini">编辑
             </el-button>
-            <el-button type="danger" icon="el-icon-delete" @click="removeRoleById(scope.row.id)" size="mini">删除
+            <el-button type="danger"
+                       icon="el-icon-delete"
+                       @click="removeRoleById(scope.row.id)"
+                       :disabled="scope.row.name === '管理员'"
+                       size="mini">删除
             </el-button>
             <el-button
               type="warning"
               icon="el-icon-setting"
               size="mini"
+              :disabled="scope.row.name === '管理员'"
               @click="showSetRights(scope.row)">
               分配权限
+            </el-button>
+            <el-button
+              type="info"
+              icon="el-icon-setting"
+              size="mini"
+              :disabled="scope.row.name === '管理员'"
+              @click="showSetMenu(scope.row)">
+              分配菜单
             </el-button>
           </template>
         </el-table-column>
@@ -95,6 +112,24 @@
       <span slot="footer" class="dialog-footer">
                 <el-button @click="rightsDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="saveRoleRights">确 定</el-button>
+            </span>
+    </el-dialog>
+    <!--分配菜单-->
+    <el-dialog
+      title="分配菜单"
+      :visible.sync="menuDialogVisible"
+      width="50%">
+      <el-tree
+        :data="menusTree"
+        :props="rightsProps"
+        ref="menusRef"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :default-checked-keys="defaultMenus"></el-tree>
+      <span slot="footer" class="dialog-footer">
+                <el-button @click="menuDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="saveRoleMenu">确 定</el-button>
             </span>
     </el-dialog>
     <!--添加角色区域-->
@@ -167,6 +202,9 @@
         defaultRights: [],
         //权限分配树形列表
         rightsTree: [],
+        defaultMenus: [],
+        menusTree: [],
+        menuDialogVisible: false,
         //显示规则
         rightsProps: {
           children: 'children',
@@ -246,22 +284,58 @@
         this.updateRights = [];
       },
       //显示分配权限对话框
-      showSetRights(roles) {
-        this.currentRole = roles;
-        this.$api.Rights.rightsGet().then(res => {
-          this.rightsTree = res.data.results;
+      showSetRights(role) {
+        this.currentRole = role;
+        this.$api.Rights.rightTreeGet().then(res => {
+          this.rightsTree = res.data;
+          console.log(this.rightsTree)
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
         });
         //获取默认的权限
         this.defaultRights = [];
-        roles.permissions.forEach(value => this.defaultRights.push(value.id));
-        // console.log(this.defaultRights);
+        role.permissions.forEach(value => this.getLeafkeys(value, this.defaultRights));
         this.rightsDialogVisible = true;
       },
+      showSetMenu(role) {
+        this.currentRole = role;
+        this.$api.Rights.menuTree().then(res => {
+          this.menusTree = res.data;
+          console.log(this.menusTree)
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
+        });
+        this.defaultMenus = [];
+        role.menus.forEach(value => this.getLeafkeys(value, this.defaultMenus));
+        this.menuDialogVisible = true;
+      },
+      getLeafkeys(node, arr) {
+        if (!node.children) {
+          return arr.push(node.id)
+        }
+        node.children.forEach(item => this.getLeafkeys(item, arr))
+      },
+      saveRoleMenu() {
+        const menusKeys = [
+          ...this.$refs.menusRef.getCheckedKeys(),
+          ...this.$refs.menusRef.getHalfCheckedKeys()
+        ];
+        this.$api.Rights.rolesPut(this.currentRole.id, {
+          menus: menusKeys,
+          name: this.currentRole.name
+        }).then(res => {
+          this.$message.success("分配成功");
+          this.getRolesList()
+        }).catch(err => {
+          console.log(err.response.data);
+          return this.$message.error(err.response.data.detail)
+        });
+        this.menuDialogVisible = false;
+      },
       //保持修改的权限
-      saveRoleRights(role) {
+      saveRoleRights() {
         const permissionsKeys = [
           ...this.$refs.rightsRef.getCheckedKeys(),
           ...this.$refs.rightsRef.getHalfCheckedKeys()

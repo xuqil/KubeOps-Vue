@@ -16,10 +16,10 @@
       </el-row>
       <!--权限表格-->
       <el-table :data="rightsList" border stripe>
-        <el-table-column type="index" label="#"></el-table-column>
-        <el-table-column label="权限名称" prop="name"></el-table-column>
-        <el-table-column label="路径" prop="path"></el-table-column>
-        <el-table-column label="权限动作" prop="method">
+        <el-table-column type="index" label="#" align="center"></el-table-column>
+        <el-table-column label="权限名称" prop="name" align="center"></el-table-column>
+        <el-table-column label="路径" prop="path" align="center"></el-table-column>
+        <el-table-column label="权限动作" prop="method" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.method === 'POST'">添加</el-tag>
             <el-tag type="danger" v-else-if="scope.row.method === 'DELETE'">删除</el-tag>
@@ -28,7 +28,12 @@
             <el-tag type="info" v-else>全部</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180px">
+        <el-table-column label="上级权限" prop="pid" align="center">
+          <template slot-scope="scope">
+            <template v-if="parentRight(scope.row.pid)">{{parentRight(scope.row.pid)}}</template>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="180px" align="center">
           <template slot-scope="scope">
             <el-button type="primary"
                        icon="el-icon-edit"
@@ -80,6 +85,7 @@
               :value="item">
             </el-option>
           </el-select>
+          <div class="tip_message">如果是父级权限可不选填</div>
         </el-form-item>
         <el-form-item label="动作" prop="method" label-width="90px">
           <el-select v-model="addRightsForm.method" placeholder="请选择动作" clearable>
@@ -87,6 +93,12 @@
             <el-option label="删" value="DELETE"></el-option>
             <el-option label="改" value="PUT"></el-option>
             <el-option label="查" value="GET"></el-option>
+            <el-option label="全部" value="*"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="上级权限" prop="pid" label-width="90px">
+          <el-select v-model="addRightsForm.pid" placeholder="请选择" clearable filterable>
+            <el-option :label="item.name" :value="item.id" v-for="item in rightsAllList" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -107,14 +119,14 @@
         ref="editRightsFormRef"
         :rules="editRightsFormRules"
         label-width="70px">
-        <el-form-item label="权限" label-width="90px">
+        <el-form-item label="权限" prop="name" label-width="90px">
           <el-input v-model="editRightsForm.name"></el-input>
         </el-form-item>
         <el-form-item label="路径" prop="path" label-width="90px">
           <el-select v-model="editRightsForm.path"
                      filterable
                      allow-create
-                     clearable placeholder="请选择">
+                     clearable placeholder="请选择(如果是父级权限可不选填)">
             <el-option
               v-for="(item, index) in rightPath"
               :key="index"
@@ -122,6 +134,7 @@
               :value="item">
             </el-option>
           </el-select>
+          <div class="tip_message">如果是父级权限可不选填</div>
         </el-form-item>
         <el-form-item label="动作" prop="method" label-width="90px">
           <el-select v-model="editRightsForm.method" placeholder="请选择动作" clearable>
@@ -129,6 +142,12 @@
             <el-option label="删" value="DELETE"></el-option>
             <el-option label="改" value="PUT"></el-option>
             <el-option label="查" value="GET"></el-option>
+            <el-option label="全部" value="*"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="上级权限" prop="pid" label-width="90px">
+          <el-select v-model="editRightsForm.pid" placeholder="请选择" clearable filterable>
+            <el-option :label="item.name" :value="item.id" v-for="item in rightsAllList" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -155,6 +174,7 @@
       return {
         // 权限列表
         rightsList: [],
+        rightsAllList: [],
         queryInfo: {
           page: 1,
           page_size: 10
@@ -166,15 +186,16 @@
         //权限表单
         addRightsForm: {
           name: '',
-          path: '',
-          method: ''
+          path: '/abc/',
+          method: '',
+          pid: null
         },
         addRightsRules: {
           name: [
             {required: true, message: '请输入权限名称', trigger: 'blur'}
           ],
           path: [
-            {required: true, message: '请输入路径', trigger: 'blur'},
+            {required: false, message: '请输入路径', trigger: 'blur'},
             {validator: checkPath, trigger: 'blur'}
           ],
           method: [
@@ -191,7 +212,7 @@
             {required: true, message: '请输入权限名称', trigger: 'blur'}
           ],
           path: [
-            {required: true, message: '请输入路径', trigger: 'blur'},
+            {required: false, message: '请输入路径', trigger: 'blur'},
             {validator: checkPath, trigger: 'blur'}
           ],
           method: [
@@ -201,8 +222,9 @@
       }
     },
     created() {
-      this.getRightsList()
-      this.getPath()
+      this.getRightsList();
+      this.getPath();
+      this.getALlRightsList();
     },
     methods: {
       //获取权限列表
@@ -211,6 +233,25 @@
           // console.log(res.data.results);
           this.rightsList = res.data.results;
           this.total = res.data.count;
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
+        })
+      },
+      //获取上级权限
+      parentRight(id) {
+        let parent = this.rightsAllList.find(function (obj) {
+          return obj.id === id
+        });
+        if (parent) {
+          return parent.name
+        }
+        return null
+      },
+      //获取所有权限
+      getALlRightsList() {
+        this.$api.Rights.rightAllGet().then(res => {
+          this.rightsAllList = res.data;
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
@@ -269,7 +310,8 @@
           this.$api.Rights.rightsPut(this.editRightsForm.id, {
             name: this.editRightsForm.name,
             path: this.editRightsForm.path,
-            method: this.editRightsForm.method
+            method: this.editRightsForm.method,
+            pid: this.editRightsForm.pid
           }).then(res => {
             this.$message.success('更新权限信息成功！');
             this.getRightsList()
@@ -311,5 +353,7 @@
 </script>
 
 <style scoped>
-
+  .el-select, .el-input {
+    width: 50%;
+  }
 </style>

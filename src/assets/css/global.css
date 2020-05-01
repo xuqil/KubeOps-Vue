@@ -37,7 +37,7 @@ html, body, #app {
   height: 300px;
 }
 
-/* 步骤条 */
-.el-steps {
-  margin: 15px 0;
+.tip_message {
+  color: red;
+  opacity: 0.5;
 }
