@@ -15,7 +15,7 @@
         </el-col>
       </el-row>
       <!--权限表格-->
-      <el-table :data="rightsList" border stripe>
+      <el-table :data="rightsList" :header-cell-style="getTableHeaderStyle" border stripe>
         <el-table-column type="index" label="#" align="center"></el-table-column>
         <el-table-column label="权限名称" prop="name" align="center"></el-table-column>
         <el-table-column label="路径" prop="path" align="center"></el-table-column>
@@ -162,6 +162,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     name: "Rights",
     data() {
@@ -227,6 +229,11 @@
       this.getRightsList();
       this.getPath();
       this.getALlRightsList();
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       //获取权限列表

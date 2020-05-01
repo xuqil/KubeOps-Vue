@@ -42,7 +42,7 @@
         </el-col>
       </el-row>
       <!--主机列表-->
-      <el-table :data="serversList" @sort-change="sortChange">
+      <el-table :data="serversList" @sort-change="sortChange" :header-cell-style="getTableHeaderStyle">
         <el-table-column type="index" label="#" align="center"></el-table-column>
         <el-table-column label="主机名" prop="hostname" align="center" min-width="100px" sortable="custom"></el-table-column>
         <el-table-column label="IP" prop="ip" align="center" min-width="100px" sortable="custom"></el-table-column>
@@ -254,6 +254,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     name: "Server",
     inject: ['reload'],
@@ -322,6 +324,11 @@
     },
     created() {
       this.getServersList()
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       getServersList() {

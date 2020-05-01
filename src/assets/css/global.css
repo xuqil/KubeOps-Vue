@@ -24,7 +24,7 @@ html, body, #app {
   display: table-cell !important;
 }
 
-.el-form-item .el-button{
+.el-form-item .el-button {
   margin-left: 10px;
 }
 
@@ -40,4 +40,12 @@ html, body, #app {
 .tip_message {
   color: red;
   opacity: 0.5;
+}
+
+.table_header_style {
+  background-color: #eeeeee
+}
+
+.ql-editor {
+  min-height: 300px;
 }

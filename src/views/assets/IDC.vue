@@ -15,7 +15,7 @@
         </el-col>
       </el-row>
       <!--IDC机房列表-->
-      <el-table :data="IDCList" @sort-change="sortChange">
+      <el-table :data="IDCList" @sort-change="sortChange" :header-cell-style="getTableHeaderStyle">
         <el-table-column type="index" label="#" align="center"></el-table-column>
         <el-table-column label="机房名" prop="name" align="center" sortable="custom"></el-table-column>
         <el-table-column label="地址" prop="address" align="center" sortable="custom"></el-table-column>
@@ -109,6 +109,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     name: "IDC",
     data() {
@@ -136,6 +138,11 @@
     },
     created() {
       this.getIDCList()
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       //获取IDC列表

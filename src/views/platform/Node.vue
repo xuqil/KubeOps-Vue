@@ -2,6 +2,7 @@
   <div>
     <el-table
       :data="nodeList"
+      :header-cell-style="getTableHeaderStyle"
       border>
       <el-table-column
         prop="hostname"
@@ -54,6 +55,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     name: "Node",
     data() {
@@ -68,6 +71,11 @@
     },
     created() {
       this.getNodeList(this.queryInfo);
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       //获取Node列表

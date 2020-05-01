@@ -15,6 +15,7 @@ export default new Vuex.Store({
     codeValue: '', //编辑器代码
     codeType: 'yaml', //编辑器语言类型
     codeReadOnly: false, //编辑器是否只读
+    tableHeaderStyle: {'background-color': '#eeeeee'}, //表格头部样式
   },
   mutations: {
     saveCollapse: state => {
@@ -47,6 +48,9 @@ export default new Vuex.Store({
     saveCodeReadOnly: ((state, payload) => {
       state.codeReadOnly = payload
     }),
+    saveTableHeaderStyle: ((state, payload) => {
+      state.tableHeaderStyle = payload
+    }),
   },
   getters: {
     getCollapse: state => state.isCollapse,
@@ -58,6 +62,7 @@ export default new Vuex.Store({
     getCodeValue: state => state.codeValue,
     getCodeType: state => state.codeType,
     getCodeReadOnly: state => state.codeReadOnly,
+    getTableHeaderStyle: state => state.tableHeaderStyle,
   },
   actions: {},
   modules: {}

@@ -24,6 +24,7 @@
       @cell-mouse-leave="cellMouseLeave"
       @cell-mouse-enter="cellMouseEnter"
       :row-class-name="tableRowClassName"
+      :header-cell-style="getTableHeaderStyle"
       border>
       <el-table-column
         prop="namespace"
@@ -145,6 +146,11 @@
       setTimeout(() => {
         this.getOrderNumber()
       }, 1000)
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       ...mapGetters([

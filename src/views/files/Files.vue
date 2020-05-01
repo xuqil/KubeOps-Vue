@@ -8,7 +8,7 @@
     <!-- 卡片视图 -->
     <el-card>
       <!--主机列表-->
-      <el-table :data="serversList" border stripe>
+      <el-table :data="serversList" border stripe :header-cell-style="getTableHeaderStyle">
         <el-table-column type="index" label="#"></el-table-column>
         <el-table-column label="主机名" prop="hostname"></el-table-column>
         <el-table-column label="IP" prop="ip"></el-table-column>
@@ -91,6 +91,7 @@
 
 <script>
   import axios from 'axios'
+  import {mapGetters} from "vuex";
 
   export default {
     name: "Files",
@@ -121,6 +122,9 @@
       this.getServersList()
     },
     computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
       header() {
         return {'Authorization': 'jwt ' + window.sessionStorage.getItem('token')}
       },

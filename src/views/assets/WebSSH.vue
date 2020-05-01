@@ -16,7 +16,7 @@
           </el-col>
         </el-row>
         <!--主机列表-->
-        <el-table :data="serversList" stripe @sort-change="sortChange">
+        <el-table :data="serversList" stripe @sort-change="sortChange" :header-cell-style="getTableHeaderStyle">
           <el-table-column type="index" label="#" align="center"></el-table-column>
           <el-table-column label="主机名" prop="hostname" align="center" sortable="custom"></el-table-column>
           <el-table-column label="IP" prop="ip" align="center" sortable="custom"></el-table-column>
@@ -141,6 +141,7 @@
   import {Terminal} from 'xterm'
   import {FitAddon} from 'xterm-addon-fit'
   import {AttachAddon} from 'xterm-addon-attach'
+  import {mapGetters} from "vuex";
 
   export default {
     name: "WebSSH",
@@ -174,6 +175,11 @@
     },
     created() {
       this.getServersList()
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       //适配终端大小

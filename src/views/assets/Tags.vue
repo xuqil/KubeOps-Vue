@@ -15,7 +15,7 @@
         </el-col>
       </el-row>
       <!--标签列表-->
-      <el-table :data="tagsList" stripe>
+      <el-table :data="tagsList" stripe :header-cell-style="getTableHeaderStyle">
         <el-table-column type="index" label="#" align="center"></el-table-column>
         <el-table-column label="标签" prop="name" align="center"></el-table-column>
         <el-table-column label="描述" prop="desc" align="center" min-width="100px"></el-table-column>
@@ -95,6 +95,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     name: "Tags",
     data() {
@@ -127,6 +129,11 @@
     },
     created() {
       this.getTagsList()
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       //获取标签列表

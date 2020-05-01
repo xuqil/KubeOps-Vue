@@ -12,6 +12,7 @@
       </div>
       <el-table
         :data="tasksList"
+        :header-cell-style="getTableHeaderStyle"
         @sort-change="sortChange">
         <el-table-column
           prop="name"
@@ -140,6 +141,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     name: "Tasks",
     data() {
@@ -156,6 +159,11 @@
     },
     created() {
       this.getTasksList()
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       //获取任务列表

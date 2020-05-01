@@ -20,7 +20,7 @@
         </el-col>
       </el-row>
       <!--用户列表区-->
-      <el-table :data="userList" border stripe>
+      <el-table :data="userList" :header-cell-style="getTableHeaderStyle" border stripe>
         <el-table-column type="index" label="#"  align="center"></el-table-column>
         <el-table-column label="姓名" prop="username"  align="center"></el-table-column>
         <el-table-column label="邮箱" prop="email"  align="center"></el-table-column>
@@ -171,6 +171,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     name: "User",
     data() {
@@ -283,6 +285,11 @@
     },
     created() {
       this.getUserList()
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       getUserList() {

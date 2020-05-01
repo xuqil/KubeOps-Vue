@@ -15,7 +15,7 @@
         </el-col>
       </el-row>
       <!--角色列表-->
-      <el-table :data="rolesList" border stripe>
+      <el-table :data="rolesList" :header-cell-style="getTableHeaderStyle" border stripe>
         <el-table-column type="expand">
           <template slot-scope="scope">
             <el-row
@@ -56,35 +56,6 @@
                 </el-row>
               </el-col>
             </el-row>
-<!--            <el-row>-->
-<!--              <el-col>-->
-<!--                <template v-for="item in scope.row.permissions">-->
-<!--                  <el-tag v-if="item.action==='add'"-->
-<!--                          @close="removeRightById(scope.row, item.id)"-->
-<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
-<!--                  </el-tag>-->
-<!--                  <el-tag v-else-if="item.action==='delete'"-->
-<!--                          type="danger"-->
-<!--                          @close="removeRightById(scope.row, item.id)"-->
-<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
-<!--                  </el-tag>-->
-<!--                  <el-tag v-else-if="item.action==='edit'"-->
-<!--                          type="warning"-->
-<!--                          @close="removeRightById(scope.row, item.id)"-->
-<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
-<!--                  </el-tag>-->
-<!--                  <el-tag v-else-if="item.action==='list'"-->
-<!--                          type="success"-->
-<!--                          @close="removeRightById(scope.row, item.id)"-->
-<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
-<!--                  </el-tag>-->
-<!--                  <el-tag v-else type="info"-->
-<!--                          @close="removeRightById(scope.row, item.id)"-->
-<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
-<!--                  </el-tag>-->
-<!--                </template>-->
-<!--              </el-col>-->
-<!--            </el-row>-->
           </template>
         </el-table-column>
         <el-table-column type="index" label="#" align="center"></el-table-column>
@@ -219,6 +190,8 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
+
   export default {
     name: "Roles",
     data() {
@@ -262,6 +235,11 @@
     },
     created() {
       this.getRolesList()
+    },
+    computed: {
+      ...mapGetters([
+        'getTableHeaderStyle'
+      ]),
     },
     methods: {
       //获取角色列表
