@@ -18,35 +18,73 @@
       <el-table :data="rolesList" border stripe>
         <el-table-column type="expand">
           <template slot-scope="scope">
-            <el-row>
-              <el-col>
-                <template v-for="item in scope.row.permissions">
-                  <el-tag v-if="item.action==='add'"
-                          @close="removeRightById(scope.row, item.id)"
-                          :closable="scope.row.name !== '管理员'">{{ item.name }}
-                  </el-tag>
-                  <el-tag v-else-if="item.action==='delete'"
-                          type="danger"
-                          @close="removeRightById(scope.row, item.id)"
-                          :closable="scope.row.name !== '管理员'">{{ item.name }}
-                  </el-tag>
-                  <el-tag v-else-if="item.action==='edit'"
-                          type="warning"
-                          @close="removeRightById(scope.row, item.id)"
-                          :closable="scope.row.name !== '管理员'">{{ item.name }}
-                  </el-tag>
-                  <el-tag v-else-if="item.action==='list'"
-                          type="success"
-                          @close="removeRightById(scope.row, item.id)"
-                          :closable="scope.row.name !== '管理员'">{{ item.name }}
-                  </el-tag>
-                  <el-tag v-else type="info"
-                          @close="removeRightById(scope.row, item.id)"
-                          :closable="scope.row.name !== '管理员'">{{ item.name }}
-                  </el-tag>
-                </template>
+            <el-row
+              :class="['bdbottom', i1 === 0 ? 'bdtop' : '', 'vcenter']"
+              v-for="(item1, i1) in scope.row.permissions"
+              :key="item1.id"
+            >
+              <!-- 一级权限 -->
+              <el-col :span="5">
+                <el-tag :closable="scope.row.name !== '管理员'"
+                        @close="removeRightById(scope.row, item1.id)">{{ item1.name}}</el-tag>
+                <i class="el-icon-caret-right"  v-if="item1.children"></i>
+              </el-col>
+              <!-- 二级和三级 -->
+              <el-col :span="19">
+                <el-row
+                  :class="[i2 === 0 ? '' : 'bdtop', 'vcenter']"
+                  v-for="(item2, i2) in item1.children"
+                  :key="item2.id"
+                >
+                  <el-col :span="6 ">
+                    <el-tag
+                      type="success"
+                      :closable="scope.row.name !== '管理员'"
+                      @close="removeRightById(scope.row, item2.id)"
+                    >{{ item2.name }}</el-tag>
+                    <i class="el-icon-caret-right" v-if="item2.children"></i>
+                  </el-col>
+                  <el-col :span="18">
+                    <el-tag
+                      type="warning"
+                      v-for="item3 in item2.children"
+                      :key="item3.id"
+                      :closable="scope.row.name !== '管理员'"
+                      @close="removeRightById(scope.row, item3.id)"
+                    >{{ item3.name}}</el-tag>
+                  </el-col>
+                </el-row>
               </el-col>
             </el-row>
+<!--            <el-row>-->
+<!--              <el-col>-->
+<!--                <template v-for="item in scope.row.permissions">-->
+<!--                  <el-tag v-if="item.action==='add'"-->
+<!--                          @close="removeRightById(scope.row, item.id)"-->
+<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
+<!--                  </el-tag>-->
+<!--                  <el-tag v-else-if="item.action==='delete'"-->
+<!--                          type="danger"-->
+<!--                          @close="removeRightById(scope.row, item.id)"-->
+<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
+<!--                  </el-tag>-->
+<!--                  <el-tag v-else-if="item.action==='edit'"-->
+<!--                          type="warning"-->
+<!--                          @close="removeRightById(scope.row, item.id)"-->
+<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
+<!--                  </el-tag>-->
+<!--                  <el-tag v-else-if="item.action==='list'"-->
+<!--                          type="success"-->
+<!--                          @close="removeRightById(scope.row, item.id)"-->
+<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
+<!--                  </el-tag>-->
+<!--                  <el-tag v-else type="info"-->
+<!--                          @close="removeRightById(scope.row, item.id)"-->
+<!--                          :closable="scope.row.name !== '管理员'">{{ item.name }}-->
+<!--                  </el-tag>-->
+<!--                </template>-->
+<!--              </el-col>-->
+<!--            </el-row>-->
           </template>
         </el-table-column>
         <el-table-column type="index" label="#" align="center"></el-table-column>
@@ -231,6 +269,7 @@
         this.$api.Rights.rolesGet(this.queryInfo).then(res => {
           this.rolesList = res.data.results;
           this.total = res.data.count;
+          console.log(this.rolesList)
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
@@ -245,20 +284,6 @@
         this.queryInfo.page = newPage;
         this.getRolesList()
       },
-      //获取数组内元素索引
-      indexArray(val, array) {
-        for (let i = 0; i < array.length; i++) {
-          if (array[i] === val) return i;
-        }
-        return -1;
-      },
-      //删除数组中指定元素
-      removeArray(val, array) {
-        let index = this.indexArray(val, array);
-        if (index > -1) {
-          array.splice(index, 1);
-        }
-      },
       //删除权限
       async removeRightById(role, rightId) {
         const rightConfirm = await this.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
@@ -269,19 +294,20 @@
         if (rightConfirm !== 'confirm') {
           return this.$message.info("已取消删除")
         }
-        role.permissions.forEach(value => this.updateRights.push(value.id));
-        this.removeArray(rightId, this.updateRights);
-        this.$api.Rights.rolesPut(role.id, {
-          permissions: this.updateRights,
-        }).then(res => {
-          // console.log(res);
-          this.$message.success("删除成功");
-          this.getRolesList()
-        }).catch(err => {
-          console.log(err);
-          return this.$message.error(err.response.data.detail)
-        });
-        this.updateRights = [];
+        // role.permissions.forEach(value => this.updateRights.push(value.id));
+        // this.removeArray(rightId, this.updateRights);
+        // console.log(this.updateRights)
+        // this.$api.Rights.rolesPut(role.id, {
+        //   permissions: this.updateRights,
+        // }).then(res => {
+        //   // console.log(res);
+        //   this.$message.success("删除成功");
+        //   this.getRolesList()
+        // }).catch(err => {
+        //   console.log(err);
+        //   return this.$message.error(err.response.data.detail)
+        // });
+        // this.updateRights = [];
       },
       //显示分配权限对话框
       showSetRights(role) {
@@ -435,5 +461,18 @@
 <style scoped>
   .el-tag {
     margin: 7px;
+  }
+
+  .bdtop {
+    border-top: 1px solid #eee;
+  }
+
+  .bdbottom {
+    border-bottom: 1px solid #eee;
+  }
+
+  .vcenter {
+    display: flex;
+    align-items: center;
   }
 </style>
