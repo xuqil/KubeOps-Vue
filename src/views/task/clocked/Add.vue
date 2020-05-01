@@ -16,7 +16,6 @@
               v-model="clockedForm.clocked_time"
               type="datetime"
               placeholder="选择日期时间"
-              align="left"
               :picker-options="pickerOptions">
             </el-date-picker>
             <div class="tip_message">按时执行任务</div>

@@ -43,7 +43,7 @@
             <el-button type="danger"
                        icon="el-icon-delete"
                        size="mini"
-                       :disabled="scope.row.method === '*'"
+                       :disabled="scope.row.path === '.*'"
                        @click="removeRightsById(scope.row.id)"></el-button>
           </template>
         </el-table-column>
@@ -100,6 +100,7 @@
           <el-select v-model="addRightsForm.pid" placeholder="请选择" clearable filterable>
             <el-option :label="item.name" :value="item.id" v-for="item in rightsAllList" :key="item.id"></el-option>
           </el-select>
+          <div class="tip_message">最多三级</div>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -149,6 +150,7 @@
           <el-select v-model="editRightsForm.pid" placeholder="请选择" clearable filterable>
             <el-option :label="item.name" :value="item.id" v-for="item in rightsAllList" :key="item.id"></el-option>
           </el-select>
+          <div class="tip_message">最多三级</div>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

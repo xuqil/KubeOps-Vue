@@ -174,7 +174,7 @@
           <el-input v-model="editServerForm.ip" clearable></el-input>
         </el-form-item>
         <el-form-item label="机房">
-          <el-select v-model="editServerForm.idc" placeholder="请选择机房">
+          <el-select v-model="editServerForm.idc" clearable filterable placeholder="请选择机房">
             <el-option
               v-for="item in IDCList"
               :key="item.id"
@@ -184,7 +184,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="标签">
-          <el-select v-model="selectedTags" multiple placeholder="请选择">
+          <el-select v-model="selectedTags" clearable filterable multiple placeholder="请选择">
             <el-option
               v-for="item in tagsList"
               :key="item.id"
