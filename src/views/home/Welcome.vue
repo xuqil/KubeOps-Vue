@@ -7,9 +7,9 @@
     <!-- 卡片视图 -->
     <el-card>
       <!--系统负载折线图-->
-      <div id="cpu-load" style="width: 1400px;height:400px;"></div>
+      <div id="cpu-load" style="width: auto;height:400px;"></div>
       <!--内存信息-->
-      <div id="memory" style="width: 600px;height:400px;"></div>
+      <div id="memory" style="width: auto;height:400px;"></div>
       <!--CPU信息-->
       <div id="cpu_info">
         <el-card header="CPU信息" shadow="always">
@@ -191,6 +191,7 @@
           title: {
             text: 'CPU负载'
           },
+          color: ['#2db7f5', '#ff6600', '#808bc6'],
           tooltip: {
             trigger: 'axis'
           },
@@ -220,17 +221,20 @@
             {
               name: '1分钟平均负载',
               type: 'line',
-              data: []
+              data: [],
+              smooth: true
             },
             {
               name: '5分钟平均负载',
               type: 'line',
-              data: []
+              data: [],
+              smooth: true
             },
             {
               name: '15分钟平均负载',
               type: 'line',
-              data: []
+              data: [],
+              smooth: true
             },
           ]
         };
@@ -245,6 +249,7 @@
             text: '平台内存信息',
             left: 'center'
           },
+          color: ['#58afed', '#de4150', '#487a3e', '#6dd8da'],
           tooltip: {
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} kB'

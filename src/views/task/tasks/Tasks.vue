@@ -79,19 +79,19 @@
         </el-table-column>
         <el-table-column
           prop="interval"
-          label="间隔ID"
+          label="间隔"
           sortable="custom"
           width="180">
         </el-table-column>
         <el-table-column
           prop="crontab"
-          label="crontab ID"
+          label="crontab"
           sortable="custom"
-          width="180">
+          min-width="300">
         </el-table-column>
         <el-table-column
           prop="clocked"
-          label="clocked ID"
+          label="clocked"
           sortable="custom"
           width="180">
         </el-table-column>
