@@ -10,20 +10,6 @@
       <el-card>
         <!--标题--->
         <div class="post_title">{{detailPostForm.title}}</div>
-        <div class="post_title_bottom">
-                <span class="post_author">
-                  <i class="el-icon-user"></i>: <span>{{detailPostForm.author}}</span></span>
-          <span class="post_category"><i class="el-icon-price-tag"></i>: <span>{{detailPostForm.category}}</span></span>
-          <span>
-            <i class="el-icon-collection-tag"></i>:
-            <el-tag style="margin-right: 5px"
-                    :type="typeColors[i]"
-                    size="mini"
-                    v-for="(item, i) in detailPostForm.tags"
-                    :key="i">{{item}}
-            </el-tag>
-          </span>
-        </div>
         <!--主体--->
         <div class="post_body">
           <div v-html="detailPostForm.body"></div>
@@ -50,6 +36,12 @@
                 <el-button type="text" class="comment_chat" @click="showAddComment(item1.id, item1.user)">
                   <i class="el-icon-chat-square"></i>回复
                 </el-button>
+                <el-button type="text"
+                           v-if="getUsername === item1.user"
+                           class="comment_chat"
+                           @click="deleteComment(item1.id)">
+                  <i class="el-icon-delete"></i>删除
+                </el-button>
               </div>
             </div>
             <!--二级评论-->
@@ -62,6 +54,12 @@
                   <el-button type="text" class="comment_chat" @click="showAddComment(item2.id, item2.user)">
                     <i class="el-icon-chat-square"></i>回复
                   </el-button>
+                  <el-button type="text"
+                             v-if="getUsername === item2.user"
+                             class="comment_chat"
+                             @click="deleteComment(item2.id)">
+                    <i class="el-icon-delete"></i>删除
+                  </el-button>
                 </div>
               </div>
               <!--三级评论-->
@@ -71,6 +69,12 @@
                   <span class="comment_content">{{item3.content}}</span>
                   <div class="comment_bottom">
                     <span>{{item3.c_time | dataFormat}}</span>
+                    <el-button type="text"
+                               v-if="getUsername === item3.user"
+                               class="comment_chat"
+                               @click="deleteComment(item3.id)">
+                      <i class="el-icon-delete"></i>删除
+                    </el-button>
                   </div>
                 </div>
               </template>
@@ -108,7 +112,6 @@
       return {
         postId: '',
         detailPostForm: '',
-        typeColors: ['', 'success', 'info', 'danger', 'warning', '', 'success', 'info', 'danger', 'warning', '', 'success', 'info', 'danger', 'warning', '', 'success', 'info', 'danger', 'warning',],
         comment: '',
         commentCount: 0,
         addComment: {
@@ -123,7 +126,8 @@
     computed:
       {
         ...mapGetters([
-          'getUserId'
+          'getUserId',
+          'getUsername'
         ]),
       },
     created() {
@@ -135,6 +139,7 @@
       getPostDetail(id) {
         this.$api.Wiki.postDetailGet(id).then(res => {
           this.detailPostForm = res.data;
+          console.log(res.data)
         }).catch(err => {
           console.log(err);
           return this.$message.error(err.response.data.detail)
@@ -192,7 +197,6 @@
       },
       subComment() {
         if (this.addComment.content) {
-          const then = this;
           this.addComment.user = this.getUserId;
           this.addComment.post = Number(this.postId);
           this.$api.Wiki.wikiCommentPost(this.addComment).then(res => {
@@ -203,6 +207,26 @@
             return this.$message.error(err.response.data.detail)
           })
         }
+      },
+      async deleteComment(id) {
+        const confirmResult = await this.$confirm(
+          '是否删除该评论?',
+          '提示',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }
+        ).catch(err => err);
+        if (confirmResult !== 'confirm') {
+          return this.$message.info('已取消删除')
+        }
+        this.$api.Wiki.wikiCommentDelete(id).then(res => {
+          this.getComments(this.postId);
+        }).catch(err => {
+          console.log(err);
+          return this.$message.error(err.response.data.detail)
+        })
       },
     }
   }
@@ -216,24 +240,6 @@
     margin-bottom: 30px;
   }
 
-  .post_title_bottom {
-    font-size: 12px;
-    text-align: center;
-    margin-bottom: 30px;
-  }
-
-  .post_author span {
-    cursor: pointer;
-    color: #4f4ce7;
-  }
-
-  .post_category span {
-    color: #801221;
-  }
-
-  .post_author, .post_category {
-    margin-right: 10px
-  }
 
   .post_operation {
     margin-top: 10px;
@@ -309,7 +315,7 @@
   }
 
   .comment_chat {
-    margin-left: 30px;
+    margin-left: 15px;
     color: #8b8b8b;
   }
 

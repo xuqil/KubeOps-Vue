@@ -285,6 +285,9 @@
   #aside_right .el-card {
     margin-bottom: 20px;
   }
+  #aside_right .el-tag {
+    margin-top: 5px;
+  }
 
   .aside_header {
     height: 10px
