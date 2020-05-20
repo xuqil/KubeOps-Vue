@@ -215,10 +215,9 @@
         this.$router.push('/tasks/add');
       },
       updateState(taskInfo) {
-        console.log(taskInfo)
         this.$api.Tasks.taskPut(
           taskInfo.id,
-          taskInfo
+          {'enabled': taskInfo.enabled}
         ).then(res => {
           this.$message.success("更新任务状态成功")
         }).catch(err => {
