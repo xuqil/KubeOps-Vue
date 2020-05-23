@@ -25,8 +25,7 @@
             >
               <!-- 一级权限 -->
               <el-col :span="5">
-                <el-tag :closable="scope.row.name !== '管理员'"
-                        @close="removeRightById(scope.row, item1.id)">{{ item1.name}}</el-tag>
+                <el-tag @close="removeRightById(scope.row, item1.id)">{{ item1.name}}</el-tag>
                 <i class="el-icon-caret-right"  v-if="item1.children"></i>
               </el-col>
               <!-- 二级和三级 -->
@@ -39,7 +38,6 @@
                   <el-col :span="6 ">
                     <el-tag
                       type="success"
-                      :closable="scope.row.name !== '管理员'"
                       @close="removeRightById(scope.row, item2.id)"
                     >{{ item2.name }}</el-tag>
                     <i class="el-icon-caret-right" v-if="item2.children"></i>
@@ -49,7 +47,6 @@
                       type="warning"
                       v-for="item3 in item2.children"
                       :key="item3.id"
-                      :closable="scope.row.name !== '管理员'"
                       @close="removeRightById(scope.row, item3.id)"
                     >{{ item3.name}}</el-tag>
                   </el-col>
