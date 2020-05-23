@@ -19,7 +19,7 @@
         <el-table :data="serversList" stripe @sort-change="sortChange" :header-cell-style="getTableHeaderStyle">
           <el-table-column type="index" label="#" align="center"></el-table-column>
           <el-table-column label="主机名" prop="hostname" align="center" sortable="custom"></el-table-column>
-          <el-table-column label="IP" prop="ip" align="center" sortable="custom"></el-table-column>
+          <el-table-column label="IP" prop="ip" align="center" sortable="custom" min-width="150px"></el-table-column>
           <el-table-column label="设备类型" prop="device_type" align="center" sortable="custom"></el-table-column>
           <el-table-column label="操作系统版本" prop="os_version" align="center" sortable="custom"></el-table-column>
           <el-table-column label="应用环境" prop="app_env" align="center" sortable="custom"></el-table-column>

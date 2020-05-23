@@ -22,15 +22,15 @@
       <!--用户列表区-->
       <el-table :data="userList" :header-cell-style="getTableHeaderStyle" border stripe>
         <el-table-column type="index" label="#"  align="center"></el-table-column>
-        <el-table-column label="姓名" prop="username"  align="center"></el-table-column>
-        <el-table-column label="邮箱" prop="email"  align="center"></el-table-column>
-        <el-table-column label="电话" prop="mobile"  align="center"></el-table-column>
-        <el-table-column label="角色" prop="roles[0].name"  align="center">
+        <el-table-column label="姓名" prop="username"  align="center" min-width="120"></el-table-column>
+        <el-table-column label="邮箱" prop="email"  align="center" min-width="180"></el-table-column>
+        <el-table-column label="电话" prop="mobile"  align="center" min-width="120"></el-table-column>
+        <el-table-column label="角色" prop="roles[0].name"  align="center" min-width="120">
           <template slot-scope="scope">
             <el-tag v-for="(item, index) in scope.row.roles" :key="index" effect="plain" size="mini">{{item.name}}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="是否为管理员" prop="is_staff" align="center">
+        <el-table-column label="是否为管理员" prop="is_staff" align="center" min-width="100">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.is_staff"
                        @change="userStaffChange(scope.row)"
@@ -38,7 +38,7 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="状态" align="center">
+        <el-table-column label="状态" align="center" min-width="100">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.is_active"
                        @change="userActiveChange(scope.row)"
@@ -46,13 +46,13 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="date_joined"  align="center">
+        <el-table-column label="创建时间" prop="date_joined"  align="center" min-width="180">
           <template slot-scope="scope">{{scope.row.date_joined | dataFormat }}</template>
         </el-table-column>
-        <el-table-column label="上次登录时间" prop="last_login"  align="center">
+        <el-table-column label="上次登录时间" prop="last_login"  align="center" min-width="180">
           <template slot-scope="scope" v-if="scope.row.last_login">{{scope.row.last_login | dataFormat }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="180px" align="center">
+        <el-table-column label="操作" width="180px" align="center" fixed="right">
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" size="mini"
                        @click="showEditDialog(scope.row.id)"

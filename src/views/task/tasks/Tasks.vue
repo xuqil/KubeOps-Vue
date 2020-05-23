@@ -87,7 +87,7 @@
           prop="crontab"
           label="crontab"
           sortable="custom"
-          min-width="300">
+          min-width="320">
         </el-table-column>
         <el-table-column
           prop="clocked"
