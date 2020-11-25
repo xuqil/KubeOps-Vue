@@ -7,28 +7,28 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.0",
     "codemirror": "latest",
-    "core-js": "^3.6.4",
-    "echarts": "^4.7.0",
-    "element-ui": "^2.13.0",
-    "js-yaml": "^3.13.1",
-    "qs": "^6.9.1",
-    "vue": "^2.6.11",
+    "core-js": "^3.7.0",
+    "echarts": "^4.9.0",
+    "element-ui": "^2.14.1",
+    "js-yaml": "^3.14.0",
+    "qs": "^6.9.4",
+    "vue": "^2.6.12",
     "vue-codemirror": "^4.0.6",
     "vue-quill-editor": "^3.0.6",
-    "vue-router": "^3.1.5",
-    "vuex": "^3.1.2",
-    "xterm": "^4.4.0",
-    "xterm-addon-attach": "^0.5.0",
-    "xterm-addon-fit": "^0.3.0"
+    "vue-router": "^3.4.9",
+    "vuex": "^3.5.1",
+    "xterm": "^4.9.0",
+    "xterm-addon-attach": "^0.6.0",
+    "xterm-addon-fit": "^0.4.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.2.0",
-    "@vue/cli-plugin-router": "~4.2.0",
-    "@vue/cli-plugin-vuex": "~4.2.0",
-    "@vue/cli-service": "~4.2.0",
+    "@vue/cli-plugin-babel": "^4.5.9",
+    "@vue/cli-plugin-router": "^4.5.9",
+    "@vue/cli-plugin-vuex": "^4.5.9",
+    "@vue/cli-service": "^4.5.9",
     "babel-plugin-component": "^1.1.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.12"
   }
 }
