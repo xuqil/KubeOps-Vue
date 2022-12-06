@@ -13,7 +13,7 @@
     "echarts": "^5.1.1",
     "element-ui": "^2.15.1",
     "js-yaml": "^4.1.0",
-    "qs": "^6.10.1",
+    "qs": "^6.10.3",
     "vue": "^2.6.12",
     "vue-codemirror": "^4.0.6",
     "vue-quill-editor": "^3.0.6",
